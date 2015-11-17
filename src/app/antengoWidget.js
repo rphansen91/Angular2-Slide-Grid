@@ -68,7 +68,7 @@ var AntengoWidget = (function () {
             directives: [angular2_1.NgFor, angular2_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction],
             styles: [
                 '.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
-                '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll;}',
+                '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
                 '.scrollingContainer::-webkit-scrollbar{display:none;}'
             ],
             template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTA()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<div class=\"scrollingContainer\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</div>\n\t\t</div>\n\t"

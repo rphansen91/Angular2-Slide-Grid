@@ -15,7 +15,7 @@ import {SlideItems} from "./display/slideShow"
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction],
 	styles: [
 		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
-		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll;}',
+		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
 		'.scrollingContainer::-webkit-scrollbar{display:none;}'
 	],
 	template: `	
