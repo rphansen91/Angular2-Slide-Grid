@@ -74,7 +74,6 @@ class AntengoWidget {
 	showCTA () {
 		this.autoScroll = true;
 		this.ctaHidden = false;
-		SlideItems.getInstance().startShow()
 		if (this.timeoutId) { clearTimeout(this.timeoutId) }
 	}
 	hideCTA () {

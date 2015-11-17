@@ -52,7 +52,6 @@ var AntengoWidget = (function () {
     AntengoWidget.prototype.showCTA = function () {
         this.autoScroll = true;
         this.ctaHidden = false;
-        slideShow_1.SlideItems.getInstance().startShow();
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
