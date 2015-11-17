@@ -16,7 +16,7 @@ var angular2_1 = require("angular2/angular2");
 var SlowScroll = (function () {
     function SlowScroll(element) {
         this.element = element;
-        this.delay = 17;
+        this.delay = 40;
         this.change = 1;
     }
     SlowScroll.prototype.onInit = function () {
