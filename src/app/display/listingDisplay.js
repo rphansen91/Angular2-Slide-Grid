@@ -55,7 +55,7 @@ var ListingDisplay = (function () {
                 '.price {position: absolute;bottom: 0px;right: 0px;color: rgb(255, 255, 255);font-size: 20px;text-shadow: black 2px 2px 3px;line-height: 35px;padding: 0px 18px;background-color: rgba(174, 146, 204, 0.8);font-family: Arial;}',
                 '.title {position: absolute;bottom: 0px;right: 0px; left: 0px; color: rgb(255, 255, 255);font-size: 20px;text-shadow: black 2px 2px 3px;line-height: 35px;padding: 0px 18px;background-color: rgba(174, 146, 204, 0.8);font-family: Arial; }'
             ],
-            template: "\n\t\t<div class=\"listingDisplay\" (click)=\"goToApp()\" [class.opening]=\"opening\" [style.width]=\"width\" [style.height]=\"height\" [style.background-position]=\"slide.positioning()\" [style.background-image]=\"slide.image\" (mouseenter)=\"startSolo()\" (mouseleave)=\"endSolo()\">\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\">$ {{listing.price}}</div>\n\t\t</div\n\t"
+            template: "\n\t\t<div class=\"listingDisplay\" (click)=\"goToApp()\" [class.opening]=\"opening\" [style.width]=\"width\" [style.height]=\"height\" [style.background-position]=\"slide.positioning()\" [style.background-image]=\"slide.image\" (mouseenter)=\"startSolo()\" (mouseleave)=\"endSolo()\" (touchstart)=\"startSolo()\" (touchend)=\"endSolo()\">\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\">$ {{listing.price}}</div>\n\t\t</div\n\t"
         }), 
         __metadata('design:paramtypes', [])
     ], ListingDisplay);

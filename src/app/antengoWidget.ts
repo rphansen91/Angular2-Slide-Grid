@@ -19,7 +19,7 @@ import {SlideItems} from "./display/slideShow"
 		'.scrollingContainer::-webkit-scrollbar{display:none;}'
 	],
 	template: `	
-		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()">
+		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()">
 			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
 			<div class="scrollingContainer">
 				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
