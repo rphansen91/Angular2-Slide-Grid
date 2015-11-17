@@ -22,7 +22,7 @@ import {SlowScroll} from "./slowScroll"
 	template: `	
 		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()">
 			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
-			<slow-scroll class="scrollingContainer" [scroll]="!ctaHidden">
+			<slow-scroll class="scrollingContainer" [scroll]="autoScroll">
 				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
 			</slow-scroll>
 		</div>
@@ -37,7 +37,10 @@ class AntengoWidget {
 	public listings: Listing[];
 	public grid: ListingGrid;
 
-	public ctaHidden: boolean = false;
+	public ctaHasBeenHidden: boolean = false;
+	public ctaHidden : boolean = false;
+	public autoScroll: boolean = true;
+	public timeoutId: number;
 
 	static display: AntengoWidget;
 
@@ -68,14 +71,22 @@ class AntengoWidget {
 		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
 	}
 	showCTA () {
-		// this.slideItems.stopShow()
-		// SlideItems.getInstance().startShow()
+		this.autoScroll = true;
 		this.ctaHidden = false;
+		if (this.timeoutId) { clearTimeout(this.timeoutId) }
 	}
 	hideCTA () {
-		// this.slideItems.stopShow()
-		// SlideItems.getInstance().stopShow()
-		this.ctaHidden = true;
+		if (this.ctaHasBeenHidden) {
+			this.timeoutId = 0;
+			this.autoScroll = false;
+			this.ctaHidden = true;
+		} else {
+			this.timeoutId = setTimeout(() => {
+				AntengoWidget.display.autoScroll = false;
+				AntengoWidget.display.ctaHidden = true;		
+				AntengoWidget.display.ctaHasBeenHidden = true;
+			}, 5000)
+		}
 	}
 }
 
