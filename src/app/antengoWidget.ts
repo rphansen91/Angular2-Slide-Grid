@@ -5,6 +5,7 @@ import {HttpHelper} from "./listings/httpService";
 import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
 import {CallToAction} from "./callToAction"
 import {SlideItems} from "./display/slideShow"
+import {SlowScroll} from "./slowScroll"
 
 @Component({
     selector: 'antengo-listings',
@@ -12,7 +13,7 @@ import {SlideItems} from "./display/slideShow"
     inputs: ["main-image: ctaImage"]
 })
 @View({
-	directives: [NgFor, NgIf, ListingDisplay, CallToAction],
+	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll],
 	styles: [
 		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
@@ -21,9 +22,9 @@ import {SlideItems} from "./display/slideShow"
 	template: `	
 		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()">
 			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
-			<div class="scrollingContainer">
+			<slow-scroll class="scrollingContainer" [scroll]="!ctaHidden">
 				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
-			</div>
+			</slow-scroll>
 		</div>
 	`
 })

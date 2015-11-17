@@ -2,6 +2,7 @@ var easings_1 = require('./easings');
 var SlideItems = (function () {
     function SlideItems() {
         this.slides = [];
+        this.isRunning = false;
         if (!SlideItems.isCreating) {
             throw new Error("You can't call new in Singleton instances! Call SlideItems.getInstance() instead.");
         }
@@ -25,30 +26,33 @@ var SlideItems = (function () {
     SlideItems.prototype.startShow = function () {
         var backwards = 0;
         var show = this;
-        show.slideInterval.config(1000, "easeIn", 10);
-        show.slideInterval.resetValue();
-        show.slideInterval.startInterval(function () {
-            if (show.slideInterval.value == 100) {
-                backwards++;
-                show.slideInterval.resetValue();
-            }
-            var finishedAll = true;
-            show.slideInterval.increaseValue();
-            show.slides.forEach(function (slide) {
-                var index = slide.getIndex(backwards);
-                if (index >= 0) {
-                    slide.positon.setPosition(show.slideInterval.value, index);
-                    finishedAll = false;
+        if (!show.isRunning) {
+            show.slideInterval.config(1000, "easeIn", 10);
+            show.slideInterval.resetValue();
+            show.isRunning = true;
+            show.slideInterval.startInterval(function () {
+                if (show.slideInterval.value == 100) {
+                    backwards++;
+                    show.slideInterval.resetValue();
+                }
+                var finishedAll = true;
+                show.slideInterval.increaseValue();
+                show.slides.forEach(function (slide) {
+                    var index = slide.getIndex(backwards);
+                    if (index >= 0) {
+                        slide.positon.setPosition(show.slideInterval.value, index);
+                        finishedAll = false;
+                    }
+                });
+                if (finishedAll) {
+                    show.stopShow();
                 }
             });
-            console.log("FINISHED: " + finishedAll);
-            if (finishedAll) {
-                show.stopShow();
-            }
-        });
+        }
     };
     SlideItems.prototype.stopShow = function () {
         this.slideInterval.stopInterval();
+        this.isRunning = false;
     };
     SlideItems.isCreating = false;
     return SlideItems;

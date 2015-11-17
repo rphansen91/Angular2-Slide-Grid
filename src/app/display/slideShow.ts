@@ -4,7 +4,9 @@ export class SlideItems {
 	static instance: SlideItems;
 	static isCreating: boolean = false;
 
+
 	public slides: SlideItem[] = []
+	public isRunning: boolean = false;
 	public slideInterval: ImageInterval;
 
 	constructor () {
@@ -37,31 +39,39 @@ export class SlideItems {
 	startShow() {
 		var backwards = 0
 		var show = this;
-		show.slideInterval.config(1000, "easeIn", 10);
-		show.slideInterval.resetValue()
-		show.slideInterval.startInterval(() => {
-			if (show.slideInterval.value == 100) {
-				backwards++
-				show.slideInterval.resetValue()
-			}
 
-			var finishedAll = true
+		if (!show.isRunning) {
 
-			show.slideInterval.increaseValue()
-			show.slides.forEach((slide: SlideItem) => {
-				var index = slide.getIndex(backwards)
-				if (index >= 0) {
-					slide.positon.setPosition(show.slideInterval.value, index)
-					finishedAll = false
+			show.slideInterval.config(1000, "easeIn", 10);
+			show.slideInterval.resetValue()
+			show.isRunning = true;
+
+			show.slideInterval.startInterval(() => {
+				if (show.slideInterval.value == 100) {
+					backwards++
+					show.slideInterval.resetValue()
+				}
+
+				var finishedAll = true
+
+				show.slideInterval.increaseValue()
+				show.slides.forEach((slide: SlideItem) => {
+					var index = slide.getIndex(backwards)
+					if (index >= 0) {
+						slide.positon.setPosition(show.slideInterval.value, index)
+						finishedAll = false
+					}
+				})
+
+				if (finishedAll) {
+					show.stopShow();
 				}
 			})
-
-			console.log("FINISHED: " + finishedAll)
-			if (finishedAll) { show.stopShow() }
-		})
+		}
 	}
 	stopShow () {
 		this.slideInterval.stopInterval()
+		this.isRunning = false;
 	}
 }
 
