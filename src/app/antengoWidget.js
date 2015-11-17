@@ -28,7 +28,7 @@ var AntengoWidget = (function () {
         this.ctaHasBeenHidden = false;
         this.ctaHidden = false;
         this.autoScroll = true;
-        this.ctaTimeout = 5000;
+        this.ctaTimeout = 6000;
         AntengoWidget.display = this;
         AntengoWidget.display.setSizes();
         var location = new listingParams_1.ListingLocation(34, -117);
@@ -52,6 +52,7 @@ var AntengoWidget = (function () {
     AntengoWidget.prototype.showCTA = function () {
         this.autoScroll = true;
         this.ctaHidden = false;
+        slideShow_1.SlideItems.getInstance().startShow();
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }

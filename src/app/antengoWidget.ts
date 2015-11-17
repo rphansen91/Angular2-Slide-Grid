@@ -40,7 +40,7 @@ class AntengoWidget {
 	public ctaHasBeenHidden: boolean = false;
 	public ctaHidden : boolean = false;
 	public autoScroll: boolean = true;
-	public ctaTimeout: number = 5000;
+	public ctaTimeout: number = 6000;
 	public timeoutId: number;
 
 	static display: AntengoWidget;
@@ -74,6 +74,7 @@ class AntengoWidget {
 	showCTA () {
 		this.autoScroll = true;
 		this.ctaHidden = false;
+		SlideItems.getInstance().startShow()
 		if (this.timeoutId) { clearTimeout(this.timeoutId) }
 	}
 	hideCTA () {
