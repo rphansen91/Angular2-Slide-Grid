@@ -61,6 +61,7 @@ exports.SlideItems = SlideItems;
 var SlideItem = (function () {
     function SlideItem(photos, size) {
         this.photos = photos;
+        this.isRunning = false;
         if (this.photos.length > 1) {
             this.photos.push(this.photos[0]);
         }
@@ -75,29 +76,33 @@ var SlideItem = (function () {
         if (this.length > 1) {
             var show = this;
             var index = this.length - 2;
-            show.interval = new ImageInterval();
-            show.interval.config(500, "easeIn");
-            show.interval.resetValue();
-            show.interval.startInterval(function () {
-                var finished = false;
-                show.interval.increaseValue();
-                show.positon.setPosition(show.interval.value, index);
-                if (show.interval.value == 100) {
-                    index--;
-                    if (index < 0) {
-                        finished = true;
+            if (!show.isRunning) {
+                show.isRunning = true;
+                show.interval = new ImageInterval();
+                show.interval.config(500, "easeIn");
+                show.interval.resetValue();
+                show.interval.startInterval(function () {
+                    var finished = false;
+                    show.interval.increaseValue();
+                    show.positon.setPosition(show.interval.value, index);
+                    if (show.interval.value == 100) {
+                        index--;
+                        if (index < 0) {
+                            finished = true;
+                        }
+                        else {
+                            show.interval.resetValue();
+                        }
                     }
-                    else {
-                        show.interval.resetValue();
+                    if (finished) {
+                        show.interval.stopInterval();
                     }
-                }
-                if (finished) {
-                    show.interval.stopInterval();
-                }
-            });
+                });
+            }
         }
     };
     SlideItem.prototype.stop = function () {
+        this.isRunning = false;
         if (this.interval) {
             this.interval.stopInterval();
         }

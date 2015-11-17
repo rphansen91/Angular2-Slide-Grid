@@ -90,6 +90,7 @@ class AntengoWidget {
 	}
 	hideCTAMobile () {
 		this.timeoutId = 0;
+		this.ctaHasBeenHidden = true;
 		this.autoScroll = false;
 		this.ctaHidden = true;
 	}

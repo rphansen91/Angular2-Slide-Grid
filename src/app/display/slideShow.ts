@@ -82,6 +82,8 @@ export class SlideItem {
 	public image: string;
 	public positionCallback: any;
 
+	public isRunning: boolean = false;
+
 	constructor(public photos: Photo[], size: number) {
 		if (this.photos.length > 1) {
 			this.photos.push(this.photos[0])
@@ -98,28 +100,35 @@ export class SlideItem {
 		if (this.length > 1) {
 			var show = this
 			var index = this.length - 2
-			show.interval = new ImageInterval()
-			show.interval.config(500, "easeIn")
-			show.interval.resetValue()
-			show.interval.startInterval(() => {
-				var finished = false;
 
-				show.interval.increaseValue()
-				show.positon.setPosition(show.interval.value, index)
+			if (!show.isRunning) {
+				show.isRunning = true;
+				show.interval = new ImageInterval()
+				show.interval.config(500, "easeIn")
+				show.interval.resetValue()
+				show.interval.startInterval(() => {
+					var finished = false;
 
-				if (show.interval.value == 100) {
-					index--;
-					if (index < 0) {
-						finished = true
-					} else {
-						show.interval.resetValue()
+					show.interval.increaseValue()
+					show.positon.setPosition(show.interval.value, index)
+
+					if (show.interval.value == 100) {
+						index--;
+						if (index < 0) {
+							finished = true
+						} else {
+							show.interval.resetValue()
+						}
 					}
-				}
-				if (finished) { show.interval.stopInterval(); }
-			})
+					if (finished) {
+						show.interval.stopInterval();
+					}
+				})
+			}
 		}
 	}
 	stop () {
+		this.isRunning = false;
 		if (this.interval) {
 			this.interval.stopInterval();
 		}

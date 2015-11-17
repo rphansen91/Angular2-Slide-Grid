@@ -71,6 +71,7 @@ var AntengoWidget = (function () {
     };
     AntengoWidget.prototype.hideCTAMobile = function () {
         this.timeoutId = 0;
+        this.ctaHasBeenHidden = true;
         this.autoScroll = false;
         this.ctaHidden = true;
     };
