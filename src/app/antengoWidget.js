@@ -18,7 +18,6 @@ var listingParams_1 = require('./listings/listingParams');
 var httpService_1 = require("./listings/httpService");
 var listingDisplay_1 = require("./display/listingDisplay");
 var callToAction_1 = require("./callToAction");
-var slideShow_1 = require("./display/slideShow");
 var slowScroll_1 = require("./slowScroll");
 var AntengoWidget = (function () {
     function AntengoWidget(listingParams, element) {
@@ -63,12 +62,17 @@ var AntengoWidget = (function () {
             this.ctaHidden = true;
         }
         else {
+            this.ctaHasBeenHidden = true;
             this.timeoutId = setTimeout(function () {
                 AntengoWidget.display.autoScroll = false;
                 AntengoWidget.display.ctaHidden = true;
-                AntengoWidget.display.ctaHasBeenHidden = true;
             }, this.ctaTimeout);
         }
+    };
+    AntengoWidget.prototype.hideCTAMobile = function () {
+        this.timeoutId = 0;
+        this.autoScroll = false;
+        this.ctaHidden = true;
     };
     __decorate([
         angular2_1.Input(), 
@@ -77,7 +81,7 @@ var AntengoWidget = (function () {
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, slideShow_1.SlideItems, angular2_1.ElementRef],
+            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, angular2_1.ElementRef],
             inputs: ["main-image: ctaImage"]
         }),
         angular2_1.View({
@@ -87,7 +91,7 @@ var AntengoWidget = (function () {
                 '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
                 '.scrollingContainer::-webkit-scrollbar{display:none;}'
             ],
-            template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTA()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<slow-scroll class=\"scrollingContainer\" [scroll]=\"autoScroll\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</slow-scroll>\n\t\t</div>\n\t"
+            template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTAMobile()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<slow-scroll class=\"scrollingContainer\" [scroll]=\"autoScroll\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</slow-scroll>\n\t\t</div>\n\t"
         }),
         __param(1, angular2_1.Inject(angular2_1.ElementRef)), 
         __metadata('design:paramtypes', [listingParams_1.ListingParams, (typeof ElementRef !== 'undefined' && ElementRef) || Object])

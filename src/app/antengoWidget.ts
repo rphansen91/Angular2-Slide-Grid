@@ -4,12 +4,12 @@ import {ListingParams, ListingLocation} from './listings/listingParams';
 import {HttpHelper} from "./listings/httpService";
 import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
 import {CallToAction} from "./callToAction"
-import {SlideItems} from "./display/slideShow"
 import {SlowScroll} from "./slowScroll"
+import {CrossPlatform} from "./platform/crossPlatform"
 
 @Component({
     selector: 'antengo-listings',
-    providers: [HttpHelper, ListingParams, SlideItems, ElementRef],
+    providers: [HttpHelper, ListingParams, ElementRef],
     inputs: ["main-image: ctaImage"]
 })
 @View({
@@ -20,7 +20,7 @@ import {SlowScroll} from "./slowScroll"
 		'.scrollingContainer::-webkit-scrollbar{display:none;}'
 	],
 	template: `	
-		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()">
+		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTAMobile()">
 			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
 			<slow-scroll class="scrollingContainer" [scroll]="autoScroll">
 				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
@@ -46,7 +46,7 @@ class AntengoWidget {
 	static display: AntengoWidget;
 
 	constructor(
-		public listingParams: ListingParams, 
+		public listingParams: ListingParams,
 		@Inject(ElementRef) public element: ElementRef
 	) {
 		AntengoWidget.display = this
@@ -63,7 +63,6 @@ class AntengoWidget {
 		.onError((err) => {
 			console.log(err)
 		})
-
 		window.onresize = this.setSizes;
 	}
 	setSizes () {
@@ -82,12 +81,17 @@ class AntengoWidget {
 			this.autoScroll = false;
 			this.ctaHidden = true;
 		} else {
+			this.ctaHasBeenHidden = true;
 			this.timeoutId = setTimeout(() => {
 				AntengoWidget.display.autoScroll = false;
 				AntengoWidget.display.ctaHidden = true;		
-				AntengoWidget.display.ctaHasBeenHidden = true;
 			}, this.ctaTimeout)
 		}
+	}
+	hideCTAMobile () {
+		this.timeoutId = 0;
+		this.autoScroll = false;
+		this.ctaHidden = true;
 	}
 }
 
