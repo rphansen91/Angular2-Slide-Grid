@@ -40,6 +40,7 @@ class AntengoWidget {
 	public ctaHasBeenHidden: boolean = false;
 	public ctaHidden : boolean = false;
 	public autoScroll: boolean = true;
+	public ctaTimeout: number = 5000;
 	public timeoutId: number;
 
 	static display: AntengoWidget;
@@ -85,7 +86,7 @@ class AntengoWidget {
 				AntengoWidget.display.autoScroll = false;
 				AntengoWidget.display.ctaHidden = true;		
 				AntengoWidget.display.ctaHasBeenHidden = true;
-			}, 5000)
+			}, this.ctaTimeout)
 		}
 	}
 }
