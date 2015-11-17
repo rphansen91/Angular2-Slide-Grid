@@ -57,9 +57,9 @@ class AntengoWidget {
 		.onResponse((res) => {
 			display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
 			
-			setTimeout(()=>{
-				SlideItems.getInstance().startShow()
-			}, 2000)
+			// setTimeout(()=>{
+			// 	SlideItems.getInstance().startShow()
+			// }, 2000)
 		})
 		.onError((err) => {
 			console.log(err)
@@ -67,12 +67,12 @@ class AntengoWidget {
 	}
 	showCTA () {
 		// this.slideItems.stopShow()
-		SlideItems.getInstance().startShow()
+		// SlideItems.getInstance().startShow()
 		this.ctaHidden = false;
 	}
 	hideCTA () {
 		// this.slideItems.stopShow()
-		SlideItems.getInstance().stopShow()
+		// SlideItems.getInstance().stopShow()
 		this.ctaHidden = true;
 	}
 }

@@ -8,7 +8,7 @@ import {Directive, ElementRef, Inject, Input} from "angular2/angular2"
 export class SlowScroll {
 	@Input('scroll') public scroll: boolean;
 
-	delay: number = 60;
+	delay: number = 17;
 	change: number = 1;
 	intervalId: number;
 

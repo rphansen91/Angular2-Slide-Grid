@@ -37,9 +37,9 @@ var AntengoWidget = (function () {
             .runSearch()
             .onResponse(function (res) {
             display.listings = res.result.rs; //.splice(0, display.grid.columns * display.grid.rows);
-            setTimeout(function () {
-                slideShow_1.SlideItems.getInstance().startShow();
-            }, 2000);
+            // setTimeout(()=>{
+            // 	SlideItems.getInstance().startShow()
+            // }, 2000)
         })
             .onError(function (err) {
             console.log(err);
@@ -47,12 +47,12 @@ var AntengoWidget = (function () {
     }
     AntengoWidget.prototype.showCTA = function () {
         // this.slideItems.stopShow()
-        slideShow_1.SlideItems.getInstance().startShow();
+        // SlideItems.getInstance().startShow()
         this.ctaHidden = false;
     };
     AntengoWidget.prototype.hideCTA = function () {
         // this.slideItems.stopShow()
-        slideShow_1.SlideItems.getInstance().stopShow();
+        // SlideItems.getInstance().stopShow()
         this.ctaHidden = true;
     };
     __decorate([
