@@ -26,25 +26,26 @@ var AntengoWidget = (function () {
         this.element = element;
         this.ctaImage = "./app/assets/callToAction.png";
         this.ctaHidden = false;
-        this.width = this.element.nativeElement.clientWidth;
-        this.height = this.element.nativeElement.clientHeight;
-        this.grid = new listingDisplay_1.ListingGrid(this.width, this.height);
-        var display = this;
+        AntengoWidget.display = this;
+        AntengoWidget.display.setSizes();
         var location = new listingParams_1.ListingLocation(34, -117);
-        display.listingParams
+        AntengoWidget.display.listingParams
             .setLocation(location)
             .getNationalShippable()
             .runSearch()
             .onResponse(function (res) {
-            display.listings = res.result.rs; //.splice(0, display.grid.columns * display.grid.rows);
-            // setTimeout(()=>{
-            // 	SlideItems.getInstance().startShow()
-            // }, 2000)
+            AntengoWidget.display.listings = res.result.rs; //.splice(0, display.grid.columns * display.grid.rows);
         })
             .onError(function (err) {
             console.log(err);
         });
+        window.onresize = this.setSizes;
     }
+    AntengoWidget.prototype.setSizes = function () {
+        AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
+        AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
+        AntengoWidget.display.grid = new listingDisplay_1.ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height);
+    };
     AntengoWidget.prototype.showCTA = function () {
         // this.slideItems.stopShow()
         // SlideItems.getInstance().startShow()

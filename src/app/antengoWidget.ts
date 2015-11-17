@@ -37,33 +37,35 @@ class AntengoWidget {
 	public listings: Listing[];
 	public grid: ListingGrid;
 
-	public ctaHidden: boolean = false
+	public ctaHidden: boolean = false;
+
+	static display: AntengoWidget;
 
 	constructor(
 		public listingParams: ListingParams, 
 		@Inject(ElementRef) public element: ElementRef
 	) {
-		this.width = this.element.nativeElement.clientWidth;
-		this.height = this.element.nativeElement.clientHeight;
-		this.grid = new ListingGrid(this.width, this.height)
-
-		var display = this
+		AntengoWidget.display = this
+		AntengoWidget.display.setSizes()
 		var location = new ListingLocation(34, -117)
 
-		display.listingParams
+		AntengoWidget.display.listingParams
 		.setLocation(location)
 		.getNationalShippable()
 		.runSearch()
 		.onResponse((res) => {
-			display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
-			
-			// setTimeout(()=>{
-			// 	SlideItems.getInstance().startShow()
-			// }, 2000)
+			AntengoWidget.display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
 		})
 		.onError((err) => {
 			console.log(err)
 		})
+
+		window.onresize = this.setSizes;
+	}
+	setSizes () {
+		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
+		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
+		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
 	}
 	showCTA () {
 		// this.slideItems.stopShow()
