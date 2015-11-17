@@ -34,7 +34,8 @@ export class ListingDisplay {
 		this.slide = SlideItems.getInstance().add(this.listing.photos, this.width)
 	}
 	goToApp () {
-		window.open("https://antengo.com/p?antengo/#/itemDetail/" + this.listing.id)
+		window.open("https://antengo.com/p?antengo/#/itemDetail/" + this.listing.id);
+		this.opening = false;
 	}
 	startSolo () {
 		this.opening = true;

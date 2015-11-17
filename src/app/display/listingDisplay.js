@@ -20,6 +20,7 @@ var ListingDisplay = (function () {
     };
     ListingDisplay.prototype.goToApp = function () {
         window.open("https://antengo.com/p?antengo/#/itemDetail/" + this.listing.id);
+        this.opening = false;
     };
     ListingDisplay.prototype.startSolo = function () {
         this.opening = true;
