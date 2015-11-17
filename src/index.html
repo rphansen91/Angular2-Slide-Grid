@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Angular 2 QuickStart</title>
+    <style>
+      .listingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; width: 800px; height: 800px;}
+    </style>
+    <script src="../node_modules/systemjs/dist/system.src.js"></script>
+    <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="../node_modules/angular2/bundles/http.dev.js"></script>
+    <script>
+      System.config({
+        packages: {'app': {defaultExtension: 'js'}}
+      });
+      System.import('app/antengoWidget').then(function (m) {
+        // m.main()
+      });
+    </script>
+  </head>
+  <body>
+    <antengo-listings class="listingContainer"></antengo-listings>
+  </body>
+</html>
