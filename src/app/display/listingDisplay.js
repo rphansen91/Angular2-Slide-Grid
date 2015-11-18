@@ -27,7 +27,7 @@ var ListingDisplay = (function () {
         if (crossPlatform_1.CrossPlatform.getInstance().device.getViewType() == "desktop") {
             this.opening = true;
         }
-        this.slide.start();
+        this.slide.setPositionSize(this.width).start();
     };
     ListingDisplay.prototype.endSolo = function () {
         this.opening = false;

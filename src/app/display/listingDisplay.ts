@@ -42,7 +42,7 @@ export class ListingDisplay {
 		if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
 			this.opening = true;
 		}
-		this.slide.start()
+		this.slide.setPositionSize(this.width).start()
 	}
 	endSolo () {
 		this.opening = false;

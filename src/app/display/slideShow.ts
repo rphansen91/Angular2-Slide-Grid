@@ -96,6 +96,10 @@ export class SlideItem {
 		}, "")
 		return this;
 	}
+	setPositionSize (size: number) {
+		this.positon.setSize(size)
+		return this;
+	}
 	start () {
 		if (this.length > 1) {
 			var show = this
@@ -219,10 +223,10 @@ export class ImagePosition {
 		var begin = index
 
 		for (var i = 0; i < begin; i++) {
-			tmp += "-" + this.size + "px, "
+			tmp += "-" + this.size + "px 50%, "
 		}
 
-		tmp += ((((percentage / 100) * this.size)) - this.size) + "px, 0"
+		tmp += ((((percentage / 100) * this.size)) - this.size) + "px 50%, 0 50%"
 
 		this.position = tmp
 		return this

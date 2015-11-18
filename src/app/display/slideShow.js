@@ -72,6 +72,10 @@ var SlideItem = (function () {
         }, "");
         return this;
     }
+    SlideItem.prototype.setPositionSize = function (size) {
+        this.positon.setSize(size);
+        return this;
+    };
     SlideItem.prototype.start = function () {
         if (this.length > 1) {
             var show = this;
@@ -179,9 +183,9 @@ var ImagePosition = (function () {
         var tmp = "";
         var begin = index;
         for (var i = 0; i < begin; i++) {
-            tmp += "-" + this.size + "px, ";
+            tmp += "-" + this.size + "px 50%, ";
         }
-        tmp += ((((percentage / 100) * this.size)) - this.size) + "px, 0";
+        tmp += ((((percentage / 100) * this.size)) - this.size) + "px 50%, 0 50%";
         this.position = tmp;
         return this;
     };
