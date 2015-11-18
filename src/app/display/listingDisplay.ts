@@ -28,6 +28,7 @@ export class ListingDisplay {
 
 	slide: SlideItem;
 	opening: boolean = false;
+	id: number;
 
 	constructor() { }
 
@@ -42,12 +43,16 @@ export class ListingDisplay {
 		// if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
 			
 		// }
+		var listing = this
 		this.opening = true;
-		this.slide.setPositionSize(this.width).start()
+		this.id = setTimeout(() => {
+			listing.slide.setPositionSize(listing.width).start()
+		}, 300)
 	}
 	endSolo () {
 		this.opening = false;
 		this.slide.stop()
+		clearTimeout(this.id)
 	}
 }
 

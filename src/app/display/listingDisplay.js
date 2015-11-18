@@ -25,12 +25,16 @@ var ListingDisplay = (function () {
     ListingDisplay.prototype.startSolo = function () {
         // if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
         // }
+        var listing = this;
         this.opening = true;
-        this.slide.setPositionSize(this.width).start();
+        this.id = setTimeout(function () {
+            listing.slide.setPositionSize(listing.width).start();
+        }, 300);
     };
     ListingDisplay.prototype.endSolo = function () {
         this.opening = false;
         this.slide.stop();
+        clearTimeout(this.id);
     };
     __decorate([
         angular2_1.Input(), 
