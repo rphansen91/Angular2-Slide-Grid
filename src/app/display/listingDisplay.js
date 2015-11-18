@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var angular2_1 = require('angular2/angular2');
 var slideShow_1 = require('./slideShow');
+var crossPlatform_1 = require('../platform/crossPlatform');
 var ListingDisplay = (function () {
     function ListingDisplay() {
         this.opening = false;
@@ -23,7 +24,9 @@ var ListingDisplay = (function () {
         this.opening = false;
     };
     ListingDisplay.prototype.startSolo = function () {
-        this.opening = true;
+        if (crossPlatform_1.CrossPlatform.getInstance().device.getViewType() == "desktop") {
+            this.opening = true;
+        }
         this.slide.start();
     };
     ListingDisplay.prototype.endSolo = function () {

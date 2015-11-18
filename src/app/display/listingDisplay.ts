@@ -1,5 +1,6 @@
 import {Component, View, Input, NgIf} from 'angular2/angular2';
-import {Photo, SlideItems, SlideItem} from './slideShow'
+import {Photo, SlideItems, SlideItem} from './slideShow';
+import {CrossPlatform} from '../platform/crossPlatform'
 
 @Component({
 	selector: "listing-display",
@@ -38,7 +39,9 @@ export class ListingDisplay {
 		this.opening = false;
 	}
 	startSolo () {
-		this.opening = true;
+		if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
+			this.opening = true;
+		}
 		this.slide.start()
 	}
 	endSolo () {
