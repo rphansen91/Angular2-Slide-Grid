@@ -20,7 +20,7 @@ import {CrossPlatform} from "./platform/crossPlatform"
 		'.scrollingContainer::-webkit-scrollbar{display:none;}'
 	],
 	template: `	
-		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTAMobile()">
+		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTAMobile()" (click)="hideCTAMobile()">
 			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
 			<slow-scroll class="scrollingContainer" [scroll]="autoScroll">
 				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>

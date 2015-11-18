@@ -92,7 +92,7 @@ var AntengoWidget = (function () {
                 '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
                 '.scrollingContainer::-webkit-scrollbar{display:none;}'
             ],
-            template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTAMobile()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<slow-scroll class=\"scrollingContainer\" [scroll]=\"autoScroll\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</slow-scroll>\n\t\t</div>\n\t"
+            template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTAMobile()\" (click)=\"hideCTAMobile()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<slow-scroll class=\"scrollingContainer\" [scroll]=\"autoScroll\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</slow-scroll>\n\t\t</div>\n\t"
         }),
         __param(1, angular2_1.Inject(angular2_1.ElementRef)), 
         __metadata('design:paramtypes', [listingParams_1.ListingParams, (typeof ElementRef !== 'undefined' && ElementRef) || Object])
