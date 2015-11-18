@@ -33,7 +33,6 @@ var ListingDisplay = (function () {
     };
     ListingDisplay.prototype.endSolo = function () {
         this.opening = false;
-        this.slide.stop();
         clearTimeout(this.id);
     };
     __decorate([

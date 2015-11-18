@@ -51,7 +51,6 @@ export class ListingDisplay {
 	}
 	endSolo () {
 		this.opening = false;
-		this.slide.stop()
 		clearTimeout(this.id)
 	}
 }
