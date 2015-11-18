@@ -19,7 +19,6 @@ var httpService_1 = require("./listings/httpService");
 var listingDisplay_1 = require("./display/listingDisplay");
 var callToAction_1 = require("./callToAction");
 var slowScroll_1 = require("./slowScroll");
-var slideShow_1 = require("./display/slideShow");
 var AntengoWidget = (function () {
     function AntengoWidget(listingParams, element) {
         this.listingParams = listingParams;
@@ -38,9 +37,6 @@ var AntengoWidget = (function () {
             .runSearch()
             .onResponse(function (res) {
             AntengoWidget.display.listings = res.result.rs; //.splice(0, display.grid.columns * display.grid.rows);
-            setTimeout(function () {
-                slideShow_1.SlideItems.getInstance().startShow();
-            }, 500);
         })
             .onError(function (err) {
             console.log(err);

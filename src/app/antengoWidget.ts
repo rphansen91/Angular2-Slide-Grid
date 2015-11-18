@@ -61,9 +61,7 @@ class AntengoWidget {
 		.onResponse((res) => {
 			AntengoWidget.display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
 
-			setTimeout(() => {
-				SlideItems.getInstance().startShow()
-			}, 500)
+
 		})
 		.onError((err) => {
 			console.log(err)
