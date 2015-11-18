@@ -10,13 +10,15 @@ import {CrossPlatform} from '../platform/crossPlatform'
 @View({
 	directives: [NgIf],
 	styles: [
-		'.listingDisplay {position: relative; float: left; z-index: 1; background-color: rgba(174, 146, 204, 0.8); background-size: cover; background-repeat: no-repeat;}',
+		'.listingDisplay {position: relative; float: left; z-index: 1; background-color: rgba(174, 146, 204, 0.8); background-size: cover; background-repeat: no-repeat; overflow: hidden;}',
 		'.opening {-webkit-transform: scale(1.3); -ms-transform: scale(1.3); transform: scale(1.3); z-index: 11;}',
 		'.price {position: absolute;bottom: 0px;right: 0px;color: rgb(255, 255, 255);font-size: 20px;text-shadow: black 2px 2px 3px;line-height: 35px;padding: 0px 18px;background-color: rgba(174, 146, 204, 0.8);}',
-		'.title {position: absolute;bottom: 0px;right: 0px; left: 0px; color: rgb(255, 255, 255);font-size: 20px;text-shadow: black 2px 2px 3px;line-height: 35px;padding: 0px 18px;background-color: rgba(174, 146, 204, 0.8);}'
+		'.title {position: absolute;bottom: 0px;right: 0px; left: 0px; color: rgb(255, 255, 255);font-size: 20px;text-shadow: black 2px 2px 3px;line-height: 35px;padding: 0px 18px;background-color: rgba(174, 146, 204, 0.8);}',
+		'.sold {position: absolute; top: -5%; right: -5%; width: 80%; height: 80%; background-image: url(./app/assets/sold_banner.png); background-size: contain;background-position: top right; background-repeat: no-repeat;}'
 	],
 	template: `
 		<div class="listingDisplay" (click)="goToApp()" [class.opening]="opening" [style.width]="width" [style.height]="height" [style.background-position]="slide.positioning()" [style.background-image]="slide.image" (mouseenter)="startSolo()" (mouseleave)="endSolo()" (touchstart)="startSolo()" (touchend)="endSolo()">
+			<div class="sold" *ng-if="listing.status == 2"></div>
 			<div class="price" *ng-if="listing.price">$ {{listing.price}}</div>
 		</div
 	`

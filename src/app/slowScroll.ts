@@ -1,4 +1,5 @@
 import {Directive, ElementRef, Inject, Input} from "angular2/angular2"
+import {CrossPlatform} from "./platform/crossPlatform"
 
 @Directive({
 	selector: "slow-scroll",
@@ -27,6 +28,8 @@ export class SlowScroll {
 		scroller.intervalId = setInterval(() => {
 			if (scroller.scroll) {
 				scroller.element.nativeElement.scrollTop += scroller.change;
+			} else if (CrossPlatform.getInstance().device.getViewType() != "desktop") {
+				this.stop()
 			}
 		}, scroller.delay)
 	}

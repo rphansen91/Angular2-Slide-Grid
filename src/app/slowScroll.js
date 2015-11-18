@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var angular2_1 = require("angular2/angular2");
+var crossPlatform_1 = require("./platform/crossPlatform");
 var SlowScroll = (function () {
     function SlowScroll(element) {
         this.element = element;
@@ -28,10 +29,14 @@ var SlowScroll = (function () {
         }
     };
     SlowScroll.prototype.start = function () {
+        var _this = this;
         var scroller = this;
         scroller.intervalId = setInterval(function () {
             if (scroller.scroll) {
                 scroller.element.nativeElement.scrollTop += scroller.change;
+            }
+            else if (crossPlatform_1.CrossPlatform.getInstance().device.getViewType() != "desktop") {
+                _this.stop();
             }
         }, scroller.delay);
     };
