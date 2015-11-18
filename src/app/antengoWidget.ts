@@ -6,6 +6,7 @@ import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
 import {CallToAction} from "./callToAction"
 import {SlowScroll} from "./slowScroll"
 import {CrossPlatform} from "./platform/crossPlatform"
+import {SlideItems} from "./display/slideShow"
 
 @Component({
     selector: 'antengo-listings',
@@ -59,6 +60,10 @@ class AntengoWidget {
 		.runSearch()
 		.onResponse((res) => {
 			AntengoWidget.display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
+
+			setTimeout(() => {
+				SlideItems.getInstance().startShow()
+			}, 500)
 		})
 		.onError((err) => {
 			console.log(err)
