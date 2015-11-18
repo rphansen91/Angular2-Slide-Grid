@@ -40,14 +40,11 @@ export class ListingDisplay {
 		this.opening = false;
 	}
 	startSolo () {
-		// if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
-			
-		// }
 		var listing = this
 		this.opening = true;
 		this.id = setTimeout(() => {
 			listing.slide.setPositionSize(listing.width).start()
-		}, 300)
+		}, 200)
 	}
 	endSolo () {
 		this.opening = false;

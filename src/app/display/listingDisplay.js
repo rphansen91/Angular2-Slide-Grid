@@ -23,13 +23,11 @@ var ListingDisplay = (function () {
         this.opening = false;
     };
     ListingDisplay.prototype.startSolo = function () {
-        // if (CrossPlatform.getInstance().device.getViewType() == "desktop") {
-        // }
         var listing = this;
         this.opening = true;
         this.id = setTimeout(function () {
             listing.slide.setPositionSize(listing.width).start();
-        }, 300);
+        }, 200);
     };
     ListingDisplay.prototype.endSolo = function () {
         this.opening = false;
