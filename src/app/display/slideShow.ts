@@ -5,7 +5,7 @@ export class SlideItems {
 	static isCreating: boolean = false;
 
 
-	public slides: SlideItem[] = []
+	public slides: SlideItem[] = [];
 	public isRunning: boolean = false;
 	public slideInterval: ImageInterval;
 
@@ -133,6 +133,7 @@ export class SlideItem {
 	}
 	stop () {
 		this.isRunning = false;
+		this.positon.setPosition(100, this.length - 1)
 		if (this.interval) {
 			this.interval.stopInterval();
 		}

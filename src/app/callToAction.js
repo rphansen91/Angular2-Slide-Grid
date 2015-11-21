@@ -13,27 +13,11 @@ var angular2_1 = require('angular2/angular2');
 var CallToAction = (function () {
     function CallToAction() {
         this.image = "./app/assets/callToAction.png";
+        this.control = CallToActionControl.getInstance();
     }
-    CallToAction.prototype.onInit = function () { };
-    CallToAction.prototype.onchange = function (change) { console.log(this.hidden); };
-    CallToAction.prototype.show = function () {
-        this.hidden = false;
-    };
-    CallToAction.prototype.hide = function () {
-        this.hidden = false;
-    };
-    __decorate([
-        angular2_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], CallToAction.prototype, "hidden");
-    __decorate([
-        angular2_1.Input(), 
-        __metadata('design:type', String)
-    ], CallToAction.prototype, "image");
     CallToAction = __decorate([
         angular2_1.Component({
             selector: "call-to-action",
-            inputs: ["hidden: hidden", "image: image"]
         }),
         angular2_1.View({
             styles: [
@@ -42,11 +26,36 @@ var CallToAction = (function () {
                 ".callToActionRemoved {visibility: hidden; opacity: 0;}",
                 ".callToActionImage {position: absolute; margin: auto; top: 0; left: 0; right: 0; bottom: 0; height: 50%; width: 60%; min-width: 300px; max-width: 500px; background-size: contain; background-position: center; background-repeat: no-repeat;}"
             ],
-            template: "\n\t\t<div class=\"callToAction callToActionAnimated\" [class.callToActionRemoved]=\"hidden\">\n\t\t\t<div class=\"callToActionImage\" [style.background-image]=\"'url(' + image + ')'\"></div>\n\t\t</div>\n\t"
+            template: "\n\t\t<div class=\"callToAction callToActionAnimated\" [class.callToActionRemoved]=\"!control.visible\">\n\t\t\t<div class=\"callToActionImage\" [style.background-image]=\"'url(' + image + ')'\"></div>\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [])
     ], CallToAction);
     return CallToAction;
 })();
 exports.CallToAction = CallToAction;
+var CallToActionControl = (function () {
+    function CallToActionControl() {
+        this.visible = true;
+        if (!CallToActionControl.isCreating) {
+            throw new Error("Use CallToActionControl.getInstance() instead of new CallToActionControl()");
+        }
+    }
+    CallToActionControl.getInstance = function () {
+        if (CallToActionControl.instance == null) {
+            CallToActionControl.isCreating = true;
+            CallToActionControl.instance = new CallToActionControl();
+            CallToActionControl.isCreating = false;
+        }
+        return CallToActionControl.instance;
+    };
+    CallToActionControl.prototype.show = function () {
+        this.visible = true;
+    };
+    CallToActionControl.prototype.hide = function () {
+        this.visible = false;
+    };
+    CallToActionControl.isCreating = false;
+    return CallToActionControl;
+})();
+exports.CallToActionControl = CallToActionControl;
 //# sourceMappingURL=callToAction.js.map

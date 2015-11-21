@@ -107,6 +107,7 @@ var SlideItem = (function () {
     };
     SlideItem.prototype.stop = function () {
         this.isRunning = false;
+        this.positon.setPosition(100, this.length - 1);
         if (this.interval) {
             this.interval.stopInterval();
         }

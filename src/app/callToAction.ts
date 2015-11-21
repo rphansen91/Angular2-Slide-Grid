@@ -2,7 +2,6 @@ import {Component, View, Input} from 'angular2/angular2';
 
 @Component({
 	selector: "call-to-action",
-	inputs: ["hidden: hidden", "image: image"]
 })
 @View({
 	styles: [
@@ -12,26 +11,46 @@ import {Component, View, Input} from 'angular2/angular2';
 		".callToActionImage {position: absolute; margin: auto; top: 0; left: 0; right: 0; bottom: 0; height: 50%; width: 60%; min-width: 300px; max-width: 500px; background-size: contain; background-position: center; background-repeat: no-repeat;}"
 	],
 	template: `
-		<div class="callToAction callToActionAnimated" [class.callToActionRemoved]="hidden">
+		<div class="callToAction callToActionAnimated" [class.callToActionRemoved]="!control.visible">
 			<div class="callToActionImage" [style.background-image]="'url(' + image + ')'"></div>
 		</div>
 	`	
 })
 export class CallToAction {
-	@Input() hidden: boolean;
-	@Input() image: string = "./app/assets/callToAction.png";
+	image: string = "./app/assets/callToAction.png";
+	control: CallToActionControl;
 
-	constructor () {}
+	constructor () {
+		this.control = CallToActionControl.getInstance()
+	}
+}
 
-	onInit() {}
+export class CallToActionControl {
+	static isCreating: boolean = false;
+	static instance: CallToActionControl;
 
-	onchange (change: any) { console.log(this.hidden) }
+	visible: boolean = true;
 
-	show() {
-		this.hidden = false
+	constructor() {
+		if (!CallToActionControl.isCreating) {
+			throw new Error("Use CallToActionControl.getInstance() instead of new CallToActionControl()")
+		}
+	}
+
+	static getInstance() {
+		if (CallToActionControl.instance == null) {
+			CallToActionControl.isCreating = true;
+			CallToActionControl.instance = new CallToActionControl()
+			CallToActionControl.isCreating = false;
+		}
+		return CallToActionControl.instance
+	}
+
+	show () {
+		this.visible = true;
 	}
 
 	hide () {
-		this.hidden = false
+		this.visible = false
 	}
 }

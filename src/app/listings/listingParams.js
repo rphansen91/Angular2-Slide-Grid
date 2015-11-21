@@ -87,6 +87,10 @@ var DefaultParams = (function () {
 })();
 var SearchParams = (function () {
     function SearchParams(q, categoryGroupId, minPrice, maxPrice) {
+        if (q === void 0) { q = ""; }
+        if (categoryGroupId === void 0) { categoryGroupId = 0; }
+        if (minPrice === void 0) { minPrice = 0; }
+        if (maxPrice === void 0) { maxPrice = 0; }
         this.q = "";
         this.categoryGroupId = 0;
         this.minPrice = 0;

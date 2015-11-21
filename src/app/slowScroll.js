@@ -13,44 +13,22 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var angular2_1 = require("angular2/angular2");
-var crossPlatform_1 = require("./platform/crossPlatform");
 var SlowScroll = (function () {
     function SlowScroll(element) {
         this.element = element;
-        this.delay = 40;
-        this.change = 1;
+        this.interval = SlowScrollInterval.getInstance();
     }
     SlowScroll.prototype.onInit = function () {
-        if (this.scroll) {
-            this.start();
-        }
-        else {
-            this.stop();
-        }
-    };
-    SlowScroll.prototype.start = function () {
-        var _this = this;
-        var scroller = this;
-        scroller.intervalId = setInterval(function () {
-            if (scroller.scroll) {
-                scroller.element.nativeElement.scrollTop += scroller.change;
-            }
-            else if (crossPlatform_1.CrossPlatform.getInstance().device.getViewType() != "desktop") {
-                _this.stop();
-            }
-        }, scroller.delay);
-    };
-    SlowScroll.prototype.stop = function () {
-        clearInterval(this.intervalId);
+        this.interval.addScroller(this);
     };
     __decorate([
-        angular2_1.Input('scroll'), 
-        __metadata('design:type', Boolean)
-    ], SlowScroll.prototype, "scroll");
+        angular2_1.Input('direction'), 
+        __metadata('design:type', Number)
+    ], SlowScroll.prototype, "direction");
     SlowScroll = __decorate([
         angular2_1.Directive({
             selector: "slow-scroll",
-            inputs: ["scroll: scroll"],
+            inputs: ["direction: direction"],
             providers: [angular2_1.ElementRef]
         }),
         __param(0, angular2_1.Inject(angular2_1.ElementRef)), 
@@ -59,4 +37,56 @@ var SlowScroll = (function () {
     return SlowScroll;
 })();
 exports.SlowScroll = SlowScroll;
+var SlowScrollInterval = (function () {
+    function SlowScrollInterval() {
+        this.delay = 40;
+        this.change = 1;
+        this.isRunning = false;
+        this.scrollers = [];
+        if (!SlowScrollInterval.isCreating) {
+            throw new Error("Can't invoke SlowScrollInterval using keyword new. Use SlowScrollInterval.getInstance() instead.");
+        }
+    }
+    SlowScrollInterval.getInstance = function () {
+        if (SlowScrollInterval.instance == null) {
+            SlowScrollInterval.isCreating = true;
+            SlowScrollInterval.instance = new SlowScrollInterval();
+            SlowScrollInterval.isCreating = false;
+        }
+        return SlowScrollInterval.instance;
+    };
+    SlowScrollInterval.prototype.addScroller = function (scroller) {
+        this.scrollers.push(scroller);
+    };
+    SlowScrollInterval.prototype.setScroll = function (scroller, index, arr) {
+        if (SlowScrollInterval.firstInterval && scroller.direction) {
+            scroller.element.nativeElement.scrollTop = scroller.element.nativeElement.clientHeight;
+        }
+        if (scroller.direction) {
+            scroller.element.nativeElement.scrollTop -= SlowScrollInterval.instance.change;
+        }
+        else {
+            scroller.element.nativeElement.scrollTop += SlowScrollInterval.instance.change;
+            ;
+        }
+    };
+    SlowScrollInterval.prototype.start = function () {
+        if (!this.isRunning) {
+            SlowScrollInterval.firstInterval = true;
+            this.isRunning = true;
+            this.id = setInterval(function () {
+                SlowScrollInterval.instance.scrollers.forEach(SlowScrollInterval.instance.setScroll);
+                SlowScrollInterval.firstInterval = false;
+            }, this.delay);
+        }
+    };
+    SlowScrollInterval.prototype.stop = function () {
+        this.isRunning = false;
+        clearInterval(this.id);
+    };
+    SlowScrollInterval.isCreating = false;
+    SlowScrollInterval.firstInterval = false;
+    return SlowScrollInterval;
+})();
+exports.SlowScrollInterval = SlowScrollInterval;
 //# sourceMappingURL=slowScroll.js.map

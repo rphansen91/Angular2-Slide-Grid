@@ -68,7 +68,7 @@ class OperatingSystem {
 		var invalid = false;
 		this.values = userAgent.split('').filter((char: string, i: number) => {
 			if (i >= begin && !invalid) {
-				if (valid.indexOf(char]) == -1) {
+				if (valid.indexOf(char) == -1) {
 					invalid = true;
 				} else if (char != "_" && char != "-" && char != ".") {
 					return true;

@@ -19,24 +19,27 @@ var httpService_1 = require("./listings/httpService");
 var listingDisplay_1 = require("./display/listingDisplay");
 var callToAction_1 = require("./callToAction");
 var slowScroll_1 = require("./slowScroll");
+// import {OffsetBlocks} from "./display/offsetBlocks"
 var AntengoWidget = (function () {
     function AntengoWidget(listingParams, element) {
         this.listingParams = listingParams;
         this.element = element;
-        this.ctaImage = "./app/assets/callToAction.png";
+        this.listings = [];
+        this.columnOrRow = "row";
         this.ctaHasBeenHidden = false;
-        this.ctaHidden = false;
-        this.autoScroll = true;
         this.ctaTimeout = 6000;
         AntengoWidget.display = this;
         AntengoWidget.display.setSizes();
         var location = new listingParams_1.ListingLocation(34, -117);
+        var query = new listingParams_1.SearchParams("car");
         AntengoWidget.display.listingParams
             .setLocation(location)
             .getNationalShippable()
             .runSearch()
             .onResponse(function (res) {
-            AntengoWidget.display.listings = res.result.rs; //.splice(0, display.grid.columns * display.grid.rows);
+            AntengoWidget.display.listings = res.result.rs; //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
+            AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow);
+            slowScroll_1.SlowScrollInterval.getInstance().start();
         })
             .onError(function (err) {
             console.log(err);
@@ -47,10 +50,11 @@ var AntengoWidget = (function () {
         AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
         AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
         AntengoWidget.display.grid = new listingDisplay_1.ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height);
+        AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow);
     };
     AntengoWidget.prototype.showCTA = function () {
-        this.autoScroll = true;
-        this.ctaHidden = false;
+        slowScroll_1.SlowScrollInterval.getInstance().start();
+        callToAction_1.CallToActionControl.getInstance().show();
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
@@ -58,41 +62,40 @@ var AntengoWidget = (function () {
     AntengoWidget.prototype.hideCTA = function () {
         if (this.ctaHasBeenHidden) {
             this.timeoutId = 0;
-            this.autoScroll = false;
-            this.ctaHidden = true;
+            slowScroll_1.SlowScrollInterval.getInstance().stop();
+            callToAction_1.CallToActionControl.getInstance().hide();
         }
         else {
             this.ctaHasBeenHidden = true;
             this.timeoutId = setTimeout(function () {
-                AntengoWidget.display.autoScroll = false;
-                AntengoWidget.display.ctaHidden = true;
+                slowScroll_1.SlowScrollInterval.getInstance().stop();
+                callToAction_1.CallToActionControl.getInstance().hide();
             }, this.ctaTimeout);
         }
     };
     AntengoWidget.prototype.hideCTAMobile = function () {
         this.timeoutId = 0;
         this.ctaHasBeenHidden = true;
-        this.autoScroll = false;
-        this.ctaHidden = true;
+        callToAction_1.CallToActionControl.getInstance().hide();
+        slowScroll_1.SlowScrollInterval.getInstance().stop();
     };
-    __decorate([
-        angular2_1.Input(), 
-        __metadata('design:type', String)
-    ], AntengoWidget.prototype, "ctaImage");
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, angular2_1.ElementRef],
-            inputs: ["main-image: ctaImage"]
+            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, angular2_1.ElementRef]
         }),
         angular2_1.View({
             directives: [angular2_1.NgFor, angular2_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll],
             styles: [
                 '.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
+                '.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
+                '.listingsColumn::-webkit-scrollbar{display:none;}',
+                '.listingsRow {position: relative; width: 100%;}',
                 '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
-                '.scrollingContainer::-webkit-scrollbar{display:none;}'
+                '.scrollingContainer::-webkit-scrollbar{display:none;}',
+                '.offset {position: relative; float: left;}'
             ],
-            template: "\t\n\t\t<div class=\"widgetContainer\" (mouseleave)=\"showCTA()\" (mouseenter)=\"hideCTA()\" (touchstart)=\"hideCTAMobile()\" (click)=\"hideCTAMobile()\">\n\t\t\t<call-to-action [hidden]=\"ctaHidden\" [image]=\"ctaImage\"></call-to-action>\n\t\t\t<slow-scroll class=\"scrollingContainer\" [scroll]=\"autoScroll\">\n\t\t\t\t<listing-display *ng-for=\"#listing of listings\" [listing]=\"listing\" [width]=\"grid.width\" [height]=\"grid.height\"></listing-display>\n\t\t\t</slow-scroll>\n\t\t</div>\n\t"
+            templateUrl: './app/widget.html'
         }),
         __param(1, angular2_1.Inject(angular2_1.ElementRef)), 
         __metadata('design:paramtypes', [listingParams_1.ListingParams, (typeof ElementRef !== 'undefined' && ElementRef) || Object])

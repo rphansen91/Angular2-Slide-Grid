@@ -1,46 +1,40 @@
 import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attribute} from 'angular2/angular2';
 // import {HTTP_PROVIDERS} from "/angular2/http";
-import {ListingParams, ListingLocation} from './listings/listingParams';
+import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
 import {HttpHelper} from "./listings/httpService";
 import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
-import {CallToAction} from "./callToAction"
-import {SlowScroll} from "./slowScroll"
+import {CallToAction, CallToActionControl} from "./callToAction"
+import {SlowScroll, SlowScrollInterval} from "./slowScroll"
 import {CrossPlatform} from "./platform/crossPlatform"
 import {SlideItems} from "./display/slideShow"
+// import {OffsetBlocks} from "./display/offsetBlocks"
 
 @Component({
     selector: 'antengo-listings',
-    providers: [HttpHelper, ListingParams, ElementRef],
-    inputs: ["main-image: ctaImage"]
+    providers: [HttpHelper, ListingParams, ElementRef]
 })
 @View({
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll],
 	styles: [
 		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
+		'.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
+		'.listingsColumn::-webkit-scrollbar{display:none;}',
+		'.listingsRow {position: relative; width: 100%;}',
 		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
-		'.scrollingContainer::-webkit-scrollbar{display:none;}'
+		'.scrollingContainer::-webkit-scrollbar{display:none;}',
+		'.offset {position: relative; float: left;}'
 	],
-	template: `	
-		<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTAMobile()" (click)="hideCTAMobile()">
-			<call-to-action [hidden]="ctaHidden" [image]="ctaImage"></call-to-action>
-			<slow-scroll class="scrollingContainer" [scroll]="autoScroll">
-				<listing-display *ng-for="#listing of listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
-			</slow-scroll>
-		</div>
-	`
+	templateUrl: './app/widget.html'
 })
 class AntengoWidget {
-	@Input() ctaImage: string = "./app/assets/callToAction.png";
-	
 	public width: number;
 	public height: number;
 
-	public listings: Listing[];
+	public listings: Listing[] = [];
 	public grid: ListingGrid;
-
+	public columnOrRow: string = "row";
+	
 	public ctaHasBeenHidden: boolean = false;
-	public ctaHidden : boolean = false;
-	public autoScroll: boolean = true;
 	public ctaTimeout: number = 6000;
 	public timeoutId: number;
 
@@ -53,15 +47,15 @@ class AntengoWidget {
 		AntengoWidget.display = this
 		AntengoWidget.display.setSizes()
 		var location = new ListingLocation(34, -117)
-
+		var query = new SearchParams("car")
 		AntengoWidget.display.listingParams
 		.setLocation(location)
 		.getNationalShippable()
 		.runSearch()
 		.onResponse((res) => {
-			AntengoWidget.display.listings = res.result.rs //.splice(0, display.grid.columns * display.grid.rows);
-
-
+			AntengoWidget.display.listings = res.result.rs //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
+			AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+			SlowScrollInterval.getInstance().start()
 		})
 		.onError((err) => {
 			console.log(err)
@@ -72,30 +66,31 @@ class AntengoWidget {
 		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
 		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
 		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
+		AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
 	}
 	showCTA () {
-		this.autoScroll = true;
-		this.ctaHidden = false;
+		SlowScrollInterval.getInstance().start()
+		CallToActionControl.getInstance().show()
 		if (this.timeoutId) { clearTimeout(this.timeoutId) }
 	}
 	hideCTA () {
 		if (this.ctaHasBeenHidden) {
 			this.timeoutId = 0;
-			this.autoScroll = false;
-			this.ctaHidden = true;
+			SlowScrollInterval.getInstance().stop()
+			CallToActionControl.getInstance().hide()
 		} else {
 			this.ctaHasBeenHidden = true;
 			this.timeoutId = setTimeout(() => {
-				AntengoWidget.display.autoScroll = false;
-				AntengoWidget.display.ctaHidden = true;		
+				SlowScrollInterval.getInstance().stop()
+				CallToActionControl.getInstance().hide()		
 			}, this.ctaTimeout)
 		}
 	}
 	hideCTAMobile () {
 		this.timeoutId = 0;
 		this.ctaHasBeenHidden = true;
-		this.autoScroll = false;
-		this.ctaHidden = true;
+		CallToActionControl.getInstance().hide()
+		SlowScrollInterval.getInstance().stop()
 	}
 }
 

@@ -85,7 +85,7 @@ export class SearchParams {
 	public minPrice: number = 0;
 	public maxPrice: number = 0;
 
-	constructor(q: string, categoryGroupId: number, minPrice: number, maxPrice: number) {
+	constructor(q: string = "", categoryGroupId: number = 0, minPrice: number = 0, maxPrice: number = 0) {
 		this.q = q;
 		this.categoryGroupId = categoryGroupId
 		this.minPrice = minPrice
