@@ -8,17 +8,18 @@
         src: url(./app/assets/Raleway-SemiBold.ttf);
       }
 
-      .listingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; width: 100%; height: 100%;font-family: Raleway-SemiBold;}
+      .listingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; width: 500px; height: 500px;font-family: Raleway-SemiBold;}
     </style>
     <script src="../node_modules/systemjs/dist/system.src.js"></script>
-    <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <!-- <script src="../node_modules/angular2/bundles/angular2.dev.js"></script> -->
+    <script src="../node_modules/angular2/bundles/web_worker/ui.dev.js"></script>
     <script src="../node_modules/angular2/bundles/http.dev.js"></script>
     <script>
       System.config({
-        packages: {'app': {defaultExtension: 'js'}}
+        packages: {'ui': {defaultExtension: 'js'}}
       });
-      System.import('app/antengoWidget').then(function (m) {
-        // m.main()
+      System.import('ui/app').then(function (m) {
+        m.main()
       });
     </script>
   </head>

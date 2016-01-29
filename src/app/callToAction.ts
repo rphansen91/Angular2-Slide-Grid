@@ -1,4 +1,4 @@
-import {Component, View, Input} from 'angular2/angular2';
+import {Component, View, Input} from 'angular2/web_worker/worker';
 
 @Component({
 	selector: "call-to-action",

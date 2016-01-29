@@ -1,5 +1,5 @@
 // import {Http} from 'angular2/http';
-import {Inject, Injectable} from "angular2/angular2";
+import {Inject, Injectable} from "angular2/web_worker/worker";
 
 @Injectable()
 export class HttpHelper {

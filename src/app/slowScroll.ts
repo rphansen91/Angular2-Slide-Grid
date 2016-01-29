@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Inject, Input} from "angular2/angular2"
+import {Directive, ElementRef, Inject, Input} from "angular2/web_worker/worker"
 import {CrossPlatform} from "./platform/crossPlatform"
 
 @Directive({

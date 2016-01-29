@@ -1,10 +1,8 @@
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -12,45 +10,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var angular2_1 = require('angular2/angular2');
+var worker_1 = require('angular2/web_worker/worker');
 // import {HTTP_PROVIDERS} from "/angular2/http";
 var listingParams_1 = require('./listings/listingParams');
 var httpService_1 = require("./listings/httpService");
 var listingDisplay_1 = require("./display/listingDisplay");
 var callToAction_1 = require("./callToAction");
 var slowScroll_1 = require("./slowScroll");
-// import {OffsetBlocks} from "./display/offsetBlocks"
+var loadingDots_1 = require("./loadingDots");
 var AntengoWidget = (function () {
-    function AntengoWidget(listingParams, element) {
+    function AntengoWidget(listingParams, element, renderer) {
         this.listingParams = listingParams;
         this.element = element;
+        this.renderer = renderer;
+        this.width = 500;
+        this.height = 500;
         this.listings = [];
         this.columnOrRow = "row";
         this.ctaHasBeenHidden = false;
         this.ctaTimeout = 6000;
-        AntengoWidget.display = this;
-        AntengoWidget.display.setSizes();
+    }
+    AntengoWidget.prototype.onInit = function () {
+        var _this = this;
+        this.setSizes();
         var location = new listingParams_1.ListingLocation(34, -117);
         var query = new listingParams_1.SearchParams("car");
-        AntengoWidget.display.listingParams
+        // AntengoWidget.display.listings = listingParams.getMockData()
+        // AntengoWidget.display.grid.addListingsAnimated(AntengoWidget.display.listings)
+        this.listingParams
             .setLocation(location)
             .getNationalShippable()
             .runSearch()
             .onResponse(function (res) {
-            AntengoWidget.display.listings = res.result.rs; //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
-            AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow);
-            slowScroll_1.SlowScrollInterval.getInstance().start();
+            _this.listings = res.result.rs.splice(0, 500);
+            console.log(_this.listings, _this.grid);
+            // this.grid.addListings(this.listings)
+            // AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+            // SlowScrollInterval.getInstance().start()
         })
             .onError(function (err) {
             console.log(err);
         });
-        window.onresize = this.setSizes;
-    }
+        // window.onresize = this.setSizes;
+    };
     AntengoWidget.prototype.setSizes = function () {
-        AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
-        AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-        AntengoWidget.display.grid = new listingDisplay_1.ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height);
-        AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow);
+        // this.width = this.element.nativeElement.clientWidth;
+        // this.height = this.element.nativeElement.clientHeight;
+        // this.renderer.setElementStyle()
+        this.grid = new listingDisplay_1.ListingGrid(this.width, this.height);
+        // if (this.listings.length) {
+        // 	this.grid.addListings(this.listings)
+        // //AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+        // }
     };
     AntengoWidget.prototype.showCTA = function () {
         slowScroll_1.SlowScrollInterval.getInstance().start();
@@ -80,12 +91,12 @@ var AntengoWidget = (function () {
         slowScroll_1.SlowScrollInterval.getInstance().stop();
     };
     AntengoWidget = __decorate([
-        angular2_1.Component({
+        worker_1.Component({
             selector: 'antengo-listings',
-            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, angular2_1.ElementRef]
+            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, worker_1.ElementRef, worker_1.Renderer]
         }),
-        angular2_1.View({
-            directives: [angular2_1.NgFor, angular2_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll],
+        worker_1.View({
+            directives: [worker_1.NgFor, worker_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loadingDots_1.LoadingDots],
             styles: [
                 '.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
                 '.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
@@ -97,10 +108,11 @@ var AntengoWidget = (function () {
             ],
             templateUrl: './app/widget.html'
         }),
-        __param(1, angular2_1.Inject(angular2_1.ElementRef)), 
-        __metadata('design:paramtypes', [listingParams_1.ListingParams, (typeof ElementRef !== 'undefined' && ElementRef) || Object])
+        __param(1, worker_1.Inject(worker_1.ElementRef)),
+        __param(2, worker_1.Inject(worker_1.Renderer)), 
+        __metadata('design:paramtypes', [listingParams_1.ListingParams, worker_1.ElementRef, worker_1.Renderer])
     ], AntengoWidget);
     return AntengoWidget;
 })();
-angular2_1.bootstrap(AntengoWidget);
+worker_1.bootstrapWebWorker(AntengoWidget);
 //# sourceMappingURL=antengoWidget.js.map

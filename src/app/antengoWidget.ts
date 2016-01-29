@@ -1,4 +1,4 @@
-import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attribute} from 'angular2/angular2';
+import {Component, View, Input, ElementRef, Renderer, bootstrapWebWorker, NgFor, NgIf, Inject, Attribute, OnInit} from 'angular2/web_worker/worker';
 // import {HTTP_PROVIDERS} from "/angular2/http";
 import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
 import {HttpHelper} from "./listings/httpService";
@@ -7,14 +7,14 @@ import {CallToAction, CallToActionControl} from "./callToAction"
 import {SlowScroll, SlowScrollInterval} from "./slowScroll"
 import {CrossPlatform} from "./platform/crossPlatform"
 import {SlideItems} from "./display/slideShow"
-// import {OffsetBlocks} from "./display/offsetBlocks"
+import {LoadingDots} from "./loadingDots"
 
 @Component({
     selector: 'antengo-listings',
-    providers: [HttpHelper, ListingParams, ElementRef]
+    providers: [HttpHelper, ListingParams, ElementRef, Renderer]
 })
 @View({
-	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll],
+	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, LoadingDots],
 	styles: [
 		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
@@ -26,9 +26,9 @@ import {SlideItems} from "./display/slideShow"
 	],
 	templateUrl: './app/widget.html'
 })
-class AntengoWidget {
-	public width: number;
-	public height: number;
+class AntengoWidget implements OnInit {
+	public width: number = 500;
+	public height: number = 500;
 
 	public listings: Listing[] = [];
 	public grid: ListingGrid;
@@ -38,35 +38,48 @@ class AntengoWidget {
 	public ctaTimeout: number = 6000;
 	public timeoutId: number;
 
-	static display: AntengoWidget;
-
 	constructor(
 		public listingParams: ListingParams,
-		@Inject(ElementRef) public element: ElementRef
-	) {
-		AntengoWidget.display = this
-		AntengoWidget.display.setSizes()
+		@Inject(ElementRef) public element: ElementRef,
+		@Inject(Renderer) public renderer: Renderer
+	) {}
+
+	onInit () {
+		this.setSizes()
 		var location = new ListingLocation(34, -117)
 		var query = new SearchParams("car")
-		AntengoWidget.display.listingParams
+
+		// AntengoWidget.display.listings = listingParams.getMockData()
+		// AntengoWidget.display.grid.addListingsAnimated(AntengoWidget.display.listings)
+
+		this.listingParams
 		.setLocation(location)
+		// .setSearchParams(query)
+		// .getLocalListings()
 		.getNationalShippable()
 		.runSearch()
 		.onResponse((res) => {
-			AntengoWidget.display.listings = res.result.rs //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
-			AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
-			SlowScrollInterval.getInstance().start()
+			this.listings = res.result.rs.splice(0, 500)
+			console.log(this.listings, this.grid)
+			// this.grid.addListings(this.listings)
+			// AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+			// SlowScrollInterval.getInstance().start()
 		})
 		.onError((err) => {
 			console.log(err)
 		})
-		window.onresize = this.setSizes;
+		// window.onresize = this.setSizes;
 	}
 	setSizes () {
-		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
-		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
-		AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+		// this.width = this.element.nativeElement.clientWidth;
+		// this.height = this.element.nativeElement.clientHeight;
+		// this.renderer.setElementStyle()
+		this.grid = new ListingGrid(this.width, this.height)
+
+		// if (this.listings.length) {
+		// 	this.grid.addListings(this.listings)
+		// //AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
+		// }
 	}
 	showCTA () {
 		SlowScrollInterval.getInstance().start()
@@ -94,4 +107,4 @@ class AntengoWidget {
 	}
 }
 
-bootstrap(AntengoWidget);
+bootstrapWebWorker(AntengoWidget);
