@@ -1,7 +1,9 @@
 import {Component, Input, NgIf} from 'angular2/angular2';
 import {Photo, SlideItems, SlideItem} from './slideShow';
 import {CrossPlatform} from '../platform/crossPlatform';
-import {PriceDisplay} from './price'
+import {PriceDisplay} from './price';
+
+import {PartnersService} from '../partners/partners.service';
 
 @Component({
 	selector: "listing-display",
@@ -31,13 +33,16 @@ export class ListingDisplay {
 	opening: boolean = false;
 	id: number;
 
-	constructor() { }
+	constructor(
+		private _partnersService: PartnersService
+	) { }
 
 	onInit () {
 		this.slide = SlideItems.getInstance().add(this.listing.photos, this.width)
 	}
 	goToApp () {
-		window.open("https://antengo.com/p?antengo/#/itemDetail/" + this.listing.id);
+		let code = this._partnersService.partner;
+		window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listing.id);
 		this.opening = false;
 	}
 	startSolo () {

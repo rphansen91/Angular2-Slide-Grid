@@ -1,7 +1,8 @@
 import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attribute} from 'angular2/angular2';
-// import {HTTP_PROVIDERS} from "/angular2/http";
+import {HTTP_PROVIDERS} from "angular2/http";
+
 import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
-import {HttpHelper} from "./listings/httpService";
+import {PartnersService} from './partners/partners.service'
 import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
 import {CallToAction, CallToActionControl} from "./callToAction"
 import {SlowScroll, SlowScrollInterval} from "./slowScroll"
@@ -11,7 +12,7 @@ import {SlideItems} from "./display/slideShow"
 
 @Component({
     selector: 'antengo-listings',
-    providers: [HttpHelper, ListingParams, ElementRef]
+    providers: [ListingParams, PartnersService, ElementRef]
 })
 @View({
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll],
@@ -41,6 +42,7 @@ class AntengoWidget {
 	static display: AntengoWidget;
 
 	constructor(
+		public partnersService: PartnersService,
 		public listingParams: ListingParams,
 		@Inject(ElementRef) public element: ElementRef
 	) {
@@ -48,18 +50,20 @@ class AntengoWidget {
 		AntengoWidget.display.setSizes()
 		var location = new ListingLocation(34, -117)
 		var query = new SearchParams("car")
+		
 		AntengoWidget.display.listingParams
 		.setLocation(location)
 		.getNationalShippable()
 		.runSearch()
-		.onResponse((res) => {
-			AntengoWidget.display.listings = res.result.rs //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
+		.map(res => res.json().result.rs )
+		.subscribe((listings) => {
+			AntengoWidget.display.listings = listings //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
 			AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
 			SlowScrollInterval.getInstance().start()
 		})
-		.onError((err) => {
-			console.log(err)
-		})
+
+		partnersService.initialize()
+
 		window.onresize = this.setSizes;
 	}
 	setSizes () {
@@ -94,4 +98,4 @@ class AntengoWidget {
 	}
 }
 
-bootstrap(AntengoWidget);
+bootstrap(AntengoWidget, [HTTP_PROVIDERS]);

@@ -1,16 +1,20 @@
-import {HttpHelper} from "./httpService";
 import {Injectable} from "angular2/angular2";
+import {Http} from "angular2/http";
 
 @Injectable()
 export class ListingParams {
+	public url: string = "https://api.antengo.com";
 	public params: DefaultParams;
 
-	constructor(public httpHelper: HttpHelper) {
+	constructor(
+		private _http: Http
+	) {
 		this.params = new DefaultParams()
 	}
 
 	runSearch () {
-		return this.httpHelper.request("/supplylisting/rpc", "search_v2", this.params).send()
+		let body = JSON.stringify({ "id": "0", "method": "search_v2", "params": this.params })
+		return this._http.post(this.url + "/supplylisting/rpc", body)
 	}
 
 	setSearchParams(search: SearchParams) {

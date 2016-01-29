@@ -1,10 +1,8 @@
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -13,15 +11,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var angular2_1 = require('angular2/angular2');
-// import {HTTP_PROVIDERS} from "/angular2/http";
+var http_1 = require("angular2/http");
 var listingParams_1 = require('./listings/listingParams');
-var httpService_1 = require("./listings/httpService");
+var partners_service_1 = require('./partners/partners.service');
 var listingDisplay_1 = require("./display/listingDisplay");
 var callToAction_1 = require("./callToAction");
 var slowScroll_1 = require("./slowScroll");
 // import {OffsetBlocks} from "./display/offsetBlocks"
 var AntengoWidget = (function () {
-    function AntengoWidget(listingParams, element) {
+    function AntengoWidget(partnersService, listingParams, element) {
+        this.partnersService = partnersService;
         this.listingParams = listingParams;
         this.element = element;
         this.listings = [];
@@ -36,14 +35,13 @@ var AntengoWidget = (function () {
             .setLocation(location)
             .getNationalShippable()
             .runSearch()
-            .onResponse(function (res) {
-            AntengoWidget.display.listings = res.result.rs; //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
+            .map(function (res) { return res.json().result.rs; })
+            .subscribe(function (listings) {
+            AntengoWidget.display.listings = listings; //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
             AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow);
             slowScroll_1.SlowScrollInterval.getInstance().start();
-        })
-            .onError(function (err) {
-            console.log(err);
         });
+        partnersService.initialize();
         window.onresize = this.setSizes;
     }
     AntengoWidget.prototype.setSizes = function () {
@@ -82,7 +80,7 @@ var AntengoWidget = (function () {
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [httpService_1.HttpHelper, listingParams_1.ListingParams, angular2_1.ElementRef]
+            providers: [listingParams_1.ListingParams, partners_service_1.PartnersService, angular2_1.ElementRef]
         }),
         angular2_1.View({
             directives: [angular2_1.NgFor, angular2_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll],
@@ -97,10 +95,10 @@ var AntengoWidget = (function () {
             ],
             templateUrl: './app/widget.html'
         }),
-        __param(1, angular2_1.Inject(angular2_1.ElementRef)), 
-        __metadata('design:paramtypes', [listingParams_1.ListingParams, (typeof ElementRef !== 'undefined' && ElementRef) || Object])
+        __param(2, angular2_1.Inject(angular2_1.ElementRef)), 
+        __metadata('design:paramtypes', [partners_service_1.PartnersService, listingParams_1.ListingParams, angular2_1.ElementRef])
     ], AntengoWidget);
     return AntengoWidget;
 })();
-angular2_1.bootstrap(AntengoWidget);
+angular2_1.bootstrap(AntengoWidget, [http_1.HTTP_PROVIDERS]);
 //# sourceMappingURL=antengoWidget.js.map

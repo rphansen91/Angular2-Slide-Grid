@@ -1,10 +1,8 @@
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -12,15 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var angular2_1 = require('angular2/angular2');
 var slideShow_1 = require('./slideShow');
 var price_1 = require('./price');
+var partners_service_1 = require('../partners/partners.service');
 var ListingDisplay = (function () {
-    function ListingDisplay() {
+    function ListingDisplay(_partnersService) {
+        this._partnersService = _partnersService;
         this.opening = false;
     }
     ListingDisplay.prototype.onInit = function () {
         this.slide = slideShow_1.SlideItems.getInstance().add(this.listing.photos, this.width);
     };
     ListingDisplay.prototype.goToApp = function () {
-        window.open("https://antengo.com/p?antengo/#/itemDetail/" + this.listing.id);
+        var code = this._partnersService.partner;
+        window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listing.id);
         this.opening = false;
     };
     ListingDisplay.prototype.startSolo = function () {
@@ -38,15 +39,15 @@ var ListingDisplay = (function () {
     __decorate([
         angular2_1.Input(), 
         __metadata('design:type', Listing)
-    ], ListingDisplay.prototype, "listing");
+    ], ListingDisplay.prototype, "listing", void 0);
     __decorate([
         angular2_1.Input(), 
         __metadata('design:type', Number)
-    ], ListingDisplay.prototype, "width");
+    ], ListingDisplay.prototype, "width", void 0);
     __decorate([
         angular2_1.Input(), 
         __metadata('design:type', Number)
-    ], ListingDisplay.prototype, "height");
+    ], ListingDisplay.prototype, "height", void 0);
     ListingDisplay = __decorate([
         angular2_1.Component({
             selector: "listing-display",
@@ -62,7 +63,7 @@ var ListingDisplay = (function () {
             ],
             template: "\n\t\t<div class=\"listingDisplay\" (click)=\"goToApp()\" [class.opening]=\"opening\" [style.width]=\"width\" [style.height]=\"height\" [style.background-position]=\"slide.positioning()\" [style.background-image]=\"slide.image\" (mouseenter)=\"startSolo()\" (mouseleave)=\"endSolo()\" (touchstart)=\"startSolo()\" (touchend)=\"endSolo()\">\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\">$ {{listing.price | price}}</div>\n\t\t</div>\n\t"
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [partners_service_1.PartnersService])
     ], ListingDisplay);
     return ListingDisplay;
 })();
