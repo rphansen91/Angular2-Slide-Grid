@@ -1,19 +1,19 @@
-<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTAMobile()" (click)="hideCTAMobile()">
+<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()" (click)="hideCTA()">
 	
 	<call-to-action></call-to-action>
+
+	<sell-it [show]="showSell"></sell-it>
 	
-	<!-- ROWS -->
-	<slow-scroll *ng-if="grid.listingRows.length" class="scrollingContainer">
-		<div class="listingsRow" *ng-for="#row of grid.listingRows" [style.height]="grid.height">
-			<listing-display *ng-for="#listing of row.listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
-		</div>
+	<slow-scroll class="scrollingContainer">
+
+		<listing-display *ng-for="#listing of listings" 
+			[listing]="listing" 
+			[width]="grid.width" 
+			[height]="grid.height">
+		</listing-display>
+
 	</slow-scroll>
 
-	<!-- COLUMNS -->
-	<div class="scrollingContainer" *ng-if="grid.listingColumns.length">
-		<slow-scroll *ng-for="#column of grid.listingColumns; #i=index;" class="listingsColumn" [style.width]="grid.width" [direction]="i%2">
-			<listing-display *ng-for="#listing of column.listings" [listing]="listing" [width]="grid.width" [height]="grid.height"></listing-display>
-		</slow-scroll>
-	</div>
+	<widget-loader></widget-loader>
 
 </div>

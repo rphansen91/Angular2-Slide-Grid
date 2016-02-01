@@ -1,4 +1,4 @@
-import {Component, View, Input} from 'angular2/angular2';
+import {Component, View} from 'angular2/angular2';
 
 @Component({
 	selector: "call-to-action",

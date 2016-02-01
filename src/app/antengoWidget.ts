@@ -2,20 +2,21 @@ import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attr
 import {HTTP_PROVIDERS} from "angular2/http";
 
 import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
-import {PartnersService} from './partners/partners.service'
-import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay"
-import {CallToAction, CallToActionControl} from "./callToAction"
-import {SlowScroll, SlowScrollInterval} from "./slowScroll"
-import {CrossPlatform} from "./platform/crossPlatform"
-import {SlideItems} from "./display/slideShow"
-// import {OffsetBlocks} from "./display/offsetBlocks"
+import {PartnersService} from './partners/partners.service';
+import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay";
+import {CallToAction, CallToActionControl} from "./callToAction";
+import {SellIt} from "./sellIt.component";
+import {SlowScroll, SlowScrollInterval} from "./slowScroll";
+import {CrossPlatform} from "./platform/crossPlatform";
+import {SlideItems} from "./display/slideShow";
+import {SlidePositions} from './display/slidePositions';
+import {WidgetLoader} from "./loader/loader.component"
+import {WidgetLoaderInstance} from "./loader/loader.instance"
 
 @Component({
     selector: 'antengo-listings',
-    providers: [ListingParams, PartnersService, ElementRef]
-})
-@View({
-	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll],
+    providers: [ListingParams, PartnersService, ElementRef],
+	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellIt],
 	styles: [
 		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
@@ -33,17 +34,16 @@ class AntengoWidget {
 
 	public listings: Listing[] = [];
 	public grid: ListingGrid;
-	public columnOrRow: string = "row";
 	
-	public ctaHasBeenHidden: boolean = false;
-	public ctaTimeout: number = 6000;
-	public timeoutId: number;
+	public showSell: boolean = false;
 
 	static display: AntengoWidget;
 
 	constructor(
 		public partnersService: PartnersService,
 		public listingParams: ListingParams,
+		public slideItems: SlideItems,
+		public slidePositions: SlidePositions,
 		@Inject(ElementRef) public element: ElementRef
 	) {
 		AntengoWidget.display = this
@@ -57,45 +57,31 @@ class AntengoWidget {
 		.runSearch()
 		.map(res => res.json().result.rs )
 		.subscribe((listings) => {
-			AntengoWidget.display.listings = listings //.splice(0, res.result.rs.length - (res.result.rs.length % AntengoWidget.display.grid.columns))
-			AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
-			SlowScrollInterval.getInstance().start()
+			console.log(listings.length)
+			AntengoWidget.display.listings = listings.splice(0, 300 - (300 % AntengoWidget.display.grid.columns))
+			console.log(AntengoWidget.display.listings.length)
 		})
 
-		partnersService.initialize()
-
+		partnersService.initialize();
+		slideItems.initialize();
+		slidePositions.initialize();
 		window.onresize = this.setSizes;
 	}
 	setSizes () {
 		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
 		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
 		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
-		AntengoWidget.display.grid.addListings(AntengoWidget.display.listings, AntengoWidget.display.columnOrRow)
 	}
 	showCTA () {
 		SlowScrollInterval.getInstance().start()
 		CallToActionControl.getInstance().show()
-		if (this.timeoutId) { clearTimeout(this.timeoutId) }
+		this.showSell = false;
 	}
 	hideCTA () {
-		if (this.ctaHasBeenHidden) {
-			this.timeoutId = 0;
-			SlowScrollInterval.getInstance().stop()
-			CallToActionControl.getInstance().hide()
-		} else {
-			this.ctaHasBeenHidden = true;
-			this.timeoutId = setTimeout(() => {
-				SlowScrollInterval.getInstance().stop()
-				CallToActionControl.getInstance().hide()		
-			}, this.ctaTimeout)
-		}
-	}
-	hideCTAMobile () {
-		this.timeoutId = 0;
-		this.ctaHasBeenHidden = true;
-		CallToActionControl.getInstance().hide()
 		SlowScrollInterval.getInstance().stop()
+		CallToActionControl.getInstance().hide()
+		this.showSell = true;
 	}
 }
 
-bootstrap(AntengoWidget, [HTTP_PROVIDERS]);
+bootstrap(AntengoWidget, [HTTP_PROVIDERS, WidgetLoaderInstance, SlideItems, SlidePositions]);

@@ -1,196 +1,51 @@
-var easings_1 = require('./easings');
-var SlideItems = (function () {
-    function SlideItems() {
-        this.slides = [];
-        this.isRunning = false;
-        if (!SlideItems.isCreating) {
-            throw new Error("You can't call new in Singleton instances! Call SlideItems.getInstance() instead.");
-        }
-        this.slideInterval = new ImageInterval();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
+    switch (arguments.length) {
+        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
-    SlideItems.getInstance = function () {
-        if (SlideItems.instance == null) {
-            SlideItems.isCreating = true;
-            SlideItems.instance = new SlideItems();
-            SlideItems.isCreating = false;
-        }
-        return SlideItems.instance;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var angular2_1 = require("angular2/angular2");
+var slowScroll_1 = require("../slowScroll");
+var slideItem_1 = require("./slideItem");
+var loader_instance_1 = require("../loader/loader.instance");
+var SlideItems = (function () {
+    function SlideItems(_loader) {
+        this._loader = _loader;
+    }
+    SlideItems.prototype.initialize = function () {
+        this._worker = (window["Worker"]) ? new window["Worker"]("./app/workers/slideWorker.js") : false;
+        this._workerResolvers = [];
     };
     SlideItems.prototype.add = function (photos, size) {
-        var slide = new SlideItem(photos, size);
-        if (photos.length > 1) {
-            this.slides.push(slide);
-        }
-        return slide;
-    };
-    SlideItems.prototype.startShow = function () {
-        var backwards = 0;
-        var show = this;
-        if (!show.isRunning) {
-            show.slideInterval.config(1000, "easeIn", 10);
-            show.slideInterval.resetValue();
-            show.isRunning = true;
-            show.slideInterval.startInterval(function () {
-                if (show.slideInterval.value == 100) {
-                    backwards++;
-                    show.slideInterval.resetValue();
-                }
-                var finishedAll = true;
-                show.slideInterval.increaseValue();
-                show.slides.forEach(function (slide) {
-                    var index = slide.getIndex(backwards);
-                    if (index >= 0) {
-                        slide.positon.setPosition(show.slideInterval.value, index);
-                        finishedAll = false;
+        var work = this;
+        return new Promise(function (resolve, reject) {
+            if (work._worker) {
+                work._workerResolvers.push(resolve);
+                work._worker.postMessage([photos, size, work._workerResolvers.length - 1]);
+                work._worker.onmessage = function (e) {
+                    var resolver = work._workerResolvers[e.data[1]];
+                    if (e.data[1] >= work._workerResolvers.length - 1) {
+                        work._loader.toggle();
+                        slowScroll_1.SlowScrollInterval.getInstance().start();
                     }
-                });
-                if (finishedAll) {
-                    show.stopShow();
-                }
-            });
-        }
+                    resolver(e.data[0]);
+                };
+            }
+            else {
+                resolve(new slideItem_1.SlideItem(photos, size));
+            }
+        });
     };
-    SlideItems.prototype.stopShow = function () {
-        this.slideInterval.stopInterval();
-        this.isRunning = false;
-    };
-    SlideItems.isCreating = false;
+    SlideItems = __decorate([
+        angular2_1.Injectable(), 
+        __metadata('design:paramtypes', [loader_instance_1.WidgetLoaderInstance])
+    ], SlideItems);
     return SlideItems;
 })();
 exports.SlideItems = SlideItems;
-var SlideItem = (function () {
-    function SlideItem(photos, size) {
-        this.photos = photos;
-        this.isRunning = false;
-        if (this.photos.length > 1) {
-            this.photos.push(this.photos[0]);
-        }
-        this.length = this.photos.length;
-        this.positon = new ImagePosition().setSize(size).setPosition(100, this.length - 1);
-        this.image = this.photos.reverse().reduce(function (previous, current, index, arr) {
-            return previous + 'url(' + current.url + ')' + ((index != arr.length - 1) ? ',' : '');
-        }, "");
-        return this;
-    }
-    SlideItem.prototype.setPositionSize = function (size) {
-        this.positon.setSize(size);
-        return this;
-    };
-    SlideItem.prototype.start = function () {
-        if (this.length > 1) {
-            var show = this;
-            var index = this.length - 2;
-            if (!show.isRunning) {
-                show.isRunning = true;
-                show.interval = new ImageInterval();
-                show.interval.config(500, "easeIn");
-                show.interval.resetValue();
-                show.interval.startInterval(function () {
-                    var finished = false;
-                    show.interval.increaseValue();
-                    show.positon.setPosition(show.interval.value, index);
-                    if (show.interval.value == 100) {
-                        index--;
-                        if (index < 0) {
-                            finished = true;
-                        }
-                        else {
-                            show.interval.resetValue();
-                        }
-                    }
-                    if (finished) {
-                        show.interval.stopInterval();
-                    }
-                });
-            }
-        }
-    };
-    SlideItem.prototype.stop = function () {
-        this.isRunning = false;
-        this.positon.setPosition(100, this.length - 1);
-        if (this.interval) {
-            this.interval.stopInterval();
-        }
-    };
-    SlideItem.prototype.positioning = function () {
-        if (this.positon && this.positon.position) {
-            return this.positon.position;
-        }
-        else {
-            return "0";
-        }
-    };
-    SlideItem.prototype.getIndex = function (backward) {
-        return this.length - backward - 2;
-    };
-    return SlideItem;
-})();
-exports.SlideItem = SlideItem;
-var Photo = (function () {
-    function Photo() {
-    }
-    return Photo;
-})();
-exports.Photo = Photo;
-var ImageInterval = (function () {
-    function ImageInterval() {
-        this.value = 0;
-        this.currentTime = 0;
-        this.startValue = 0;
-        this.endValue = 100;
-        this.change = 100;
-        this.ammount = 100;
-    }
-    ImageInterval.prototype.config = function (d, t, ammount, start, end) {
-        this.duration = d;
-        this.type = t;
-        this.startValue = (start) ? start : 0;
-        this.endValue = (end) ? end : 100;
-        this.change = this.endValue - this.startValue;
-        this.ammount = (ammount) ? ammount : this.ammount;
-        this.interval = this.duration / this.ammount;
-        this.easingFn = new easings_1.Easings(this.type);
-    };
-    ImageInterval.prototype.resetValue = function () {
-        this.value = 0;
-        this.currentTime = 0;
-    };
-    ImageInterval.prototype.increaseValue = function () {
-        // Fibonacci increase
-        this.currentTime += this.interval;
-        this.value = this.easingFn(this.currentTime, this.startValue, this.change, this.duration);
-    };
-    ImageInterval.prototype.startInterval = function (callback) {
-        this.id = setInterval(function () {
-            callback();
-        }, this.interval);
-    };
-    ImageInterval.prototype.stopInterval = function () {
-        clearInterval(this.id);
-    };
-    return ImageInterval;
-})();
-exports.ImageInterval = ImageInterval;
-var ImagePosition = (function () {
-    function ImagePosition() {
-        this.position = "0";
-        return this;
-    }
-    ImagePosition.prototype.setSize = function (size) {
-        this.size = size;
-        return this;
-    };
-    ImagePosition.prototype.setPosition = function (percentage, index) {
-        var tmp = "";
-        var begin = index;
-        for (var i = 0; i < begin; i++) {
-            tmp += "-" + this.size + "px 50%, ";
-        }
-        tmp += ((((percentage / 100) * this.size)) - this.size) + "px 50%, 0 50%";
-        this.position = tmp;
-        return this;
-    };
-    return ImagePosition;
-})();
-exports.ImagePosition = ImagePosition;
 //# sourceMappingURL=slideShow.js.map

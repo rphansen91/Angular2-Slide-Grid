@@ -1,0 +1,47 @@
+.widget-loader {position: fixed; z-index: 99999; bottom: 0; left: 0; right: 0; pointer-events: none; width: 100%;}
+.widget-loader-streaks {
+	background-image: -owg-linear-gradient(89deg, #89c201 7%, #8c77b6 50%, #8c77b6 100%);
+	background-image: -webkit-linear-gradient(89deg, #89c201 7%, #8c77b6 50%, #8c77b6 100%);
+	background-image: -moz-linear-gradient(89deg, #89c201 7%, #8c77b6 50%, #8c77b6 100%);
+	background-image: -o-linear-gradient(89deg, #89c201 7%, #8c77b6 50%, #8c77b6 100%);
+	background-image: linear-gradient(89deg, #89c201 7%, #8c77b6 50%, #8c77b6 100%);
+	height: 10px;
+	width: 100 %;
+	border: none;
+	overflow: hidden;
+	position: relative;
+}
+.widget-loader-streak {position: absolute;width: 100%;top: -25px;}
+.widget-loader-streak ul li {
+	width: 12%;
+    height: 20px;
+    display: inline-block;
+    margin: 0 3%;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    transform: translateX(0px);
+    -webkit-animation: loadingSlide 1.7s infinite;
+    -moz-animation: loadingSlide 1.7s infinite;
+    -o-animation: loadingSlide 1.7s infinite;
+    -ms-animation: loadingSlide 1.7s infinite;
+    animation: loadingSlide 1.7s infinite;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    -ms-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(0.03, 0.615, 0.995, 0.415);
+    -moz-animation-timing-function: cubic-bezier(0.03, 0.615, 0.995, 0.415);
+    -o-animation-timing-function: cubic-bezier(0.03, 0.615, 0.995, 0.415);
+    -ms-animation-timing-function: cubic-bezier(0.03, 0.615, 0.995, 0.415);
+    animation-timing-function: cubic-bezier(0.03, 0.615, 0.995, 0.415);
+    background-image: -owg-linear-gradient(90deg, #8dbf50 0%, #8c77b6 20%, #89c201 100%);
+    background-image: -webkit-linear-gradient(90deg, #8dbf50 0%, #8c77b6 20%, #89c201 100%);
+    background-image: -moz-linear-gradient(90deg, #8dbf50 0%, #8c77b6 20%, #89c201 100%);
+    background-image: -o-linear-gradient(90deg, #8dbf50 0%, #8c77b6 20%, #89c201 100%);
+    background-image: linear-gradient(90deg, #8dbf50 0%, #8c77b6 20%, #89c201 100%);
+}
+
+@keyframes loadingSlide{0%{transform:translateX(-100px);opacity:0}50%{opacity:1}100%{transform:translateX(100px);opacity:0}}
