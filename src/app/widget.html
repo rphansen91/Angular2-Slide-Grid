@@ -6,10 +6,12 @@
 	
 	<slow-scroll class="scrollingContainer">
 
-		<listing-display *ng-for="#listing of listings" 
+		<listing-display *ng-for="#listing of listings;" 
 			[listing]="listing" 
 			[width]="grid.width" 
-			[height]="grid.height">
+			[height]="grid.height"
+			[top]="listing.top"
+			[left]="listing.left">
 		</listing-display>
 
 	</slow-scroll>

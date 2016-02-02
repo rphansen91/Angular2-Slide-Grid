@@ -102,6 +102,14 @@ var ListingDisplay = (function () {
         angular2_1.Input(), 
         __metadata('design:type', Number)
     ], ListingDisplay.prototype, "height");
+    __decorate([
+        angular2_1.Input(), 
+        __metadata('design:type', Number)
+    ], ListingDisplay.prototype, "top");
+    __decorate([
+        angular2_1.Input(), 
+        __metadata('design:type', Number)
+    ], ListingDisplay.prototype, "left");
     ListingDisplay = __decorate([
         angular2_1.Component({
             selector: "listing-display",
@@ -109,12 +117,12 @@ var ListingDisplay = (function () {
             pipes: [price_1.PriceDisplay],
             directives: [angular2_1.NgIf],
             styles: [
-                '.listingDisplay {position: relative; float: left; z-index: 1; background-color: rgba(174, 146, 204, 0.8); background-size: cover; background-repeat: no-repeat; overflow: hidden; cursor: pointer;}',
+                '.listingDisplay {position: absolute; z-index: 1; background-color: rgba(174, 146, 204, 0.8); background-size: cover; background-repeat: no-repeat; overflow: hidden; cursor: pointer;}',
                 '.opening {-webkit-transform: scale(1.3); -ms-transform: scale(1.3); transform: scale(1.3); z-index: 2;}',
                 '.price {position: absolute;bottom: 0px;right: 0px;color: rgb(255, 255, 255);font-size: 20px;line-height: 35px;padding: 0px 18px;background-color: rgba(130,95,168,0.95);}',
                 '.sold {position: absolute; top: -5%; right: -5%; width: 80%; height: 80%; background-image: url(./app/assets/sold_banner.png); background-size: contain;background-position: top right; background-repeat: no-repeat;}'
             ],
-            template: "\n\t\t<div *ng-if=\"slide\" class=\"listingDisplay\" \n\t\t\t[class.opening]=\"opening\" \n\t\t\t[style.width]=\"width\" \n\t\t\t[style.height]=\"height\" \n\t\t\t[style.background-position]=\"position\" \n\t\t\t[style.background-image]=\"slide.image\" \n\t\t\t(click)=\"goToApp()\" \n\t\t\t(mouseenter)=\"startSolo()\" \n\t\t\t(mouseleave)=\"endSolo()\" \n\t\t\t(touchstart)=\"startSolo()\" \n\t\t\t(touchend)=\"endSolo()\">\n\t\t\t\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\t\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\">$ {{listing.price | price}}</div>\n\t\t\n\t\t</div>\n\t"
+            template: "\n\t\t<div *ng-if=\"slide\" class=\"listingDisplay\" \n\t\t\t[class.opening]=\"opening\" \n\t\t\t[style.width]=\"width\" \n\t\t\t[style.height]=\"height\"\n\t\t\t[style.top] = \"top\"\n\t\t\t[style.left] = \"left\"\n\t\t\t[style.background-position]=\"position\" \n\t\t\t[style.background-image]=\"slide.image\" \n\t\t\t(click)=\"goToApp()\" \n\t\t\t(mouseenter)=\"startSolo()\" \n\t\t\t(mouseleave)=\"endSolo()\" \n\t\t\t(touchstart)=\"startSolo()\" \n\t\t\t(touchend)=\"endSolo()\">\n\t\t\t\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\t\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\">$ {{listing.price | price}}</div>\n\t\t\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [slideShow_1.SlideItems, slidePositions_1.SlidePositions, partners_service_1.PartnersService])
     ], ListingDisplay);
@@ -137,6 +145,14 @@ var ListingGrid = (function () {
         this.height = (totalHeight / this.rows);
         ListingGrid.grid = this;
     }
+    ListingGrid.prototype.getTop = function (index) {
+        var row = Math.floor(index / ListingGrid.grid.columns);
+        return row * this.height;
+    };
+    ListingGrid.prototype.getLeft = function (index) {
+        var column = index % ListingGrid.grid.columns;
+        return column * this.width;
+    };
     return ListingGrid;
 })();
 exports.ListingGrid = ListingGrid;

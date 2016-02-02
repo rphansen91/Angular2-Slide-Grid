@@ -44,8 +44,13 @@ var AntengoWidget = (function () {
             .map(function (res) { return res.json().result.rs; })
             .subscribe(function (listings) {
             console.log(listings.length);
-            AntengoWidget.display.listings = listings.splice(0, 300 - (300 % AntengoWidget.display.grid.columns));
-            console.log(AntengoWidget.display.listings.length);
+            AntengoWidget.display.listings = listings.splice(0, 300 - (300 % AntengoWidget.display.grid.columns))
+                .map(function (listing, index) {
+                listing.top = AntengoWidget.display.grid.getTop(index);
+                listing.left = AntengoWidget.display.grid.getLeft(index);
+                return listing;
+            });
+            console.log(AntengoWidget.display.listings);
         });
         partnersService.initialize();
         slideItems.initialize();
@@ -73,12 +78,11 @@ var AntengoWidget = (function () {
             providers: [listingParams_1.ListingParams, partners_service_1.PartnersService, angular2_1.ElementRef],
             directives: [angular2_1.NgFor, angular2_1.NgIf, listingDisplay_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sellIt_component_1.SellIt],
             styles: [
-                '.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
-                '.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
-                '.listingsColumn::-webkit-scrollbar{display:none;}',
+                '.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
                 '.listingsRow {position: relative; width: 100%;}',
                 '.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
-                '.scrollingContainer::-webkit-scrollbar{display:none;}',
+                '.scrollingContainer::-webkit-scrollbar {background-color: transparent!important; width: 12px;}',
+                '.scrollingContainer::-webkit-scrollbar-thumb {background-color: #fff;}',
                 '.offset {position: relative; float: left;}'
             ],
             templateUrl: './app/widget.html'

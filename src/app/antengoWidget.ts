@@ -10,20 +10,19 @@ import {SlowScroll, SlowScrollInterval} from "./slowScroll";
 import {CrossPlatform} from "./platform/crossPlatform";
 import {SlideItems} from "./display/slideShow";
 import {SlidePositions} from './display/slidePositions';
-import {WidgetLoader} from "./loader/loader.component"
-import {WidgetLoaderInstance} from "./loader/loader.instance"
+import {WidgetLoader} from "./loader/loader.component";
+import {WidgetLoaderInstance} from "./loader/loader.instance";
 
 @Component({
     selector: 'antengo-listings',
     providers: [ListingParams, PartnersService, ElementRef],
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellIt],
 	styles: [
-		'.widgetContainer {width:100%; height: 100%;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
-		'.listingsColumn {position: relative; float: left; height: 100%; overflow-x: hidden; overflow-y: auto; scroll; -webkit-overflow-scrolling: touch;}',
-		'.listingsColumn::-webkit-scrollbar{display:none;}',
+		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsRow {position: relative; width: 100%;}',
 		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
-		'.scrollingContainer::-webkit-scrollbar{display:none;}',
+		'.scrollingContainer::-webkit-scrollbar {background-color: transparent!important; width: 12px;}',
+		'.scrollingContainer::-webkit-scrollbar-thumb {background-color: #fff;}',
 		'.offset {position: relative; float: left;}'
 	],
 	templateUrl: './app/widget.html'
@@ -59,7 +58,13 @@ class AntengoWidget {
 		.subscribe((listings) => {
 			console.log(listings.length)
 			AntengoWidget.display.listings = listings.splice(0, 300 - (300 % AntengoWidget.display.grid.columns))
-			console.log(AntengoWidget.display.listings.length)
+			.map((listing, index) => {
+				listing.top = AntengoWidget.display.grid.getTop(index)
+				listing.left = AntengoWidget.display.grid.getLeft(index)
+				return listing;
+			})
+			console.log(AntengoWidget.display.listings)
+			
 		})
 
 		partnersService.initialize();

@@ -1,9 +1,10 @@
-import {Component, Input} from 'angular2/angular2';
+import {Component, Input, NgIf} from 'angular2/angular2';
 
 import { PartnersService } from './partners/partners.service';
 
 @Component({
 	selector: "sell-it",
+	directives: [NgIf],
 	styles: [
 		`.sell {
 			position: fixed;
@@ -30,18 +31,22 @@ import { PartnersService } from './partners/partners.service';
 			box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
 		}`,
 		`.sell.show {
-			right: 20px;
-		}`
+			right: 32px;
+		}`,
+		`.sellText {color: #333; font-size: 18px}`
 	],
 	template: `
-		<div class="sell" (click)="sell()" [class.show]="show">
-			<span class="sellDollar">$</span>
+		<div class="sell" [class.show]="show" (click)="sell()" (mouseenter)="isHovering()" (mouseleave)="notHovering()">
+			<span>$</span><span *ng-if="hovering" class="sellText">{{hovering}}</span>
 		</div>
 	`,
 })
 export class SellIt {
 
 	@Input('show') show: boolean;
+
+	public hovering: string = "";
+	public hoveringId: number;
 
 	constructor (
 		private _partnersService: PartnersService
@@ -50,6 +55,26 @@ export class SellIt {
 	sell () {
 		let code = this._partnersService.partner;
 		window.open("https://antengo.com/p?" + code + "/#/post");
+	}
+
+	isHovering () {
+		let count = 0;
+		this.hoveringId = setInterval(() => {
+			this.hovering = this.getCurrentLetters(count);
+			count++;
+		}, 100, 3)
+	}
+	notHovering() {
+		clearInterval(this.hoveringId)
+		this.hovering = "";
+	}
+	getCurrentLetters (count: number): string {
+		switch (count) {
+			case 0: return "e";
+			case 1: return "el";
+			case 2: return "ell";
+			default: return "ell";
+		}
 	}
 
 }
