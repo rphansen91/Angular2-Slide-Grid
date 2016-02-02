@@ -16,10 +16,11 @@ var ListingGrid = (function () {
         this._customizations = _customizations;
     }
     ListingGrid.prototype.initialize = function (totalWidth, totalHeight) {
-        this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth);
-        this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight);
+        this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
+        this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
         this.width = (totalWidth / this.columns);
         this.height = (totalHeight / this.rows);
+        console.log(this.width, this.height);
     };
     ListingGrid.prototype.getTop = function (index) {
         var row = Math.floor(index / this.columns);

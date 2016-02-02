@@ -13,11 +13,12 @@ export class ListingGrid {
 	constructor(private _customizations: Customizations) { }
 
 	initialize(totalWidth: number, totalHeight: number) {
-		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth)
-		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight)
+		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
+		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
 
-		this.width = (totalWidth / this.columns)
-		this.height = (totalHeight / this.rows)
+		this.width = (totalWidth / this.columns);
+		this.height = (totalHeight / this.rows);
+		console.log(this.width, this.height)
 	}
 
 	getTop(index: number): number {

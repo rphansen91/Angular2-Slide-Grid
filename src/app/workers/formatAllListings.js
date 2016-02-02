@@ -2,7 +2,7 @@
 onmessage = function (e) {
     var listings = e.data[0];
     var grid = e.data[1];
-    console.log(listings, grid);
+
     listings = listings.map(function (listing, index) {
         listing.slide = new SlideItem(listing.photos);
         listing.position = new ImagePosition().setSize(grid.width).setPosition(100, listing.photos.length - 1).position;
@@ -11,7 +11,6 @@ onmessage = function (e) {
         return listing;
     });
 
-    console.log(listings);
     postMessage([listings]);
 };
 

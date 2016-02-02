@@ -90,7 +90,7 @@ class AntengoWidget {
 		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
 		console.log(AntengoWidget.display.width, AntengoWidget.display.height)
 		AntengoWidget.display.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height)
-		console.log(AntengoWidget.display.listings.length)
+
 		if (AntengoWidget.display.listings.length) {
 			AntengoWidget.display.setListings(AntengoWidget.display.listings)
 		}
