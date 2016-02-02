@@ -1,5 +1,5 @@
 var SlideItem = (function () {
-    function SlideItem(photos, size) {
+    function SlideItem(photos) {
         this.photos = photos;
         this.isRunning = false;
         if (this.photos.length > 1) {

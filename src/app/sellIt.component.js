@@ -26,21 +26,38 @@ var SellIt = (function () {
     SellIt.prototype.isHovering = function () {
         var _this = this;
         var count = 0;
+        this.clear();
         this.hoveringId = setInterval(function () {
             _this.hovering = _this.getCurrentLetters(count);
             count++;
-        }, 100, 3);
+            if (count == 3) {
+                _this.clear();
+            }
+        }, 100);
     };
     SellIt.prototype.notHovering = function () {
-        clearInterval(this.hoveringId);
-        this.hovering = "";
+        var _this = this;
+        var count = 3;
+        this.clear();
+        this.hoveringId = setInterval(function () {
+            count--;
+            _this.hovering = _this.getCurrentLetters(count);
+            if (count == -1) {
+                _this.clear();
+            }
+        }, 100);
+    };
+    SellIt.prototype.clear = function () {
+        if (this.hoveringId) {
+            clearInterval(this.hoveringId);
+        }
     };
     SellIt.prototype.getCurrentLetters = function (count) {
         switch (count) {
             case 0: return "e";
             case 1: return "el";
             case 2: return "ell";
-            default: return "ell";
+            default: return "";
         }
     };
     __decorate([

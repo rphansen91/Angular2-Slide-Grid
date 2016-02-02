@@ -4,7 +4,7 @@ export class SlideItem {
 
 	public isRunning: boolean = false;
 
-	constructor(public photos: Photo[], size: number) {
+	constructor(public photos: Photo[]) {
 		if (this.photos.length > 1) {
 			this.photos.push(this.photos[0])
 		}

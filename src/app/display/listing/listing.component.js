@@ -10,12 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require('angular2/angular2');
-var customizations_service_1 = require('../customizations/customizations.service');
-var slideShow_1 = require('./slideShow');
-var slidePositions_1 = require('./slidePositions');
+var customizations_service_1 = require('../../customizations/customizations.service');
+var slideItems_1 = require('../slide/slideItems');
+var slidePositions_1 = require('../slide/slidePositions');
 var price_1 = require('./price');
-var partners_service_1 = require('../partners/partners.service');
-var easings_1 = require('./easings');
+var partners_service_1 = require('../../partners/partners.service');
+var easings_1 = require('../easings');
 var ListingDisplay = (function () {
     function ListingDisplay(_slideItems, _slidePositions, _partnersService, _customizations) {
         this._slideItems = _slideItems;
@@ -26,16 +26,17 @@ var ListingDisplay = (function () {
         this.isRunning = false;
     }
     ListingDisplay.prototype.onInit = function () {
-        var _this = this;
+        this.slide = this.listing.slide;
+        this.position = this.listing.position;
         this.color = this._customizations.values.colors[0];
-        this._slideItems.add(this.listing.photos, this.width)
-            .then(function (slide) { _this.slide = slide; })
-            .then(function () {
-            return _this._slidePositions.getPosition(100, _this.slide.length - 1, _this.width);
-        })
-            .then(function (position) {
-            _this.position = position;
-        });
+        // this.listing.slidePromise
+        // .then((slide) => { this.slide = slide; })
+        // .then(() => { 
+        // 	return this._slidePositions.getPosition(100, this.slide.length - 1, this.width)
+        // })
+        // .then((position) => {
+        // 	this.position = position; 
+        // })
     };
     ListingDisplay.prototype.goToApp = function () {
         var code = this._partnersService.partner;
@@ -66,8 +67,7 @@ var ListingDisplay = (function () {
                 show.interval.startInterval(function () {
                     var finished = false;
                     show.interval.increaseValue();
-                    show._slidePositions.getPosition(show.interval.value, index, show.width)
-                        .then(function (position) { return show.position = position; });
+                    show.position = show._slidePositions.getPosition(show.interval.value, index, show.width);
                     if (show.interval.value == 100) {
                         index--;
                         if (index < 0) {
@@ -85,17 +85,15 @@ var ListingDisplay = (function () {
         }
     };
     ListingDisplay.prototype.stop = function () {
-        var _this = this;
         this.isRunning = false;
-        this._slidePositions.getPosition(100, this.slide.length - 1, this.width)
-            .then(function (position) { return _this.position = position; });
+        this.position = this._slidePositions.getPosition(100, this.slide.length - 1, this.width);
         if (this.interval) {
             this.interval.stopInterval();
         }
     };
     __decorate([
         angular2_1.Input(), 
-        __metadata('design:type', Listing)
+        __metadata('design:type', Object)
     ], ListingDisplay.prototype, "listing");
     __decorate([
         angular2_1.Input(), 
@@ -127,42 +125,11 @@ var ListingDisplay = (function () {
             ],
             template: "\n\t\t<div *ng-if=\"slide\" class=\"listingDisplay\" \n\t\t\t[class.opening]=\"opening\" \n\t\t\t[style.width]=\"width\" \n\t\t\t[style.height]=\"height\"\n\t\t\t[style.top] = \"top\"\n\t\t\t[style.left] = \"left\"\n\t\t\t[style.background-position]=\"position\" \n\t\t\t[style.background-image]=\"slide.image\" \n\t\t\t(click)=\"goToApp()\" \n\t\t\t(mouseenter)=\"startSolo()\" \n\t\t\t(mouseleave)=\"endSolo()\" \n\t\t\t(touchstart)=\"startSolo()\" \n\t\t\t(touchend)=\"endSolo()\">\n\t\t\t\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\t\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\" [style.background-color]=\"color\">$ {{listing.price | price}}</div>\n\t\t\n\t\t</div>\n\t"
         }), 
-        __metadata('design:paramtypes', [slideShow_1.SlideItems, slidePositions_1.SlidePositions, partners_service_1.PartnersService, customizations_service_1.Customizations])
+        __metadata('design:paramtypes', [slideItems_1.SlideItems, slidePositions_1.SlidePositions, partners_service_1.PartnersService, customizations_service_1.Customizations])
     ], ListingDisplay);
     return ListingDisplay;
 })();
 exports.ListingDisplay = ListingDisplay;
-var Listing = (function () {
-    function Listing() {
-    }
-    return Listing;
-})();
-exports.Listing = Listing;
-var ListingGrid = (function () {
-    function ListingGrid(_customizations) {
-        this._customizations = _customizations;
-    }
-    ListingGrid.prototype.initialize = function (totalWidth, totalHeight) {
-        this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth);
-        this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight);
-        this.width = (totalWidth / this.columns);
-        this.height = (totalHeight / this.rows);
-    };
-    ListingGrid.prototype.getTop = function (index) {
-        var row = Math.floor(index / this.columns);
-        return row * this.height;
-    };
-    ListingGrid.prototype.getLeft = function (index) {
-        var column = index % this.columns;
-        return column * this.width;
-    };
-    ListingGrid = __decorate([
-        angular2_1.Injectable(), 
-        __metadata('design:paramtypes', [customizations_service_1.Customizations])
-    ], ListingGrid);
-    return ListingGrid;
-})();
-exports.ListingGrid = ListingGrid;
 var ImageInterval = (function () {
     function ImageInterval() {
         this.value = 0;
@@ -201,5 +168,4 @@ var ImageInterval = (function () {
     };
     return ImageInterval;
 })();
-exports.ImageInterval = ImageInterval;
-//# sourceMappingURL=listingDisplay.js.map
+//# sourceMappingURL=listing.component.js.map

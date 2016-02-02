@@ -63,21 +63,37 @@ export class SellIt {
 
 	isHovering () {
 		let count = 0;
+		this.clear()
 		this.hoveringId = setInterval(() => {
 			this.hovering = this.getCurrentLetters(count);
 			count++;
-		}, 100, 3)
+			if (count == 3) {
+				this.clear()
+			} 
+		}, 100)
 	}
 	notHovering() {
-		clearInterval(this.hoveringId)
-		this.hovering = "";
+		let count = 3;
+		this.clear()
+		this.hoveringId = setInterval(() => {
+			count--;
+			this.hovering = this.getCurrentLetters(count);
+			if (count == -1) {
+				this.clear()
+			} 
+		}, 100)
+	}
+	clear () {
+		if (this.hoveringId) {
+			clearInterval(this.hoveringId)
+		}
 	}
 	getCurrentLetters (count: number): string {
 		switch (count) {
 			case 0: return "e";
 			case 1: return "el";
 			case 2: return "ell";
-			default: return "ell";
+			default: return "";
 		}
 	}
 

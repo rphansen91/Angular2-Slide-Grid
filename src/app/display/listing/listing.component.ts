@@ -1,13 +1,12 @@
-import { Component, Input, NgIf, OnInit, Injectable } from 'angular2/angular2';
+import { Component, Input, NgIf, OnInit } from 'angular2/angular2';
 
-import { Customizations } from '../customizations/customizations.service';
-import { SlideItems } from './slideShow';
-import { SlidePositions } from './slidePositions'
-import { Photo, SlideItem } from './slideItem';
-import { CrossPlatform } from '../platform/crossPlatform';
+import { Customizations } from '../../customizations/customizations.service';
+import { SlideItems } from '../slide/slideItems';
+import { Photo, SlideItem } from '../slide/slideItem';
+import { SlidePositions } from '../slide/slidePositions'
 import { PriceDisplay } from './price';
-import { PartnersService } from '../partners/partners.service';
-import { Easings } from './easings';
+import { PartnersService } from '../../partners/partners.service';
+import { Easings } from '../easings';
 
 @Component({
 	selector: "listing-display",
@@ -65,16 +64,18 @@ export class ListingDisplay implements OnInit {
 	) {}
 
 	onInit () {
+		this.slide = this.listing.slide;
+		this.position = this.listing.position;
 		this.color = this._customizations.values.colors[0];
 
-		this._slideItems.add(this.listing.photos, this.width)
-		.then((slide) => { this.slide = slide; })
-		.then(() => { 
-			return this._slidePositions.getPosition(100, this.slide.length - 1, this.width)
-		})
-		.then((position) => {
-			this.position = position; 
-		})
+		// this.listing.slidePromise
+		// .then((slide) => { this.slide = slide; })
+		// .then(() => { 
+		// 	return this._slidePositions.getPosition(100, this.slide.length - 1, this.width)
+		// })
+		// .then((position) => {
+		// 	this.position = position; 
+		// })
 	}
 	goToApp () {
 		let code = this._partnersService.partner;
@@ -109,8 +110,7 @@ export class ListingDisplay implements OnInit {
 
 					show.interval.increaseValue()
 
-					show._slidePositions.getPosition(show.interval.value, index, show.width)
-					.then(position => show.position = position)
+					show.position = show._slidePositions.getPosition(show.interval.value, index, show.width);
 
 					if (show.interval.value == 100) {
 						index--;
@@ -130,8 +130,7 @@ export class ListingDisplay implements OnInit {
 	stop() {
 		this.isRunning = false;
 
-		this._slidePositions.getPosition(100, this.slide.length - 1, this.width)
-		.then((position) => this.position = position)
+		this.position = this._slidePositions.getPosition(100, this.slide.length - 1, this.width);
 
 		if (this.interval) {
 			this.interval.stopInterval();
@@ -139,45 +138,20 @@ export class ListingDisplay implements OnInit {
 	}
 }
 
-export class Listing {
+export interface Listing {
 	id: string;
 	title: string;
 	text: string;
 	price: string;
 	slide: SlideItem;
+	position: string;
+	slidePromise: Promise<SlideItem>;
 	photos: Photo[];
+	top: number;
+	left: number;
 }
 
-@Injectable()
-export class ListingGrid {
-	public width: number;
-	public height: number;
-	
-	public columns: number;
-	public rows: number;
-
-	constructor(private _customizations: Customizations) {}
-
-	initialize (totalWidth: number, totalHeight: number) {
-		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth)
-		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight)
-
-		this.width = (totalWidth / this.columns)
-		this.height = (totalHeight / this.rows)
-	}
-
-	getTop (index: number): number {
-		let row = Math.floor(index / this.columns);
-		return row * this.height;
-	}
-
-	getLeft(index: number): number {
-		var column = index % this.columns;
-		return column * this.width;
-	}
-}
-
-export class ImageInterval {
+class ImageInterval {
 	public value: number = 0;
 	public currentTime: number = 0;
 

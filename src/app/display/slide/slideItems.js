@@ -10,20 +10,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var angular2_1 = require("angular2/angular2");
-var WidgetLoaderInstance = (function () {
-    function WidgetLoaderInstance() {
-        this.loading = true;
+var SlideItems = (function () {
+    function SlideItems() {
     }
-    WidgetLoaderInstance.prototype.toggle = function () {
-        this.loading = !this.loading;
+    SlideItems.prototype.initialize = function () {
+        // this._allSlidesWorker = (window["Worker"]) ? new window["Worker"]("./app/workers/allSlidesWorker.js") : false;
+        this._allSlidesWorker = (window["Worker"]) ? new window["Worker"]("./app/workers/formatAllListings.js") : false;
     };
-    WidgetLoaderInstance.prototype.stop = function () { this.loading = false; };
-    WidgetLoaderInstance.prototype.start = function () { this.loading = true; };
-    WidgetLoaderInstance = __decorate([
+    SlideItems.prototype.addAll = function (listings, grid) {
+        var work = this;
+        return new Promise(function (resolve, reject) {
+            if (work._allSlidesWorker) {
+                work._allSlidesWorker.postMessage([listings, grid]);
+                work._allSlidesWorker.onmessage = function (e) {
+                    resolve(e.data[0]);
+                };
+            }
+        });
+    };
+    SlideItems = __decorate([
         angular2_1.Injectable(), 
         __metadata('design:paramtypes', [])
-    ], WidgetLoaderInstance);
-    return WidgetLoaderInstance;
+    ], SlideItems);
+    return SlideItems;
 })();
-exports.WidgetLoaderInstance = WidgetLoaderInstance;
-//# sourceMappingURL=loader.instance.js.map
+exports.SlideItems = SlideItems;
+//# sourceMappingURL=slideItems.js.map

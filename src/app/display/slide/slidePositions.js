@@ -13,26 +13,8 @@ var angular2_1 = require("angular2/angular2");
 var SlidePositions = (function () {
     function SlidePositions() {
     }
-    SlidePositions.prototype.initialize = function () {
-        this._worker = (window["Worker"]) ? new window["Worker"]("./app/workers/positionWorker.js") : false;
-        this._workerResolvers = [];
-    };
     SlidePositions.prototype.getPosition = function (percentage, index, size) {
-        var work = this;
-        return new Promise(function (resolve, reject) {
-            if (work._worker) {
-                work._workerResolvers.push(resolve);
-                work._worker.postMessage([percentage, index, size, work._workerResolvers.length - 1]);
-                work._worker.onmessage = function (e) {
-                    var resolver = work._workerResolvers[e.data[1]];
-                    resolver(e.data[0]);
-                };
-            }
-            else {
-                var pos = new ImagePosition().setSize(size).setPosition(percentage, index);
-                resolve(pos.position);
-            }
-        });
+        return new ImagePosition().setSize(size).setPosition(percentage, index).position;
     };
     SlidePositions = __decorate([
         angular2_1.Injectable(), 
@@ -61,4 +43,5 @@ var ImagePosition = (function () {
     };
     return ImagePosition;
 })();
+exports.ImagePosition = ImagePosition;
 //# sourceMappingURL=slidePositions.js.map

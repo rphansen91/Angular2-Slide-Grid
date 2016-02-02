@@ -7,4 +7,6 @@ export class WidgetLoaderInstance {
 	toggle() {
 		this.loading = !this.loading
 	}
+	stop() { this.loading = false; }
+	start() { this.loading = true; }
 }
