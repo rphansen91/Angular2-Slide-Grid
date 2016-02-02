@@ -1,6 +1,7 @@
 import {Component, Input, NgIf} from 'angular2/angular2';
 
 import { PartnersService } from './partners/partners.service';
+import { Customizations } from './customizations/customizations.service';
 
 @Component({
 	selector: "sell-it",
@@ -16,7 +17,6 @@ import { PartnersService } from './partners/partners.service';
 			line-height: 60px;
 			border-radius: 30px;
 			font-size: 32px;
-			color: #8c77b6;
 			text-align: center;
 			background-color: rgba(255, 255, 255, 1);
 			box-shadow: 0 8px 12px 0 rgba(0,0,0,0.6);
@@ -36,7 +36,7 @@ import { PartnersService } from './partners/partners.service';
 		`.sellText {font-size: 18px}`
 	],
 	template: `
-		<div class="sell" [class.show]="show" (click)="sell()" (mouseenter)="isHovering()" (mouseleave)="notHovering()">
+		<div class="sell" [class.show]="show" [style.color]="color" (click)="sell()" (mouseenter)="isHovering()" (mouseleave)="notHovering()">
 			<span>$</span><span *ng-if="hovering" class="sellText">{{hovering}}</span>
 		</div>
 	`,
@@ -45,12 +45,16 @@ export class SellIt {
 
 	@Input('show') show: boolean;
 
+	public color: string;
 	public hovering: string = "";
 	public hoveringId: number;
 
 	constructor (
-		private _partnersService: PartnersService
-	) {}
+		private _partnersService: PartnersService,
+		private _customizations: Customizations
+	) {
+		this.color = this._customizations.values.colors[0]
+	}
 
 	sell () {
 		let code = this._partnersService.partner;

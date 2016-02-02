@@ -1,4 +1,4 @@
-<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()" (click)="hideCTA()">
+<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()" (click)="hideCTA()" [style.background-color]="color">
 	
 	<call-to-action></call-to-action>
 
@@ -8,8 +8,8 @@
 
 		<listing-display *ng-for="#listing of listings;" 
 			[listing]="listing" 
-			[width]="grid.width" 
-			[height]="grid.height"
+			[width]="listingGrid.width" 
+			[height]="listingGrid.height"
 			[top]="listing.top"
 			[left]="listing.left">
 		</listing-display>

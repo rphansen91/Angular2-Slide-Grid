@@ -1,5 +1,6 @@
-import { Component, Input, NgIf, OnInit } from 'angular2/angular2';
+import { Component, Input, NgIf, OnInit, Injectable } from 'angular2/angular2';
 
+import { Customizations } from '../customizations/customizations.service';
 import { SlideItems } from './slideShow';
 import { SlidePositions } from './slidePositions'
 import { Photo, SlideItem } from './slideItem';
@@ -16,7 +17,7 @@ import { Easings } from './easings';
 	styles: [
 		'.listingDisplay {position: absolute; z-index: 1; background-size: cover; background-repeat: no-repeat; overflow: hidden; cursor: pointer;}',
 		'.opening {-webkit-transform: scale(1.3); -ms-transform: scale(1.3); transform: scale(1.3); z-index: 2;}',
-		'.price {position: absolute;bottom: 0px;right: 0px;color: rgb(255, 255, 255);font-size: 20px;line-height: 35px;padding: 0px 18px;background-color: rgba(130,95,168,0.95);}',
+		'.price {position: absolute;bottom: 0px;right: 0px;color: rgb(255, 255, 255);font-size: 20px;line-height: 35px;padding: 0px 18px;}',
 		'.sold {position: absolute; top: -5%; right: -5%; width: 80%; height: 80%; background-image: url(./app/assets/sold_banner.png); background-size: contain;background-position: top right; background-repeat: no-repeat;}'
 	],
 	template: `
@@ -35,7 +36,7 @@ import { Easings } from './easings';
 			(touchend)="endSolo()">
 			
 			<div class="sold" *ng-if="listing.status == 2"></div>	
-			<div class="price" *ng-if="listing.price">$ {{listing.price | price}}</div>
+			<div class="price" *ng-if="listing.price" [style.background-color]="color">$ {{listing.price | price}}</div>
 		
 		</div>
 	`
@@ -47,6 +48,8 @@ export class ListingDisplay implements OnInit {
 	@Input() top: number;
 	@Input() left: number;
 
+	public color: string;
+
 	slide: SlideItem;
 	interval: ImageInterval;
 	position: string;
@@ -57,10 +60,13 @@ export class ListingDisplay implements OnInit {
 	constructor(
 		private _slideItems: SlideItems,
 		private _slidePositions: SlidePositions,
-		private _partnersService: PartnersService
-	) { }
+		private _partnersService: PartnersService,
+		private _customizations: Customizations
+	) {}
 
 	onInit () {
+		this.color = this._customizations.values.colors[0];
+
 		this._slideItems.add(this.listing.photos, this.width)
 		.then((slide) => { this.slide = slide; })
 		.then(() => { 
@@ -142,6 +148,7 @@ export class Listing {
 	photos: Photo[];
 }
 
+@Injectable()
 export class ListingGrid {
 	public width: number;
 	public height: number;
@@ -149,28 +156,23 @@ export class ListingGrid {
 	public columns: number;
 	public rows: number;
 
-	defaultWidth: number = 175;
-	defaultHeight: number = 150;
+	constructor(private _customizations: Customizations) {}
 
-	static grid: ListingGrid;
+	initialize (totalWidth: number, totalHeight: number) {
+		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth)
+		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight)
 
-	constructor (totalWidth: number, totalHeight: number) {
-		this.columns = Math.floor(totalWidth  / this.defaultWidth)
-		this.rows = Math.floor(totalHeight / this.defaultHeight)
-
-		this.width  = (totalWidth / this.columns)
+		this.width = (totalWidth / this.columns)
 		this.height = (totalHeight / this.rows)
-
-		ListingGrid.grid = this
 	}
 
 	getTop (index: number): number {
-		let row = Math.floor(index / ListingGrid.grid.columns);
+		let row = Math.floor(index / this.columns);
 		return row * this.height;
 	}
 
 	getLeft(index: number): number {
-		var column = index % ListingGrid.grid.columns;
+		var column = index % this.columns;
 		return column * this.width;
 	}
 }

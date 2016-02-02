@@ -1,6 +1,7 @@
 import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attribute} from 'angular2/angular2';
 import {HTTP_PROVIDERS} from "angular2/http";
 
+import {Customizations} from './customizations/customizations.service';
 import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
 import {PartnersService} from './partners/partners.service';
 import {ListingDisplay, Listing, ListingGrid} from "./display/listingDisplay";
@@ -15,10 +16,10 @@ import {WidgetLoaderInstance} from "./loader/loader.instance";
 
 @Component({
     selector: 'antengo-listings',
-    providers: [ListingParams, PartnersService, ElementRef],
+    providers: [ListingParams, PartnersService, ElementRef, ListingGrid],
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellIt],
 	styles: [
-		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;background-color: rgba(174, 146, 204, 0.8);-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
+		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsRow {position: relative; width: 100%;}',
 		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
 		'.scrollingContainer::-webkit-scrollbar {background-color: transparent!important; width: 12px;}',
@@ -32,8 +33,8 @@ class AntengoWidget {
 	public height: number;
 
 	public listings: Listing[] = [];
-	public grid: ListingGrid;
-	
+	public color: string;
+	public fontUrl: string;
 	public showSell: boolean = false;
 
 	static display: AntengoWidget;
@@ -43,10 +44,17 @@ class AntengoWidget {
 		public listingParams: ListingParams,
 		public slideItems: SlideItems,
 		public slidePositions: SlidePositions,
+		public listingGrid: ListingGrid,
+		public customizations: Customizations,
 		@Inject(ElementRef) public element: ElementRef
 	) {
+		this.customizations.initialize()
+		this.color = this.customizations.values.colors[0];
+		this.fontUrl = this.customizations.values.fontUrl;
+
 		AntengoWidget.display = this
 		AntengoWidget.display.setSizes()
+
 		var location = new ListingLocation(34, -117)
 		var query = new SearchParams("car")
 		
@@ -57,10 +65,10 @@ class AntengoWidget {
 		.map(res => res.json().result.rs )
 		.subscribe((listings) => {
 			console.log(listings.length)
-			AntengoWidget.display.listings = listings.splice(0, 300 - (300 % AntengoWidget.display.grid.columns))
+			AntengoWidget.display.listings = listings.splice(0, 300 - (300 % this.listingGrid.columns))
 			.map((listing, index) => {
-				listing.top = AntengoWidget.display.grid.getTop(index)
-				listing.left = AntengoWidget.display.grid.getLeft(index)
+				listing.top = this.listingGrid.getTop(index)
+				listing.left = this.listingGrid.getLeft(index)
 				return listing;
 			})
 			console.log(AntengoWidget.display.listings)
@@ -75,7 +83,7 @@ class AntengoWidget {
 	setSizes () {
 		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
 		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-		AntengoWidget.display.grid = new ListingGrid(AntengoWidget.display.width, AntengoWidget.display.height)
+		this.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height)
 	}
 	showCTA () {
 		SlowScrollInterval.getInstance().start()
@@ -89,4 +97,10 @@ class AntengoWidget {
 	}
 }
 
-bootstrap(AntengoWidget, [HTTP_PROVIDERS, WidgetLoaderInstance, SlideItems, SlidePositions]);
+bootstrap(AntengoWidget, [
+	HTTP_PROVIDERS,
+	WidgetLoaderInstance,
+	SlideItems,
+	SlidePositions,
+	Customizations
+]);
