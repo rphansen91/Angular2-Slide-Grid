@@ -33,7 +33,7 @@ import { PartnersService } from './partners/partners.service';
 		`.sell.show {
 			right: 32px;
 		}`,
-		`.sellText {color: #333; font-size: 18px}`
+		`.sellText {font-size: 18px}`
 	],
 	template: `
 		<div class="sell" [class.show]="show" (click)="sell()" (mouseenter)="isHovering()" (mouseleave)="notHovering()">

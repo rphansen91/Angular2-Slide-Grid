@@ -15,13 +15,18 @@ var WidgetLoader = (function () {
     function WidgetLoader(_loader) {
         this._loader = _loader;
         this.streaks = [1.25, 1.0, 0.75, 0.5, 0.25, 0.1];
+        this.colors = [
+            "#8c77b6",
+            "#baadd3",
+            "#f3f1f7"
+        ];
     }
     WidgetLoader = __decorate([
         angular2_1.Component({
             selector: "widget-loader",
             directives: [angular2_1.NgIf, angular2_1.NgFor],
             styleUrls: ["./app/loader/loader.css"],
-            template: "\n\t\t<div class=\"widget-loader\" *ng-if=\"_loader.loading\">\n\t\t\t<div class=\"widget-loader-streaks\">\n\t\t\t\t<div class=\"widget-loader-streak\">\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li *ng-for=\"#streak of streaks\"\n\t\t\t\t\t\t\t[style.webkit-animation-delay]=\"streak + 's !important'\"\n\t\t\t\t\t\t\t[style.-moz-animation-delay]=\"streak + 's !important'\"\n\t\t\t\t\t\t\t[style.-o-animation-delay]=\"streak + 's !important'\"\n\t\t\t\t\t\t\t[style.-ms-animation-delay]=\"streak + 's !important'\"\n\t\t\t\t\t\t\t[style.animation-delay]=\"streak + 's !important'\"\n\t\t\t\t\t\t></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t"
+            template: "\n\t\t<div class=\"widget-loader\" *ng-if=\"_loader.loading\">\n\t\t\t<div class=\"widget-loader-bar\" *ng-for=\"#color of colors; #i = index;\"\n\t\t\t\t[style.background-color]=\"color\"\n\t\t\t\t[style.webkit-animation]=\"'loading ' + colors.length + 's linear ' + i + 's infinite'\"\n\t\t\t\t[style.-moz-animation]=\"'loading ' + colors.length + 's linear ' + i + 's infinite'\"\n\t\t\t\t[style.-o-animation]=\"'loading ' + colors.length + 's linear ' + i + 's infinite'\"\n\t\t\t\t[style.-ms-animation]=\"'loading ' + colors.length + 's linear ' + i + 's infinite'\"\n\t\t\t\t[style.animation]=\"'loading ' + colors.length + 's linear ' + i + 's infinite'\"\n\t\t\t></div>\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [loader_instance_1.WidgetLoaderInstance])
     ], WidgetLoader);
