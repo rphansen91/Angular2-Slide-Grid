@@ -18,7 +18,6 @@ export class ListingGrid {
 
 		this.width = (totalWidth / this.columns);
 		this.height = (totalHeight / this.rows);
-		console.log(this.width, this.height)
 	}
 
 	getTop(index: number): number {

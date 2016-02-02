@@ -37,7 +37,7 @@ var AntengoWidget = (function () {
         this.element = element;
         this.listings = [];
         this.showSell = false;
-        this.MAX_LISTINGS = 300;
+        this.MAX_LISTINGS = 100;
         this.customizations.initialize();
         this.color = this.customizations.values.colors[0];
         this.fontUrl = this.customizations.values.fontUrl;
@@ -68,7 +68,6 @@ var AntengoWidget = (function () {
         AntengoWidget.display.loader.start();
         AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
         AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-        console.log(AntengoWidget.display.width, AntengoWidget.display.height);
         AntengoWidget.display.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height);
         if (AntengoWidget.display.listings.length) {
             AntengoWidget.display.setListings(AntengoWidget.display.listings);

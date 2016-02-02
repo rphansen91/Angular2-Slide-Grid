@@ -37,7 +37,7 @@ class AntengoWidget {
 	public color: string;
 	public fontUrl: string;
 	public showSell: boolean = false;
-	public MAX_LISTINGS: number = 300;
+	public MAX_LISTINGS: number = 100;
 
 	static display: AntengoWidget;
 
@@ -88,7 +88,6 @@ class AntengoWidget {
 
 		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
 		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-		console.log(AntengoWidget.display.width, AntengoWidget.display.height)
 		AntengoWidget.display.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height)
 
 		if (AntengoWidget.display.listings.length) {

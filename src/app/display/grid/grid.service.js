@@ -20,7 +20,6 @@ var ListingGrid = (function () {
         this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
         this.width = (totalWidth / this.columns);
         this.height = (totalHeight / this.rows);
-        console.log(this.width, this.height);
     };
     ListingGrid.prototype.getTop = function (index) {
         var row = Math.floor(index / this.columns);
