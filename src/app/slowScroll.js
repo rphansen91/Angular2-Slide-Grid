@@ -67,7 +67,6 @@ var SlowScrollInterval = (function () {
         }
         else {
             scroller.element.nativeElement.scrollTop += SlowScrollInterval.instance.change;
-            ;
         }
     };
     SlowScrollInterval.prototype.start = function () {

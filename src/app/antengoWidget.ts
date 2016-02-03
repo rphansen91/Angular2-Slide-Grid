@@ -2,7 +2,8 @@ import {Component, View, Input, ElementRef, bootstrap, NgFor, NgIf, Inject, Attr
 import {HTTP_PROVIDERS} from "angular2/http";
 
 import {Customizations} from './customizations/customizations.service';
-import {ListingParams, ListingLocation, SearchParams} from './listings/listingParams';
+import {ListingStore} from './listings/listingStore';
+import {ListingParams} from './listings/listingParams';
 import {PartnersService} from './partners/partners.service';
 import {ListingDisplay, Listing} from "./display/listing/listing.component";
 import {ListingGrid} from "./display/grid/grid.service"
@@ -17,7 +18,7 @@ import {WidgetLoaderInstance} from "./loader/loader.instance";
 
 @Component({
     selector: 'antengo-listings',
-    providers: [ListingParams, PartnersService, ElementRef, ListingGrid],
+    providers: [PartnersService, ListingStore, ListingGrid, ElementRef],
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellIt],
 	styles: [
 		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
@@ -33,19 +34,16 @@ class AntengoWidget {
 	public width: number;
 	public height: number;
 
-	public listings: Listing[] = [];
 	public color: string;
 	public fontUrl: string;
 	public showSell: boolean = false;
-	public MAX_LISTINGS: number = 100;
-
-	static display: AntengoWidget;
+	public MAX_LISTINGS: number = 300;
 
 	constructor(
 		public partnersService: PartnersService,
-		public listingParams: ListingParams,
 		public slideItems: SlideItems,
 		public listingGrid: ListingGrid,
+		public listingStore: ListingStore,
 		public customizations: Customizations,
 		public loader: WidgetLoaderInstance,
 		@Inject(ElementRef) public element: ElementRef
@@ -53,45 +51,39 @@ class AntengoWidget {
 		this.customizations.initialize()
 		this.color = this.customizations.values.colors[0];
 		this.fontUrl = this.customizations.values.fontUrl;
-
-		AntengoWidget.display = this
-
-		var location = new ListingLocation(34, -117)
-		var query = new SearchParams("car")
 		
-		AntengoWidget.display.listingParams
-		.setLocation(location)
-		.getNationalShippable()
-		.runSearch()
-		.map(res => res.json().result.rs )
-		.subscribe(this.setListings)
+		this.listingStore.initialize()
+		.subscribe((listings: Listing[]) => { 
+			this.setListings(listings) 
+		})
 
 		partnersService.initialize();
 		slideItems.initialize();
-		AntengoWidget.display.setSizes()
+		this.setSizes()
 
-		window.onresize = this.setSizes;
+		window.onresize = () => { this.setSizes() };
 	}
 
 	setListings (listings: Listing[]) {
-		listings = listings.splice(0, AntengoWidget.display.MAX_LISTINGS - (AntengoWidget.display.MAX_LISTINGS % AntengoWidget.display.listingGrid.columns))
-
-		AntengoWidget.display.slideItems.addAll(listings, AntengoWidget.display.listingGrid)
+		listings = listings.splice(0, this.MAX_LISTINGS - (this.MAX_LISTINGS % this.listingGrid.columns))
+		this.listingStore.clearVisible()
+		this.slideItems.addAll(listings, this.listingGrid)
 		.then((_listings) => {
-			AntengoWidget.display.listings = _listings;
-			AntengoWidget.display.loader.stop();
+			this.listingStore.setAll(_listings);
+			this.listingStore.appendToVisible(this.listingGrid.addListingCount())
+			this.loader.stop();
 			SlowScrollInterval.getInstance().start()
 		})
 	}
 	setSizes () {
-		AntengoWidget.display.loader.start();
+		this.loader.start();
 
-		AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
-		AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-		AntengoWidget.display.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height)
+		this.width = this.element.nativeElement.clientWidth;
+		this.height = this.element.nativeElement.clientHeight;
+		this.listingGrid.initialize(this.width, this.height)
 
-		if (AntengoWidget.display.listings.length) {
-			AntengoWidget.display.setListings(AntengoWidget.display.listings)
+		if (this.listingStore.visible.length) {
+			this.setListings([...this.listingStore.visible, ...this.listingStore.all])
 		}
 	}
 	showCTA () {
@@ -104,10 +96,20 @@ class AntengoWidget {
 		CallToActionControl.getInstance().hide()
 		this.showSell = true;
 	}
+	elementScroll({ target }) {
+		let scrollHeight = target.scrollHeight;
+		let scrollTop = target.scrollTop;
+		let offset = this.listingGrid.height;
+
+		if (scrollTop + offset + this.height > scrollHeight) {
+			this.listingStore.appendToVisible(this.listingGrid.addListingCount())
+		}
+	}
 }
 
 bootstrap(AntengoWidget, [
 	HTTP_PROVIDERS,
+	ListingParams,
 	WidgetLoaderInstance,
 	SlideItems,
 	SlidePositions,

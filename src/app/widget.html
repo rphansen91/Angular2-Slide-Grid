@@ -4,9 +4,9 @@
 
 	<sell-it [show]="showSell"></sell-it>
 	
-	<slow-scroll class="scrollingContainer">
+	<slow-scroll class="scrollingContainer" (scroll)="elementScroll($event)">
 
-		<listing-display *ng-for="#listing of listings;" 
+		<listing-display *ng-for="#listing of listingStore.visible" 
 			[listing]="listing" 
 			[width]="listingGrid.width" 
 			[height]="listingGrid.height"

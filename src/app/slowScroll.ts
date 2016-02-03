@@ -59,7 +59,7 @@ export class SlowScrollInterval {
 		if (scroller.direction) {
 			scroller.element.nativeElement.scrollTop -= SlowScrollInterval.instance.change;
 		} else {
-			scroller.element.nativeElement.scrollTop += SlowScrollInterval.instance.change;;
+			scroller.element.nativeElement.scrollTop += SlowScrollInterval.instance.change;
 		}
 	}
 

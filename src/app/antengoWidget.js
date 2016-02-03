@@ -15,6 +15,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var angular2_1 = require('angular2/angular2');
 var http_1 = require("angular2/http");
 var customizations_service_1 = require('./customizations/customizations.service');
+var listingStore_1 = require('./listings/listingStore');
 var listingParams_1 = require('./listings/listingParams');
 var partners_service_1 = require('./partners/partners.service');
 var listing_component_1 = require("./display/listing/listing.component");
@@ -27,50 +28,48 @@ var slidePositions_1 = require('./display/slide/slidePositions');
 var loader_component_1 = require("./loader/loader.component");
 var loader_instance_1 = require("./loader/loader.instance");
 var AntengoWidget = (function () {
-    function AntengoWidget(partnersService, listingParams, slideItems, listingGrid, customizations, loader, element) {
+    function AntengoWidget(partnersService, slideItems, listingGrid, listingStore, customizations, loader, element) {
+        var _this = this;
         this.partnersService = partnersService;
-        this.listingParams = listingParams;
         this.slideItems = slideItems;
         this.listingGrid = listingGrid;
+        this.listingStore = listingStore;
         this.customizations = customizations;
         this.loader = loader;
         this.element = element;
-        this.listings = [];
         this.showSell = false;
-        this.MAX_LISTINGS = 100;
+        this.MAX_LISTINGS = 300;
         this.customizations.initialize();
         this.color = this.customizations.values.colors[0];
         this.fontUrl = this.customizations.values.fontUrl;
-        AntengoWidget.display = this;
-        var location = new listingParams_1.ListingLocation(34, -117);
-        var query = new listingParams_1.SearchParams("car");
-        AntengoWidget.display.listingParams
-            .setLocation(location)
-            .getNationalShippable()
-            .runSearch()
-            .map(function (res) { return res.json().result.rs; })
-            .subscribe(this.setListings);
+        this.listingStore.initialize()
+            .subscribe(function (listings) {
+            _this.setListings(listings);
+        });
         partnersService.initialize();
         slideItems.initialize();
-        AntengoWidget.display.setSizes();
-        window.onresize = this.setSizes;
+        this.setSizes();
+        window.onresize = function () { _this.setSizes(); };
     }
     AntengoWidget.prototype.setListings = function (listings) {
-        listings = listings.splice(0, AntengoWidget.display.MAX_LISTINGS - (AntengoWidget.display.MAX_LISTINGS % AntengoWidget.display.listingGrid.columns));
-        AntengoWidget.display.slideItems.addAll(listings, AntengoWidget.display.listingGrid)
+        var _this = this;
+        listings = listings.splice(0, this.MAX_LISTINGS - (this.MAX_LISTINGS % this.listingGrid.columns));
+        this.listingStore.clearVisible();
+        this.slideItems.addAll(listings, this.listingGrid)
             .then(function (_listings) {
-            AntengoWidget.display.listings = _listings;
-            AntengoWidget.display.loader.stop();
+            _this.listingStore.setAll(_listings);
+            _this.listingStore.appendToVisible(_this.listingGrid.addListingCount());
+            _this.loader.stop();
             slowScroll_1.SlowScrollInterval.getInstance().start();
         });
     };
     AntengoWidget.prototype.setSizes = function () {
-        AntengoWidget.display.loader.start();
-        AntengoWidget.display.width = AntengoWidget.display.element.nativeElement.clientWidth;
-        AntengoWidget.display.height = AntengoWidget.display.element.nativeElement.clientHeight;
-        AntengoWidget.display.listingGrid.initialize(AntengoWidget.display.width, AntengoWidget.display.height);
-        if (AntengoWidget.display.listings.length) {
-            AntengoWidget.display.setListings(AntengoWidget.display.listings);
+        this.loader.start();
+        this.width = this.element.nativeElement.clientWidth;
+        this.height = this.element.nativeElement.clientHeight;
+        this.listingGrid.initialize(this.width, this.height);
+        if (this.listingStore.visible.length) {
+            this.setListings(this.listingStore.visible.concat(this.listingStore.all));
         }
     };
     AntengoWidget.prototype.showCTA = function () {
@@ -83,10 +82,19 @@ var AntengoWidget = (function () {
         callToAction_1.CallToActionControl.getInstance().hide();
         this.showSell = true;
     };
+    AntengoWidget.prototype.elementScroll = function (_a) {
+        var target = _a.target;
+        var scrollHeight = target.scrollHeight;
+        var scrollTop = target.scrollTop;
+        var offset = this.listingGrid.height;
+        if (scrollTop + offset + this.height > scrollHeight) {
+            this.listingStore.appendToVisible(this.listingGrid.addListingCount());
+        }
+    };
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [listingParams_1.ListingParams, partners_service_1.PartnersService, angular2_1.ElementRef, grid_service_1.ListingGrid],
+            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef],
             directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sellIt_component_1.SellIt],
             styles: [
                 '.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
@@ -99,12 +107,13 @@ var AntengoWidget = (function () {
             templateUrl: './app/widget.html'
         }),
         __param(6, angular2_1.Inject(angular2_1.ElementRef)), 
-        __metadata('design:paramtypes', [partners_service_1.PartnersService, listingParams_1.ListingParams, slideItems_1.SlideItems, grid_service_1.ListingGrid, customizations_service_1.Customizations, loader_instance_1.WidgetLoaderInstance, angular2_1.ElementRef])
+        __metadata('design:paramtypes', [partners_service_1.PartnersService, slideItems_1.SlideItems, grid_service_1.ListingGrid, listingStore_1.ListingStore, customizations_service_1.Customizations, loader_instance_1.WidgetLoaderInstance, angular2_1.ElementRef])
     ], AntengoWidget);
     return AntengoWidget;
 })();
 angular2_1.bootstrap(AntengoWidget, [
     http_1.HTTP_PROVIDERS,
+    listingParams_1.ListingParams,
     loader_instance_1.WidgetLoaderInstance,
     slideItems_1.SlideItems,
     slidePositions_1.SlidePositions,

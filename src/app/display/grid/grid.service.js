@@ -29,6 +29,9 @@ var ListingGrid = (function () {
         var column = index % this.columns;
         return column * this.width;
     };
+    ListingGrid.prototype.addListingCount = function () {
+        return this.columns * (this.rows + 2);
+    };
     ListingGrid = __decorate([
         angular2_1.Injectable(), 
         __metadata('design:paramtypes', [customizations_service_1.Customizations])

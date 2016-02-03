@@ -29,4 +29,8 @@ export class ListingGrid {
 		var column = index % this.columns;
 		return column * this.width;
 	}
+
+	addListingCount (): number {
+		return this.columns * (this.rows + 2);
+	}
 }
