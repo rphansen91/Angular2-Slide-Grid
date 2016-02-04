@@ -2,6 +2,14 @@
 
 .main {position: absolute; top: 4px; left: 4px; width: 44px; height: 44px; font-size: 34px; border-radius: 44px; text-align: center; background-color: #fff; border: 1px solid; z-index: 2;}
 .sub {position: absolute; top: 11px; left: 11px; width: 30px; height: 30px; font-size: 22px; border-radius: 30px; text-align: center; background-color: #fff; border: 1px solid; z-index: 1;
+	-webkit-transition: all 0.3s cubic-bezier(1.000, 0, 0.910, 0);
+	-webkit-transition: all 0.3s cubic-bezier(1.000, -0.600, 0.910, -0.595);
+	-moz-transition:    all 0.3s cubic-bezier(1.000, -0.600, 0.910, -0.595);
+	-ms-transition:     all 0.3s cubic-bezier(1.000, -0.600, 0.910, -0.595);
+ 	-o-transition:      all 0.3s cubic-bezier(1.000, -0.600, 0.910, -0.595);
+	transition:         all 0.3s cubic-bezier(1.000, -0.600, 0.910, -0.595);
+}
+.visible_one {top: 18px; left: 52px;
 	-webkit-transition: all 0.3s cubic-bezier(0.205, 1, 0.000, 1);
 	-webkit-transition: all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
 	-moz-transition:    all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
@@ -9,8 +17,14 @@
  	-o-transition:      all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
 	transition:         all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
 }
-.visible_one {top: 18px; left: 52px;}
-.visible_two {top: 52px; left: 18px;}
+.visible_two {top: 52px; left: 18px;
+	-webkit-transition: all 0.3s cubic-bezier(0.205, 1, 0.000, 1);
+	-webkit-transition: all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
+	-moz-transition:    all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
+	-ms-transition:     all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
+ 	-o-transition:      all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
+	transition:         all 0.3s cubic-bezier(0.205, 1.650, 0.000, 1.650);
+}
 
 .icon-mustache {height: 34px;}
 .icon-chat {height: 22px;}
