@@ -62,7 +62,7 @@ var ListingDisplay = (function () {
         this._blurService.show();
         this.id = setTimeout(function () {
             listing.start();
-        }, 200);
+        }, 300);
     };
     ListingDisplay.prototype.endSolo = function () {
         if (this.debounce) {

@@ -103,7 +103,7 @@ export class ListingDisplay implements OnInit {
 		this._blurService.show();
 		this.id = setTimeout(() => {
 			listing.start()
-		}, 200)
+		}, 300)
 	}
 	endSolo () {
 		if (this.debounce) { clearTimeout(this.debounce) }
