@@ -15,6 +15,7 @@ import { PartnersService } from '../../partners/partners.service';
 			
 			<div class="main"
 				[style.border-color]="customizations.values.colors[0]"
+				(mouseenter)="show()"
 				(click)="openListing()">
 				+
 			</div>
