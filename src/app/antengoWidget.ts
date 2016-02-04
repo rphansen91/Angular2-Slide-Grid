@@ -20,7 +20,7 @@ import {FocusService} from "./focus/focus.service";
 
 @Component({
     selector: 'antengo-listings',
-    providers: [PartnersService, ListingStore, ListingGrid, ElementRef, FocusService],
+    providers: [PartnersService, ListingStore, ListingGrid, ElementRef, FocusService, CrossPlatform],
 	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellButton, FocusControl],
 	styles: [
 		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',

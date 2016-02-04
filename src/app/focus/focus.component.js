@@ -16,6 +16,9 @@ var FocusControl = (function () {
     function FocusControl(focus) {
         this.focus = focus;
     }
+    FocusControl.prototype.closeFocus = function () {
+        this.focus.hide();
+    };
     __decorate([
         angular2_1.Input('height'), 
         __metadata('design:type', Number)
@@ -25,7 +28,7 @@ var FocusControl = (function () {
             selector: "focus-control",
             directives: [mainFocus_component_1.MainFocus],
             styleUrls: ["./app/focus/focus.css"],
-            template: "\n\t\t<div class=\"blur\" [class.blurActive]=\"focus.active\" [style.height]=\"height\">\n\t\t\t<main-focus></main-focus>\n\t\t</div>\n\t"
+            template: "\n\t\t<div class=\"blur\" \n\t\t\t[class.blurActive]=\"focus.active\" \n\t\t\t[style.height]=\"height\"\n\t\t\t(click)=\"closeFocus()\">\n\t\t\t<main-focus></main-focus>\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [focus_service_1.FocusService])
     ], FocusControl);

@@ -23,6 +23,7 @@ var grid_service_1 = require("./display/grid/grid.service");
 var callToAction_1 = require("./callToAction");
 var sell_component_1 = require("./sell/sell.component");
 var slowScroll_1 = require("./slowScroll");
+var crossPlatform_1 = require("./platform/crossPlatform");
 var slideItems_1 = require("./display/slide/slideItems");
 var slidePositions_1 = require('./display/slide/slidePositions');
 var loader_component_1 = require("./loader/loader.component");
@@ -100,7 +101,7 @@ var AntengoWidget = (function () {
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef, focus_service_1.FocusService],
+            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef, focus_service_1.FocusService, crossPlatform_1.CrossPlatform],
             directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sell_component_1.SellButton, focus_component_1.FocusControl],
             styles: [
                 '.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',

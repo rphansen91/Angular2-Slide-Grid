@@ -8,7 +8,10 @@ import { MainFocus } from "./mainFocus.component";
 	directives: [MainFocus],
 	styleUrls: ["./app/focus/focus.css"],
 	template: `
-		<div class="blur" [class.blurActive]="focus.active" [style.height]="height">
+		<div class="blur" 
+			[class.blurActive]="focus.active" 
+			[style.height]="height"
+			(click)="closeFocus()">
 			<main-focus></main-focus>
 		</div>
 	`
@@ -20,5 +23,9 @@ export class FocusControl {
 	constructor(
 		public focus: FocusService
 	) { }
+
+	closeFocus() {
+		this.focus.hide();
+	}
 
 }
