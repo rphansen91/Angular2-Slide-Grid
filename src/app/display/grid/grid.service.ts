@@ -4,6 +4,8 @@ import { Customizations } from '../../customizations/customizations.service';
 
 @Injectable()
 export class ListingGrid {
+	public totalWidgetWidth: number;
+	public totalWidgetHeight: number;
 	public width: number;
 	public height: number;
 
@@ -13,6 +15,8 @@ export class ListingGrid {
 	constructor(private _customizations: Customizations) { }
 
 	initialize(totalWidth: number, totalHeight: number) {
+		this.totalWidgetWidth = totalWidth;
+		this.totalWidgetHeight = totalHeight;
 		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
 		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
 

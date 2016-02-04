@@ -16,6 +16,8 @@ var ListingGrid = (function () {
         this._customizations = _customizations;
     }
     ListingGrid.prototype.initialize = function (totalWidth, totalHeight) {
+        this.totalWidgetWidth = totalWidth;
+        this.totalWidgetHeight = totalHeight;
         this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
         this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
         this.width = (totalWidth / this.columns);

@@ -7,7 +7,8 @@ export class Customizations {
 		cardWidth: 175,
 		cardHeight: 150,
 		fontUrl: "./app/assets/Brown-Light.ttf",
-		colors: ["#8c77b6","#baadd3","#f3f1f7"]
+		colors: ["#8c77b6","#baadd3","#f3f1f7"],
+		partnerLogo: "./app/assets/logos/nbc.png"
 	}
 	
 	constructor () {}
@@ -33,4 +34,5 @@ interface CustomizationsTypes {
 	cardHeight: number;
 	fontUrl: string;
 	colors: string[];
+	partnerLogo: string;
 }

@@ -21,12 +21,13 @@ var partners_service_1 = require('./partners/partners.service');
 var listing_component_1 = require("./display/listing/listing.component");
 var grid_service_1 = require("./display/grid/grid.service");
 var callToAction_1 = require("./callToAction");
-var sellIt_component_1 = require("./sellIt.component");
+var sell_component_1 = require("./sell/sell.component");
 var slowScroll_1 = require("./slowScroll");
 var slideItems_1 = require("./display/slide/slideItems");
 var slidePositions_1 = require('./display/slide/slidePositions');
 var loader_component_1 = require("./loader/loader.component");
 var loader_instance_1 = require("./loader/loader.instance");
+var blur_component_1 = require("./blur.component");
 var AntengoWidget = (function () {
     function AntengoWidget(partnersService, slideItems, listingGrid, listingStore, customizations, loader, element) {
         var _this = this;
@@ -94,8 +95,8 @@ var AntengoWidget = (function () {
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef],
-            directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sellIt_component_1.SellIt],
+            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef, blur_component_1.BlurService],
+            directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sell_component_1.SellButton, blur_component_1.Blur],
             styles: [
                 '.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
                 '.listingsRow {position: relative; width: 100%;}',

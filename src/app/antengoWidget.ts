@@ -8,18 +8,19 @@ import {PartnersService} from './partners/partners.service';
 import {ListingDisplay, Listing} from "./display/listing/listing.component";
 import {ListingGrid} from "./display/grid/grid.service"
 import {CallToAction, CallToActionControl} from "./callToAction";
-import {SellIt} from "./sellIt.component";
+import {SellButton} from "./sell/sell.component";
 import {SlowScroll, SlowScrollInterval} from "./slowScroll";
 import {CrossPlatform} from "./platform/crossPlatform";
 import {SlideItems} from "./display/slide/slideItems";
 import {SlidePositions} from './display/slide/slidePositions';
 import {WidgetLoader} from "./loader/loader.component";
 import {WidgetLoaderInstance} from "./loader/loader.instance";
+import {Blur, BlurService} from "./blur.component";
 
 @Component({
     selector: 'antengo-listings',
-    providers: [PartnersService, ListingStore, ListingGrid, ElementRef],
-	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellIt],
+    providers: [PartnersService, ListingStore, ListingGrid, ElementRef, BlurService],
+	directives: [NgFor, NgIf, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellButton, Blur],
 	styles: [
 		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsRow {position: relative; width: 100%;}',
