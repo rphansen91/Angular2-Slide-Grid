@@ -57,10 +57,11 @@ var ListingDisplay = (function () {
         this.debounce = setTimeout(function () { _this.startSolo(); }, 300);
     };
     ListingDisplay.prototype.startSolo = function () {
+        var _this = this;
         var listing = this;
         this.setOpenStyles();
-        this._blurService.show();
         this.id = setTimeout(function () {
+            _this._blurService.show();
             listing.start();
         }, 300);
     };
@@ -68,10 +69,12 @@ var ListingDisplay = (function () {
         if (this.debounce) {
             clearTimeout(this.debounce);
         }
+        if (this.id) {
+            clearTimeout(this.id);
+        }
+        this.stop();
         this.setCloseStyles();
         this._blurService.hide();
-        clearTimeout(this.id);
-        this.stop();
     };
     ListingDisplay.prototype.start = function () {
         this.showControls = true;

@@ -100,18 +100,19 @@ export class ListingDisplay implements OnInit {
 	startSolo () { 
 		var listing = this
 		this.setOpenStyles()
-		this._blurService.show();
+		
 		this.id = setTimeout(() => {
+			this._blurService.show();
 			listing.start()
 		}, 300)
 	}
 	endSolo () {
 		if (this.debounce) { clearTimeout(this.debounce) }
+		if (this.id) { clearTimeout(this.id) }
 
-		this.setCloseStyles()
+		this.stop();
+		this.setCloseStyles();
 		this._blurService.hide();
-		clearTimeout(this.id);
-		this.stop()
 	}
 
 	start() {
@@ -149,9 +150,9 @@ export class ListingDisplay implements OnInit {
 	}
 	stop() {
 		this.isRunning = false;
-
 		this.position = this._slidePositions.getPosition(100, this.slide.length - 1, this.width);
 		this.showControls = false;
+		
 		if (this.interval) {
 			this.interval.stopInterval();
 		}
