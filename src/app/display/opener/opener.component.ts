@@ -16,7 +16,7 @@ import { PartnersService } from '../../partners/partners.service';
 			
 			<div class="main"
 				[style.border-color]="customizations.values.colors[0]">
-				<span class="icon-mustache"></span>
+				+
 			</div>
 			<div class="sub" 
 				[style.border-color]="customizations.values.colors[0]"
