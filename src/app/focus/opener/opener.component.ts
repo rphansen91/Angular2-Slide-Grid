@@ -46,8 +46,12 @@ export class Opener {
 	) {}
 
 	openListing () {
-		let code = this._partnersService.partner;
-		window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+		if (this.showSubs) {
+			let code = this._partnersService.partner;
+			window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+		} else {
+			this.showSubs = true;
+		}
 	}
 
 	openShare () {

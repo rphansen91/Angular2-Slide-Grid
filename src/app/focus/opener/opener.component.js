@@ -19,8 +19,13 @@ var Opener = (function () {
         this.showSubs = false;
     }
     Opener.prototype.openListing = function () {
-        var code = this._partnersService.partner;
-        window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+        if (this.showSubs) {
+            var code = this._partnersService.partner;
+            window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+        }
+        else {
+            this.showSubs = true;
+        }
     };
     Opener.prototype.openShare = function () {
         var code = this._partnersService.partner;

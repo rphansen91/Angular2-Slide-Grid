@@ -20,8 +20,8 @@ import { FocusService } from '../../focus/focus.service';
 			[style.height]="height"
 			[style.top]="listing.top"
 			[style.left]="listing.left"
-			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'" 
-			(click)="goToApp()" 
+			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
+			(click)="startSolo()"
 			(mouseenter)="debounceStart()" 
 			(touchstart)="debounceStart()">
 			
