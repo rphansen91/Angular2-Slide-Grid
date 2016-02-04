@@ -5,7 +5,7 @@ onmessage = function (e) {
 
     listings = listings.map(function (listing, index) {
         listing.slide = new SlideItem(listing.photos);
-        listing.position = new ImagePosition().setSize(grid.width).setPosition(100, listing.photos.length - 1).position;
+        listing.position = new ImagePosition().setSize(grid.width * 1.3).setPosition(100, listing.photos.length - 1).position;
         listing.top = (Math.floor(index / grid.columns) * grid.height);
         listing.left = ((index % grid.columns) * grid.width);
         return listing;
