@@ -3,20 +3,18 @@
 	<call-to-action></call-to-action>
 
 	<sell-button [show]="showSell"></sell-button>
-	
+
 	<slow-scroll class="scrollingContainer" (scroll)="elementScroll($event)">
+		
+		<focus-control [height]="listingGrid.height * (listingStore.visible.length / listingGrid.columns)"></focus-control>
 
 		<listing-display *ng-for="#listing of listingStore.visible" 
 			[listing]="listing" 
 			[width]="listingGrid.width" 
-			[height]="listingGrid.height"
-			[top]="listing.top"
-			[left]="listing.left">
+			[height]="listingGrid.height">
 		</listing-display>
 
 	</slow-scroll>
-
-	<bkgd-blur></bkgd-blur>
 
 	<widget-loader></widget-loader>
 

@@ -5,17 +5,17 @@ import { PartnersService } from '../../partners/partners.service';
 
 @Component({
 	selector: "opener",
-	styleUrls: ["./app/display/opener/opener.css"],
+	styleUrls: ["./app/focus/opener/opener.css"],
 	directives: [NgIf],
 	template: `
 		<div class="openerContainer"
-			*ng-if="showMain"
 			[style.color]="customizations.values.colors[0]"
 			(mouseenter)="show()"
 			(mouseleave)="hide()">
 			
 			<div class="main"
-				[style.border-color]="customizations.values.colors[0]">
+				[style.border-color]="customizations.values.colors[0]"
+				(click)="openListing()">
 				+
 			</div>
 			<div class="sub" 
@@ -36,7 +36,6 @@ import { PartnersService } from '../../partners/partners.service';
 })
 export class Opener {
 
-	@Input('show') showMain: boolean = false;
 	@Input('id') listingId: string;
 	public showSubs: boolean = false;
 
@@ -44,6 +43,11 @@ export class Opener {
 		public customizations: Customizations,
 		private _partnersService: PartnersService
 	) {}
+
+	openListing () {
+		let code = this._partnersService.partner;
+		window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+	}
 
 	openShare () {
 		let code = this._partnersService.partner;

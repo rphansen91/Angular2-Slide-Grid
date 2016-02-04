@@ -4,6 +4,11 @@ onmessage = function (e) {
     var grid = e.data[1];
 
     listings = listings.map(function (listing, index) {
+        
+        if (listing.photos.length > 1) {
+            listing.photos = listing.photos.concat(listing.photos[0]);
+        }
+
         listing.slide = new SlideItem(listing.photos);
         listing.position = new ImagePosition().setSize(grid.width * 1.3).setPosition(100, listing.photos.length - 1).position;
         listing.top = (Math.floor(index / grid.columns) * grid.height);

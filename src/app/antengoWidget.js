@@ -27,9 +27,10 @@ var slideItems_1 = require("./display/slide/slideItems");
 var slidePositions_1 = require('./display/slide/slidePositions');
 var loader_component_1 = require("./loader/loader.component");
 var loader_instance_1 = require("./loader/loader.instance");
-var blur_component_1 = require("./blur.component");
+var focus_component_1 = require("./focus/focus.component");
+var focus_service_1 = require("./focus/focus.service");
 var AntengoWidget = (function () {
-    function AntengoWidget(partnersService, slideItems, listingGrid, listingStore, customizations, loader, element) {
+    function AntengoWidget(partnersService, slideItems, listingGrid, listingStore, customizations, loader, focus, element) {
         var _this = this;
         this.partnersService = partnersService;
         this.slideItems = slideItems;
@@ -37,6 +38,7 @@ var AntengoWidget = (function () {
         this.listingStore = listingStore;
         this.customizations = customizations;
         this.loader = loader;
+        this.focus = focus;
         this.element = element;
         this.showSell = false;
         this.MAX_LISTINGS = 300;
@@ -88,6 +90,9 @@ var AntengoWidget = (function () {
         var scrollHeight = target.scrollHeight;
         var scrollTop = target.scrollTop;
         var offset = this.listingGrid.height;
+        if (this.focus.active) {
+            this.focus.hide();
+        }
         if (scrollTop + offset + this.height > scrollHeight) {
             this.listingStore.appendToVisible(this.listingGrid.addListingCount());
         }
@@ -95,8 +100,8 @@ var AntengoWidget = (function () {
     AntengoWidget = __decorate([
         angular2_1.Component({
             selector: 'antengo-listings',
-            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef, blur_component_1.BlurService],
-            directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sell_component_1.SellButton, blur_component_1.Blur],
+            providers: [partners_service_1.PartnersService, listingStore_1.ListingStore, grid_service_1.ListingGrid, angular2_1.ElementRef, focus_service_1.FocusService],
+            directives: [angular2_1.NgFor, angular2_1.NgIf, listing_component_1.ListingDisplay, callToAction_1.CallToAction, slowScroll_1.SlowScroll, loader_component_1.WidgetLoader, sell_component_1.SellButton, focus_component_1.FocusControl],
             styles: [
                 '.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
                 '.listingsRow {position: relative; width: 100%;}',
@@ -107,8 +112,8 @@ var AntengoWidget = (function () {
             ],
             templateUrl: './app/widget.html'
         }),
-        __param(6, angular2_1.Inject(angular2_1.ElementRef)), 
-        __metadata('design:paramtypes', [partners_service_1.PartnersService, slideItems_1.SlideItems, grid_service_1.ListingGrid, listingStore_1.ListingStore, customizations_service_1.Customizations, loader_instance_1.WidgetLoaderInstance, angular2_1.ElementRef])
+        __param(7, angular2_1.Inject(angular2_1.ElementRef)), 
+        __metadata('design:paramtypes', [partners_service_1.PartnersService, slideItems_1.SlideItems, grid_service_1.ListingGrid, listingStore_1.ListingStore, customizations_service_1.Customizations, loader_instance_1.WidgetLoaderInstance, focus_service_1.FocusService, angular2_1.ElementRef])
     ], AntengoWidget);
     return AntengoWidget;
 })();

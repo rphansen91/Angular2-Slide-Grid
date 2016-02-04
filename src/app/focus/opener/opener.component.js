@@ -16,9 +16,12 @@ var Opener = (function () {
     function Opener(customizations, _partnersService) {
         this.customizations = customizations;
         this._partnersService = _partnersService;
-        this.showMain = false;
         this.showSubs = false;
     }
+    Opener.prototype.openListing = function () {
+        var code = this._partnersService.partner;
+        window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId);
+    };
     Opener.prototype.openShare = function () {
         var code = this._partnersService.partner;
         window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listingId + "?open=share");
@@ -34,19 +37,15 @@ var Opener = (function () {
         this.showSubs = false;
     };
     __decorate([
-        angular2_1.Input('show'), 
-        __metadata('design:type', Boolean)
-    ], Opener.prototype, "showMain");
-    __decorate([
         angular2_1.Input('id'), 
         __metadata('design:type', String)
     ], Opener.prototype, "listingId");
     Opener = __decorate([
         angular2_1.Component({
             selector: "opener",
-            styleUrls: ["./app/display/opener/opener.css"],
+            styleUrls: ["./app/focus/opener/opener.css"],
             directives: [angular2_1.NgIf],
-            template: "\n\t\t<div class=\"openerContainer\"\n\t\t\t*ng-if=\"showMain\"\n\t\t\t[style.color]=\"customizations.values.colors[0]\"\n\t\t\t(mouseenter)=\"show()\"\n\t\t\t(mouseleave)=\"hide()\">\n\t\t\t\n\t\t\t<div class=\"main\"\n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\">\n\t\t\t\t+\n\t\t\t</div>\n\t\t\t<div class=\"sub\" \n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\"\n\t\t\t\t[class.visible_one]=\"showSubs\"\n\t\t\t\t(click)=\"openChat()\">\n\t\t\t\t<span class=\"icon-chat\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"sub\" \n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\"\n\t\t\t\t[class.visible_two]=\"showSubs\"\n\t\t\t\t(click)=\"openShare()\">\n\t\t\t\t<span class=\"icon-share\"></span>\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\t"
+            template: "\n\t\t<div class=\"openerContainer\"\n\t\t\t[style.color]=\"customizations.values.colors[0]\"\n\t\t\t(mouseenter)=\"show()\"\n\t\t\t(mouseleave)=\"hide()\">\n\t\t\t\n\t\t\t<div class=\"main\"\n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\"\n\t\t\t\t(click)=\"openListing()\">\n\t\t\t\t+\n\t\t\t</div>\n\t\t\t<div class=\"sub\" \n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\"\n\t\t\t\t[class.visible_one]=\"showSubs\"\n\t\t\t\t(click)=\"openChat()\">\n\t\t\t\t<span class=\"icon-chat\"></span>\n\t\t\t</div>\n\t\t\t<div class=\"sub\" \n\t\t\t\t[style.border-color]=\"customizations.values.colors[0]\"\n\t\t\t\t[class.visible_two]=\"showSubs\"\n\t\t\t\t(click)=\"openShare()\">\n\t\t\t\t<span class=\"icon-share\"></span>\n\t\t\t</div>\n\t\t\t\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [customizations_service_1.Customizations, partners_service_1.PartnersService])
     ], Opener);
