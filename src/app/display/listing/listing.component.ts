@@ -22,6 +22,7 @@ import { FocusService } from '../../focus/focus.service';
 			[style.left]="listing.left"
 			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
 			(click)="startSolo()"
+            (mouseleave)="debounceEnd()"
 			(mouseenter)="debounceStart()" 
 			(touchstart)="debounceStart()">
 			
@@ -62,6 +63,9 @@ export class ListingDisplay implements OnInit {
 			this.startSolo(); 
 		}, 300)
 	}
+    debounceEnd () {
+        if (this.debounce) { clearTimeout(this.debounce) }
+    }
 	startSolo () {
 		let listing = this.listing;
 		this._focusService.activate(listing)

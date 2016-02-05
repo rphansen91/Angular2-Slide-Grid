@@ -40,6 +40,11 @@ var ListingDisplay = (function () {
             _this.startSolo();
         }, 300);
     };
+    ListingDisplay.prototype.debounceEnd = function () {
+        if (this.debounce) {
+            clearTimeout(this.debounce);
+        }
+    };
     ListingDisplay.prototype.startSolo = function () {
         var listing = this.listing;
         this._focusService.activate(listing);
@@ -62,7 +67,7 @@ var ListingDisplay = (function () {
             pipes: [price_1.PriceDisplay],
             directives: [angular2_1.NgIf],
             styleUrls: ["./app/display/listing/listing.css"],
-            template: "\n\t\t<div *ng-if=\"listing\" class=\"listingDisplay\" \n\t\t\t[style.width]=\"width\" \n\t\t\t[style.height]=\"height\"\n\t\t\t[style.top]=\"listing.top\"\n\t\t\t[style.left]=\"listing.left\"\n\t\t\t[style.background-image]=\"'url(' + listing.photos[listing.photos.length - 1].url + ')'\"\n\t\t\t(click)=\"startSolo()\"\n\t\t\t(mouseenter)=\"debounceStart()\" \n\t\t\t(touchstart)=\"debounceStart()\">\n\t\t\t\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\t\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\" [style.background-color]=\"color\">$ {{listing.price | price}}</div>\n\t\t\n\t\t</div>\n\t"
+            template: "\n\t\t<div *ng-if=\"listing\" class=\"listingDisplay\" \n\t\t\t[style.width]=\"width\" \n\t\t\t[style.height]=\"height\"\n\t\t\t[style.top]=\"listing.top\"\n\t\t\t[style.left]=\"listing.left\"\n\t\t\t[style.background-image]=\"'url(' + listing.photos[listing.photos.length - 1].url + ')'\"\n\t\t\t(click)=\"startSolo()\"\n            (mouseleave)=\"debounceEnd()\"\n\t\t\t(mouseenter)=\"debounceStart()\" \n\t\t\t(touchstart)=\"debounceStart()\">\n\t\t\t\n\t\t\t<div class=\"sold\" *ng-if=\"listing.status == 2\"></div>\t\n\t\t\t<div class=\"price\" *ng-if=\"listing.price\" [style.background-color]=\"color\">$ {{listing.price | price}}</div>\n\t\t\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [slidePositions_1.SlidePositions, partners_service_1.PartnersService, customizations_service_1.Customizations, grid_service_1.ListingGrid, focus_service_1.FocusService])
     ], ListingDisplay);
