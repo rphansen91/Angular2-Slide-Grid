@@ -6,6 +6,7 @@ export class Customizations {
 	public values: CustomizationsTypes = {
 		cardWidth: 175,
 		cardHeight: 150,
+        categoryId: 0,
 		fontUrl: "./app/assets/Brown-Light.ttf",
 		colors: ["#8c77b6","#baadd3","#f3f1f7"],
 		partnerLogo: "./app/assets/logos/nbc.png"
@@ -21,7 +22,7 @@ export class Customizations {
 				return val.split("=")
 			})
 			values.forEach((val)=>{
-				if (this.values[val[0]]) {
+				if (this.values[val[0]] || this.values[val[0]] >= 0) {
 					this.values[val[0]] = (val[1].split(",").length > 1) ? val[1].split(","): val[1];
 				}
 			})
@@ -32,6 +33,7 @@ export class Customizations {
 interface CustomizationsTypes {
 	cardWidth: number;
 	cardHeight: number;
+    categoryId: number;
 	fontUrl: string;
 	colors: string[];
 	partnerLogo: string;

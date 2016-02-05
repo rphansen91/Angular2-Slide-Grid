@@ -15,6 +15,7 @@ var Customizations = (function () {
         this.values = {
             cardWidth: 175,
             cardHeight: 150,
+            categoryId: 0,
             fontUrl: "./app/assets/Brown-Light.ttf",
             colors: ["#8c77b6", "#baadd3", "#f3f1f7"],
             partnerLogo: "./app/assets/logos/nbc.png"
@@ -29,7 +30,7 @@ var Customizations = (function () {
                 return val.split("=");
             });
             values.forEach(function (val) {
-                if (_this.values[val[0]]) {
+                if (_this.values[val[0]] || _this.values[val[0]] >= 0) {
                     _this.values[val[0]] = (val[1].split(",").length > 1) ? val[1].split(",") : val[1];
                 }
             });

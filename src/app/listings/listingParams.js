@@ -93,10 +93,6 @@ var SearchParams = (function () {
         if (categoryGroupId === void 0) { categoryGroupId = 0; }
         if (minPrice === void 0) { minPrice = 0; }
         if (maxPrice === void 0) { maxPrice = 0; }
-        this.q = "";
-        this.categoryGroupId = 0;
-        this.minPrice = 0;
-        this.maxPrice = 0;
         this.q = q;
         this.categoryGroupId = categoryGroupId;
         this.minPrice = minPrice;

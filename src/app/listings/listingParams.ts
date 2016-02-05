@@ -84,17 +84,12 @@ class DefaultParams {
 }
 
 export class SearchParams {
-	public q: string = "";
-	public categoryGroupId: number = 0;
-	public minPrice: number = 0;
-	public maxPrice: number = 0;
-
-	constructor(q: string = "", categoryGroupId: number = 0, minPrice: number = 0, maxPrice: number = 0) {
-		this.q = q;
-		this.categoryGroupId = categoryGroupId
-		this.minPrice = minPrice
-		this.maxPrice = maxPrice
-	}
+	constructor(
+        public q = "", 
+        public categoryGroupId = 0, 
+        public minPrice = 0,
+        public maxPrice = 0
+    ) {}
 }
 
 export class ListingLocation {
