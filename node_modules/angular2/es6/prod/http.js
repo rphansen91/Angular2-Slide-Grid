@@ -1,4 +1,4 @@
-import { provide } from 'angular2/angular2';
+import { provide } from 'angular2/core';
 import { Http, Jsonp } from './src/http/http';
 import { XHRBackend } from './src/http/backends/xhr_backend';
 import { JSONPBackend, JSONPBackend_ } from './src/http/backends/jsonp_backend';
@@ -6,7 +6,6 @@ import { BrowserXhr } from './src/http/backends/browser_xhr';
 import { BrowserJsonp } from './src/http/backends/browser_jsonp';
 import { BaseRequestOptions, RequestOptions } from './src/http/base_request_options';
 import { BaseResponseOptions, ResponseOptions } from './src/http/base_response_options';
-export { MockConnection, MockBackend } from './src/http/backends/mock_backend';
 export { Request } from './src/http/static_request';
 export { Response } from './src/http/static_response';
 export { Connection, ConnectionBackend } from './src/http/interfaces';
@@ -17,7 +16,7 @@ export { XHRBackend, XHRConnection } from './src/http/backends/xhr_backend';
 export { JSONPBackend, JSONPConnection } from './src/http/backends/jsonp_backend';
 export { Http, Jsonp } from './src/http/http';
 export { Headers } from './src/http/headers';
-export { ResponseTypes, ReadyStates, RequestMethods } from './src/http/enums';
+export { ResponseType, ReadyState, RequestMethod } from './src/http/enums';
 export { URLSearchParams } from './src/http/url_search_params';
 /**
  * Provides a basic set of injectables to use the {@link Http} service in any application.
@@ -28,7 +27,9 @@ export { URLSearchParams } from './src/http/url_search_params';
  * ### Example ([live demo](http://plnkr.co/edit/snj7Nv?p=preview))
  *
  * ```
- * import {bootstrap, Component, NgFor, View} from 'angular2/angular2';
+ * import {Component} from 'angular2/core';
+ * import {bootstrap} from 'angular2/platform/browser';
+ * import {NgFor} from 'angular2/common';
  * import {HTTP_PROVIDERS, Http} from 'angular2/http';
  *
  * @Component({
@@ -38,7 +39,7 @@ export { URLSearchParams } from './src/http/url_search_params';
  *     <div>
  *       <h1>People</h1>
  *       <ul>
- *         <li *ng-for="#person of people">
+ *         <li *ngFor="#person of people">
  *           {{person.name}}
  *         </li>
  *       </ul>
@@ -82,7 +83,8 @@ export { URLSearchParams } from './src/http/url_search_params';
  * ### Example ([live demo](http://plnkr.co/edit/aCMEXi?p=preview))
  *
  * ```
- * import {provide, bootstrap} from 'angular2/angular2';
+ * import {provide} from 'angular2/core';
+ * import {bootstrap} from 'angular2/platform/browser';
  * import {HTTP_PROVIDERS, BaseRequestOptions, RequestOptions} from 'angular2/http';
  *
  * class MyOptions extends BaseRequestOptions {
@@ -99,8 +101,10 @@ export { URLSearchParams } from './src/http/url_search_params';
  * ### Example ([live demo](http://plnkr.co/edit/7LWALD?p=preview))
  *
  * ```
- * import {provide, Injector} from 'angular2/angular2';
- * import {HTTP_PROVIDERS, Http, Response, XHRBackend, MockBackend} from 'angular2/http';
+ * import {provide} from 'angular2/core';
+ * import {bootstrap} from 'angular2/platform/browser';
+ * import {HTTP_PROVIDERS, Http, Response, XHRBackend} from 'angular2/http';
+ * import {MockBackend} from 'angular2/http/testing';
  *
  * var people = [{name: 'Jeff'}, {name: 'Tobias'}];
  *
@@ -143,6 +147,8 @@ export const HTTP_PROVIDERS = [
     XHRBackend
 ];
 /**
+ * See {@link HTTP_PROVIDERS} instead.
+ *
  * @deprecated
  */
 export const HTTP_BINDINGS = HTTP_PROVIDERS;
@@ -155,7 +161,8 @@ export const HTTP_BINDINGS = HTTP_PROVIDERS;
  * ### Example ([live demo](http://plnkr.co/edit/vmeN4F?p=preview))
  *
  * ```
- * import {Component, NgFor, View} from 'angular2/angular2';
+ * import {Component} from 'angular2/core';
+ * import {NgFor} from 'angular2/common';
  * import {JSONP_PROVIDERS, Jsonp} from 'angular2/http';
  *
  * @Component({
@@ -165,7 +172,7 @@ export const HTTP_BINDINGS = HTTP_PROVIDERS;
  *     <div>
  *       <h1>People</h1>
  *       <ul>
- *         <li *ng-for="#person of people">
+ *         <li *ngFor="#person of people">
  *           {{person.name}}
  *         </li>
  *       </ul>
@@ -202,7 +209,8 @@ export const HTTP_BINDINGS = HTTP_PROVIDERS;
  * ### Example ([live demo](http://plnkr.co/edit/TFug7x?p=preview))
  *
  * ```
- * import {provide, bootstrap} from 'angular2/angular2';
+ * import {provide} from 'angular2/core';
+ * import {bootstrap} from 'angular2/platform/browser';
  * import {JSONP_PROVIDERS, BaseRequestOptions, RequestOptions} from 'angular2/http';
  *
  * class MyOptions extends BaseRequestOptions {
@@ -219,8 +227,9 @@ export const HTTP_BINDINGS = HTTP_PROVIDERS;
  * ### Example ([live demo](http://plnkr.co/edit/HDqZWL?p=preview))
  *
  * ```
- * import {provide, Injector} from 'angular2/angular2';
- * import {JSONP_PROVIDERS, Jsonp, Response, JSONPBackend, MockBackend} from 'angular2/http';
+ * import {provide, Injector} from 'angular2/core';
+ * import {JSONP_PROVIDERS, Jsonp, Response, JSONPBackend} from 'angular2/http';
+ * import {MockBackend} from 'angular2/http/testing';
  *
  * var people = [{name: 'Jeff'}, {name: 'Tobias'}];
  * var injector = Injector.resolveAndCreate([
@@ -262,7 +271,8 @@ export const JSONP_PROVIDERS = [
     provide(JSONPBackend, { useClass: JSONPBackend_ })
 ];
 /**
+ * See {@link JSONP_PROVIDERS} instead.
+ *
  * @deprecated
  */
 export const JSON_BINDINGS = JSONP_PROVIDERS;
-//# sourceMappingURL=http.js.map

@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>Antengo Widget</title>
+    
+    <link rel="icon" href="./app/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <style>
+      @font-face {
+          font-family: "Brown-Lite";
+          src: url(./app/assets/Brown-Light.ttf);
+      }
+
+      @font-face {
+          font-family: 'ant-icon';
+          src:    url('./app/assets/icons/icomoon.eot');
+          src:    url('./app/assets/icons/icomoon.eot') format('embedded-opentype'),
+              url('./app/assets/icons/icomoon.ttf') format('truetype'),
+              url('./app/assets/icons/icomoon.woff') format('woff'),
+              url('./app/assets/icons/icomoon.svg') format('svg');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      [class^="icon-"], [class*=" icon-"] {
+          /* use !important to prevent issues with browser extensions that change fonts */
+          font-family: 'ant-icon' !important;
+          speak: none;
+          font-style: normal;
+          font-weight: normal;
+          font-variant: normal;
+          text-transform: none;
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          margin: auto;
+
+          /* Better Font Rendering =========== */
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+      }
+
+      .icon-mustache:before {
+          content: "\e902";
+      }
+      .icon-chat:before {
+          content: "\e900";
+      }
+      .icon-share:before {
+          content: "\e901";
+      }
+
+      .listingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; width: 100%; height: 100%;font-family: "Brown-Lite", Brown, Arial;}
+    </style>
+
+  </head>
+  <body>
+
+    <antengo-listings class="listingContainer"></antengo-listings>
+
+    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>

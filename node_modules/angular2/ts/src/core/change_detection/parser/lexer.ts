@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/src/core/di/decorators';
-import {ListWrapper, SetWrapper} from "angular2/src/core/facade/collection";
-import {NumberWrapper, StringJoiner, StringWrapper, isPresent} from "angular2/src/core/facade/lang";
-import {BaseException} from 'angular2/src/core/facade/exceptions';
+import {ListWrapper, SetWrapper} from "angular2/src/facade/collection";
+import {NumberWrapper, StringJoiner, StringWrapper, isPresent} from "angular2/src/facade/lang";
+import {BaseException} from 'angular2/src/facade/exceptions';
 
 export enum TokenType {
   Character,
@@ -55,10 +55,6 @@ export class Token {
   }
 
   isKeywordTrue(): boolean { return (this.type == TokenType.Keyword && this.strValue == "true"); }
-
-  isKeywordIf(): boolean { return (this.type == TokenType.Keyword && this.strValue == "if"); }
-
-  isKeywordElse(): boolean { return (this.type == TokenType.Keyword && this.strValue == "else"); }
 
   isKeywordFalse(): boolean { return (this.type == TokenType.Keyword && this.strValue == "false"); }
 
@@ -397,6 +393,18 @@ function isWhitespace(code: number): boolean {
 
 function isIdentifierStart(code: number): boolean {
   return ($a <= code && code <= $z) || ($A <= code && code <= $Z) || (code == $_) || (code == $$);
+}
+
+export function isIdentifier(input: string): boolean {
+  if (input.length == 0) return false;
+  var scanner = new _Scanner(input);
+  if (!isIdentifierStart(scanner.peek)) return false;
+  scanner.advance();
+  while (scanner.peek !== $EOF) {
+    if (!isIdentifierPart(scanner.peek)) return false;
+    scanner.advance();
+  }
+  return true;
 }
 
 function isIdentifierPart(code: number): boolean {

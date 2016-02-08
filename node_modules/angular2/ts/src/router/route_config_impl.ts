@@ -1,4 +1,4 @@
-import {CONST, Type} from 'angular2/src/core/facade/lang';
+import {CONST, Type, isPresent} from 'angular2/src/facade/lang';
 import {RouteDefinition} from './route_definition';
 export {RouteDefinition} from './route_definition';
 
@@ -18,37 +18,42 @@ export class RouteConfig {
  * It has the following properties:
  * - `path` is a string that uses the route matcher DSL.
  * - `component` a component type.
- * - `as` is an optional `CamelCase` string representing the name of the route.
+ * - `name` is an optional `CamelCase` string representing the name of the route.
  * - `data` is an optional property of any type representing arbitrary route metadata for the given
- * route. It is injectable via the {@link ROUTE_DATA} token.
+ * route. It is injectable via {@link RouteData}.
+ * - `useAsDefault` is a boolean value. If `true`, the child route will be navigated to if no child
+ * route is specified during the navigation.
  *
- * ## Example
+ * ### Example
  * ```
  * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   {path: '/home', component: HomeCmp, as: 'HomeCmp' }
+ *   {path: '/home', component: HomeCmp, name: 'HomeCmp' }
  * ])
  * class MyApp {}
  * ```
  */
 @CONST()
 export class Route implements RouteDefinition {
-  data: any;
+  data: {[key: string]: any};
   path: string;
   component: Type;
-  as: string;
-  // added next two properties to work around https://github.com/Microsoft/TypeScript/issues/4107
-  loader: Function;
-  redirectTo: string;
-  constructor({path, component, as, data}:
-                  {path: string, component: Type, as?: string, data?: any}) {
+  name: string;
+  useAsDefault: boolean;
+  // added next three properties to work around https://github.com/Microsoft/TypeScript/issues/4107
+  aux: string = null;
+  loader: Function = null;
+  redirectTo: any[] = null;
+  constructor({path, component, name, data, useAsDefault}: {
+    path: string,
+    component: Type, name?: string, data?: {[key: string]: any}, useAsDefault?: boolean
+  }) {
     this.path = path;
     this.component = component;
-    this.as = as;
-    this.loader = null;
-    this.redirectTo = null;
+    this.name = name;
     this.data = data;
+    this.useAsDefault = useAsDefault;
   }
 }
 
@@ -58,11 +63,11 @@ export class Route implements RouteDefinition {
  * It takes an object with the following properties:
  * - `path` is a string that uses the route matcher DSL.
  * - `component` a component type.
- * - `as` is an optional `CamelCase` string representing the name of the route.
+ * - `name` is an optional `CamelCase` string representing the name of the route.
  * - `data` is an optional property of any type representing arbitrary route metadata for the given
- * route. It is injectable via the {@link ROUTE_DATA} token.
+ * route. It is injectable via {@link RouteData}.
  *
- * ## Example
+ * ### Example
  * ```
  * import {RouteConfig, AuxRoute} from 'angular2/router';
  *
@@ -74,17 +79,19 @@ export class Route implements RouteDefinition {
  */
 @CONST()
 export class AuxRoute implements RouteDefinition {
-  data: any = null;
+  data: {[key: string]: any} = null;
   path: string;
   component: Type;
-  as: string;
-  // added next two properties to work around https://github.com/Microsoft/TypeScript/issues/4107
+  name: string;
+  // added next three properties to work around https://github.com/Microsoft/TypeScript/issues/4107
+  aux: string = null;
   loader: Function = null;
-  redirectTo: string = null;
-  constructor({path, component, as}: {path: string, component: Type, as?: string}) {
+  redirectTo: any[] = null;
+  useAsDefault: boolean = false;
+  constructor({path, component, name}: {path: string, component: Type, name?: string}) {
     this.path = path;
     this.component = component;
-    this.as = as;
+    this.name = name;
   }
 }
 
@@ -95,49 +102,59 @@ export class AuxRoute implements RouteDefinition {
  * It has the following properties:
  * - `path` is a string that uses the route matcher DSL.
  * - `loader` is a function that returns a promise that resolves to a component.
- * - `as` is an optional `CamelCase` string representing the name of the route.
+ * - `name` is an optional `CamelCase` string representing the name of the route.
  * - `data` is an optional property of any type representing arbitrary route metadata for the given
- * route. It is injectable via the {@link ROUTE_DATA} token.
+ * route. It is injectable via {@link RouteData}.
+ * - `useAsDefault` is a boolean value. If `true`, the child route will be navigated to if no child
+ * route is specified during the navigation.
  *
- * ## Example
+ * ### Example
  * ```
  * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), as: 'MyLoadedCmp'}
+ *   {path: '/home', loader: () => Promise.resolve(MyLoadedCmp), name: 'MyLoadedCmp'}
  * ])
  * class MyApp {}
  * ```
  */
 @CONST()
 export class AsyncRoute implements RouteDefinition {
-  data: any;
+  data: {[key: string]: any};
   path: string;
   loader: Function;
-  as: string;
-  constructor({path, loader, as, data}: {path: string, loader: Function, as?: string, data?: any}) {
+  name: string;
+  useAsDefault: boolean;
+  aux: string = null;
+  constructor({path, loader, name, data, useAsDefault}: {
+    path: string,
+    loader: Function, name?: string, data?: {[key: string]: any}, useAsDefault?: boolean
+  }) {
     this.path = path;
     this.loader = loader;
-    this.as = as;
+    this.name = name;
     this.data = data;
+    this.useAsDefault = useAsDefault;
   }
 }
 
 /**
- * `Redirect` is a type of {@link RouteDefinition} used to route a path to an asynchronously loaded
- * component.
+ * `Redirect` is a type of {@link RouteDefinition} used to route a path to a canonical route.
  *
  * It has the following properties:
  * - `path` is a string that uses the route matcher DSL.
- * - `redirectTo` is a string representing the new URL to be matched against.
+ * - `redirectTo` is an array representing the link DSL.
  *
- * ## Example
+ * Note that redirects **do not** affect how links are generated. For that, see the `useAsDefault`
+ * option.
+ *
+ * ### Example
  * ```
  * import {RouteConfig} from 'angular2/router';
  *
  * @RouteConfig([
- *   {path: '/', redirectTo: '/home'},
- *   {path: '/home', component: HomeCmp}
+ *   {path: '/', redirectTo: ['/Home'] },
+ *   {path: '/home', component: HomeCmp, name: 'Home'}
  * ])
  * class MyApp {}
  * ```
@@ -145,12 +162,14 @@ export class AsyncRoute implements RouteDefinition {
 @CONST()
 export class Redirect implements RouteDefinition {
   path: string;
-  redirectTo: string;
-  as: string = null;
-  // added next property to work around https://github.com/Microsoft/TypeScript/issues/4107
+  redirectTo: any[];
+  name: string = null;
+  // added next three properties to work around https://github.com/Microsoft/TypeScript/issues/4107
   loader: Function = null;
   data: any = null;
-  constructor({path, redirectTo}: {path: string, redirectTo: string}) {
+  aux: string = null;
+  useAsDefault: boolean = false;
+  constructor({path, redirectTo}: {path: string, redirectTo: any[]}) {
     this.path = path;
     this.redirectTo = redirectTo;
   }

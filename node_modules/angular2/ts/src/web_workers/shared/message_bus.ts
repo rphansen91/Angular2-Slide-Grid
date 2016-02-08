@@ -1,6 +1,6 @@
-import {EventEmitter} from 'angular2/src/core/facade/async';
+import {EventEmitter} from 'angular2/src/facade/async';
 import {NgZone} from 'angular2/src/core/zone/ng_zone';
-export {EventEmitter, Observable} from 'angular2/src/core/facade/async';
+export {EventEmitter, Observable} from 'angular2/src/facade/async';
 
 /**
  * Message Bus is a low level API used to communicate between the UI and the background.
@@ -30,14 +30,14 @@ export abstract class MessageBus implements MessageBusSource, MessageBusSink {
    * Returns an {@link EventEmitter} that emits every time a message
    * is received on the given channel.
    */
-  abstract from(channel: string): EventEmitter;
+  abstract from(channel: string): EventEmitter<any>;
 
 
   /**
    * Returns an {@link EventEmitter} for the given channel
    * To publish methods to that channel just call next (or add in dart) on the returned emitter
    */
-  abstract to(channel: string): EventEmitter;
+  abstract to(channel: string): EventEmitter<any>;
 }
 
 export interface MessageBusSource {
@@ -60,7 +60,7 @@ export interface MessageBusSource {
    * Returns an {@link EventEmitter} that emits every time a message
    * is received on the given channel.
    */
-  from(channel: string): EventEmitter;
+  from(channel: string): EventEmitter<any>;
 }
 
 export interface MessageBusSink {
@@ -83,5 +83,5 @@ export interface MessageBusSink {
    * Returns an {@link EventEmitter} for the given channel
    * To publish methods to that channel just call next (or add in dart) on the returned emitter
    */
-  to(channel: string): EventEmitter;
+  to(channel: string): EventEmitter<any>;
 }

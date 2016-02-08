@@ -1,0 +1,21 @@
+<div class="widgetContainer" (mouseleave)="showCTA()" (mouseenter)="hideCTA()" (touchstart)="hideCTA()" (click)="hideCTA()" [style.background-color]="color">
+	
+	<call-to-action></call-to-action>
+
+	<sell-button [show]="showSell"></sell-button>
+
+	<slow-scroll class="scrollingContainer" (scroll)="elementScroll($event)">
+		
+		<focus-control [height]="listingGrid.height * (listingStore.visible.length / listingGrid.columns)"></focus-control>
+
+		<listing-display *ngFor="#listing of listingStore.visible" 
+			[listing]="listing" 
+			[width]="listingGrid.width" 
+			[height]="listingGrid.height">
+		</listing-display>
+
+	</slow-scroll>
+
+	<widget-loader></widget-loader>
+
+</div>

@@ -1,6 +1,6 @@
 library reflection.reflection_capabilities;
 
-import 'package:angular2/src/core/facade/lang.dart';
+import 'package:angular2/src/facade/lang.dart';
 import 'types.dart';
 import 'dart:mirrors';
 import 'platform_reflection_capabilities.dart';
@@ -259,7 +259,7 @@ class ReflectionCapabilities implements PlatformReflectionCapabilities {
 
   Map propMetadata(typeOrFunc) {
     final res = {};
-    reflectClass(typeOrFunc).declarations.forEach((k,v) {
+    reflectClass(typeOrFunc).declarations.forEach((k, v) {
       var name = _normalizeName(MirrorSystem.getName(k));
       if (res[name] == null) res[name] = [];
       res[name].addAll(v.metadata.map((fm) => fm.reflectee));
@@ -277,8 +277,9 @@ class ReflectionCapabilities implements PlatformReflectionCapabilities {
 
   List _interfacesFromMirror(classMirror) {
     return classMirror.superinterfaces.map((si) => si.reflectedType).toList()
-      ..addAll(classMirror.superclass == null ? []
-        : _interfacesFromMirror(classMirror.superclass));
+      ..addAll(classMirror.superclass == null
+          ? []
+          : _interfacesFromMirror(classMirror.superclass));
   }
 
   GetterFn getter(String name) {

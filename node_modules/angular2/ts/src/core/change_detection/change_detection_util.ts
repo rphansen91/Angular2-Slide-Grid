@@ -1,6 +1,20 @@
-import {CONST_EXPR, isPresent, isBlank, Type, StringWrapper} from 'angular2/src/core/facade/lang';
-import {BaseException} from 'angular2/src/core/facade/exceptions';
-import {ListWrapper, MapWrapper, StringMapWrapper} from 'angular2/src/core/facade/collection';
+import {
+  CONST_EXPR,
+  isPresent,
+  isBlank,
+  Type,
+  StringWrapper,
+  looseIdentical,
+  isPrimitive
+} from 'angular2/src/facade/lang';
+import {BaseException} from 'angular2/src/facade/exceptions';
+import {
+  ListWrapper,
+  MapWrapper,
+  StringMapWrapper,
+  isListLikeIterable,
+  areIterablesEqual
+} from 'angular2/src/facade/collection';
 import {ProtoRecord} from './proto_record';
 import {ChangeDetectionStrategy, isDefaultChangeDetectionStrategy} from './constants';
 import {implementsOnDestroy} from './pipe_lifecycle_reflector';
@@ -47,10 +61,15 @@ var _wrappedValues = [
 
 var _wrappedIndex = 0;
 
-
+/**
+ * Represents a basic change from a previous to a new value.
+ */
 export class SimpleChange {
   constructor(public previousValue: any, public currentValue: any) {}
 
+  /**
+   * Check whether the new value is the first value assigned.
+   */
   isFirstChange(): boolean { return this.previousValue === ChangeDetectionUtil.uninitialized; }
 }
 
@@ -119,8 +138,6 @@ export class ChangeDetectionUtil {
   static operation_greater_then(left, right): any { return left > right; }
   static operation_less_or_equals_then(left, right): any { return left <= right; }
   static operation_greater_or_equals_then(left, right): any { return left >= right; }
-  static operation_logical_and(left, right): any { return left && right; }
-  static operation_logical_or(left, right): any { return left || right; }
   static cond(cond, trueVal, falseVal): any { return cond ? trueVal : falseVal; }
 
   static mapFn(keys: any[]): any {
@@ -190,7 +207,7 @@ export class ChangeDetectionUtil {
 
   static callPipeOnDestroy(selectedPipe: SelectedPipe): void {
     if (implementsOnDestroy(selectedPipe.pipe)) {
-      (<any>selectedPipe.pipe).onDestroy();
+      (<any>selectedPipe.pipe).ngOnDestroy();
     }
   }
 
@@ -201,5 +218,20 @@ export class ChangeDetectionUtil {
 
   static directiveIndex(elementIndex: number, directiveIndex: number): DirectiveIndex {
     return new DirectiveIndex(elementIndex, directiveIndex);
+  }
+
+  static looseNotIdentical(a: any, b: any): boolean { return !looseIdentical(a, b); }
+
+  static devModeEqual(a: any, b: any): boolean {
+    if (isListLikeIterable(a) && isListLikeIterable(b)) {
+      return areIterablesEqual(a, b, ChangeDetectionUtil.devModeEqual);
+
+    } else if (!isListLikeIterable(a) && !isPrimitive(a) && !isListLikeIterable(b) &&
+               !isPrimitive(b)) {
+      return true;
+
+    } else {
+      return looseIdentical(a, b);
+    }
   }
 }

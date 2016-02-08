@@ -4,11 +4,11 @@ import {
   RegExpWrapper,
   NumberWrapper,
   isPresent
-} from 'angular2/src/core/facade/lang';
-import {Math} from 'angular2/src/core/facade/math';
-import {camelCaseToDashCase} from 'angular2/src/core/render/dom/util';
-import {StringMapWrapper} from 'angular2/src/core/facade/collection';
-import {DOM} from 'angular2/src/core/dom/dom_adapter';
+} from 'angular2/src/facade/lang';
+import {Math} from 'angular2/src/facade/math';
+import {camelCaseToDashCase} from 'angular2/src/platform/dom/util';
+import {StringMapWrapper} from 'angular2/src/facade/collection';
+import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 
 import {BrowserDetails} from './browser_details';
 import {CssAnimationOptions} from './css_animation_options';

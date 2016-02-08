@@ -1,4 +1,3 @@
 export function implementsOnDestroy(pipe) {
-    return pipe.constructor.prototype.onDestroy;
+    return pipe.constructor.prototype.ngOnDestroy;
 }
-//# sourceMappingURL=pipe_lifecycle_reflector.js.map

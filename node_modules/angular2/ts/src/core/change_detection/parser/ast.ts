@@ -1,9 +1,29 @@
-import {isBlank, isPresent, FunctionWrapper} from "angular2/src/core/facade/lang";
-import {Map, ListWrapper, StringMapWrapper} from "angular2/src/core/facade/collection";
+import {ListWrapper} from "angular2/src/facade/collection";
 
 export class AST {
   visit(visitor: AstVisitor): any { return null; }
   toString(): string { return "AST"; }
+}
+
+/**
+ * Represents a quoted expression of the form:
+ *
+ * quote = prefix `:` uninterpretedExpression
+ * prefix = identifier
+ * uninterpretedExpression = arbitrary string
+ *
+ * A quoted expression is meant to be pre-processed by an AST transformer that
+ * converts it into another AST that no longer contains quoted expressions.
+ * It is meant to allow third-party developers to extend Angular template
+ * expression language. The `uninterpretedExpression` part of the quote is
+ * therefore not interpreted by the Angular's own expression parser.
+ */
+export class Quote extends AST {
+  constructor(public prefix: string, public uninterpretedExpression: string, public location: any) {
+    super();
+  }
+  visit(visitor: AstVisitor): any { return visitor.visitQuote(this); }
+  toString(): string { return "Quote"; }
 }
 
 export class EmptyExpr extends AST {
@@ -27,11 +47,6 @@ export class Chain extends AST {
 export class Conditional extends AST {
   constructor(public condition: AST, public trueExp: AST, public falseExp: AST) { super(); }
   visit(visitor: AstVisitor): any { return visitor.visitConditional(this); }
-}
-
-export class If extends AST {
-  constructor(public condition: AST, public trueExp: AST, public falseExp?: AST) { super(); }
-  visit(visitor: AstVisitor): any { return visitor.visitIf(this); }
 }
 
 export class PropertyRead extends AST {
@@ -64,7 +79,6 @@ export class KeyedWrite extends AST {
 
 export class BindingPipe extends AST {
   constructor(public exp: AST, public name: string, public args: any[]) { super(); }
-
   visit(visitor: AstVisitor): any { return visitor.visitPipe(this); }
 }
 
@@ -85,7 +99,7 @@ export class LiteralMap extends AST {
 
 export class Interpolation extends AST {
   constructor(public strings: any[], public expressions: any[]) { super(); }
-  visit(visitor: AstVisitor) { visitor.visitInterpolation(this); }
+  visit(visitor: AstVisitor): any { return visitor.visitInterpolation(this); }
 }
 
 export class Binary extends AST {
@@ -133,7 +147,6 @@ export interface AstVisitor {
   visitChain(ast: Chain): any;
   visitConditional(ast: Conditional): any;
   visitFunctionCall(ast: FunctionCall): any;
-  visitIf(ast: If): any;
   visitImplicitReceiver(ast: ImplicitReceiver): any;
   visitInterpolation(ast: Interpolation): any;
   visitKeyedRead(ast: KeyedRead): any;
@@ -146,6 +159,7 @@ export interface AstVisitor {
   visitPrefixNot(ast: PrefixNot): any;
   visitPropertyRead(ast: PropertyRead): any;
   visitPropertyWrite(ast: PropertyWrite): any;
+  visitQuote(ast: Quote): any;
   visitSafeMethodCall(ast: SafeMethodCall): any;
   visitSafePropertyRead(ast: SafePropertyRead): any;
 }
@@ -158,12 +172,6 @@ export class RecursiveAstVisitor implements AstVisitor {
   }
   visitChain(ast: Chain): any { return this.visitAll(ast.expressions); }
   visitConditional(ast: Conditional): any {
-    ast.condition.visit(this);
-    ast.trueExp.visit(this);
-    ast.falseExp.visit(this);
-    return null;
-  }
-  visitIf(ast: If): any {
     ast.condition.visit(this);
     ast.trueExp.visit(this);
     ast.falseExp.visit(this);
@@ -224,71 +232,70 @@ export class RecursiveAstVisitor implements AstVisitor {
     asts.forEach(ast => ast.visit(this));
     return null;
   }
+  visitQuote(ast: Quote): any { return null; }
 }
 
 export class AstTransformer implements AstVisitor {
-  visitImplicitReceiver(ast: ImplicitReceiver): ImplicitReceiver { return ast; }
+  visitImplicitReceiver(ast: ImplicitReceiver): AST { return ast; }
 
-  visitInterpolation(ast: Interpolation): Interpolation {
+  visitInterpolation(ast: Interpolation): AST {
     return new Interpolation(ast.strings, this.visitAll(ast.expressions));
   }
 
-  visitLiteralPrimitive(ast: LiteralPrimitive): LiteralPrimitive {
-    return new LiteralPrimitive(ast.value);
-  }
+  visitLiteralPrimitive(ast: LiteralPrimitive): AST { return new LiteralPrimitive(ast.value); }
 
-  visitPropertyRead(ast: PropertyRead): PropertyRead {
+  visitPropertyRead(ast: PropertyRead): AST {
     return new PropertyRead(ast.receiver.visit(this), ast.name, ast.getter);
   }
 
-  visitPropertyWrite(ast: PropertyWrite): PropertyWrite {
+  visitPropertyWrite(ast: PropertyWrite): AST {
     return new PropertyWrite(ast.receiver.visit(this), ast.name, ast.setter, ast.value);
   }
 
-  visitSafePropertyRead(ast: SafePropertyRead): SafePropertyRead {
+  visitSafePropertyRead(ast: SafePropertyRead): AST {
     return new SafePropertyRead(ast.receiver.visit(this), ast.name, ast.getter);
   }
 
-  visitMethodCall(ast: MethodCall): MethodCall {
+  visitMethodCall(ast: MethodCall): AST {
     return new MethodCall(ast.receiver.visit(this), ast.name, ast.fn, this.visitAll(ast.args));
   }
 
-  visitSafeMethodCall(ast: SafeMethodCall): SafeMethodCall {
+  visitSafeMethodCall(ast: SafeMethodCall): AST {
     return new SafeMethodCall(ast.receiver.visit(this), ast.name, ast.fn, this.visitAll(ast.args));
   }
 
-  visitFunctionCall(ast: FunctionCall): FunctionCall {
+  visitFunctionCall(ast: FunctionCall): AST {
     return new FunctionCall(ast.target.visit(this), this.visitAll(ast.args));
   }
 
-  visitLiteralArray(ast: LiteralArray): LiteralArray {
+  visitLiteralArray(ast: LiteralArray): AST {
     return new LiteralArray(this.visitAll(ast.expressions));
   }
 
-  visitLiteralMap(ast: LiteralMap): LiteralMap {
+  visitLiteralMap(ast: LiteralMap): AST {
     return new LiteralMap(ast.keys, this.visitAll(ast.values));
   }
 
-  visitBinary(ast: Binary): Binary {
+  visitBinary(ast: Binary): AST {
     return new Binary(ast.operation, ast.left.visit(this), ast.right.visit(this));
   }
 
-  visitPrefixNot(ast: PrefixNot): PrefixNot { return new PrefixNot(ast.expression.visit(this)); }
+  visitPrefixNot(ast: PrefixNot): AST { return new PrefixNot(ast.expression.visit(this)); }
 
-  visitConditional(ast: Conditional): Conditional {
+  visitConditional(ast: Conditional): AST {
     return new Conditional(ast.condition.visit(this), ast.trueExp.visit(this),
                            ast.falseExp.visit(this));
   }
 
-  visitPipe(ast: BindingPipe): BindingPipe {
+  visitPipe(ast: BindingPipe): AST {
     return new BindingPipe(ast.exp.visit(this), ast.name, this.visitAll(ast.args));
   }
 
-  visitKeyedRead(ast: KeyedRead): KeyedRead {
+  visitKeyedRead(ast: KeyedRead): AST {
     return new KeyedRead(ast.obj.visit(this), ast.key.visit(this));
   }
 
-  visitKeyedWrite(ast: KeyedWrite): KeyedWrite {
+  visitKeyedWrite(ast: KeyedWrite): AST {
     return new KeyedWrite(ast.obj.visit(this), ast.key.visit(this), ast.value.visit(this));
   }
 
@@ -300,10 +307,9 @@ export class AstTransformer implements AstVisitor {
     return res;
   }
 
-  visitChain(ast: Chain): Chain { return new Chain(this.visitAll(ast.expressions)); }
+  visitChain(ast: Chain): AST { return new Chain(this.visitAll(ast.expressions)); }
 
-  visitIf(ast: If): If {
-    let falseExp = isPresent(ast.falseExp) ? ast.falseExp.visit(this) : null;
-    return new If(ast.condition.visit(this), ast.trueExp.visit(this), falseExp);
+  visitQuote(ast: Quote): AST {
+    return new Quote(ast.prefix, ast.uninterpretedExpression, ast.location);
   }
 }

@@ -1,12 +1,12 @@
 library angular2.src.web_workers.shared.generic_message_bus;
 
 import 'dart:async';
-import 'package:angular2/src/core/facade/async.dart' show EventEmitter;
+import 'package:angular2/src/facade/async.dart' show EventEmitter;
 import 'package:angular2/src/web_workers/shared/message_bus.dart'
     show MessageBus, MessageBusSink, MessageBusSource;
 import 'package:angular2/src/core/zone/ng_zone.dart';
-import 'package:angular2/src/core/facade/lang.dart';
-import 'package:angular2/src/core/facade/exceptions.dart';
+import 'package:angular2/src/facade/lang.dart';
+import 'package:angular2/src/facade/exceptions.dart';
 
 class GenericMessageBus implements MessageBus {
   final MessageBusSink _sink;
@@ -20,21 +20,21 @@ class GenericMessageBus implements MessageBus {
         _source = source;
 
   void attachToZone(NgZone zone) {
-    sink.attachToZone(zone);
-    source.attachToZone(zone);
+    _sink.attachToZone(zone);
+    _source.attachToZone(zone);
   }
 
   void initChannel(String channel, [bool runInZone = true]) {
-    sink.initChannel(channel, runInZone);
-    source.initChannel(channel, runInZone);
+    _sink.initChannel(channel, runInZone);
+    _source.initChannel(channel, runInZone);
   }
 
   EventEmitter from(String channel) {
-    return source.from(channel);
+    return _source.from(channel);
   }
 
   EventEmitter to(String channel) {
-    return sink.to(channel);
+    return _sink.to(channel);
   }
 }
 
@@ -45,10 +45,14 @@ abstract class GenericMessageBusSink implements MessageBusSink {
 
   void attachToZone(NgZone zone) {
     _zone = zone;
-    _zone.overrideOnEventDone(() {
-      sendMessages(_messageBuffer);
-      _messageBuffer.clear();
-    }, false);
+    _zone.runOutsideAngular(() {
+      _zone.onEventDone.listen((_) {
+        if (_messageBuffer.length > 0) {
+          sendMessages(_messageBuffer);
+          _messageBuffer.clear();
+        }
+      });
+    });
   }
 
   void initChannel(String channelName, [bool runInZone = true]) {
