@@ -6,7 +6,7 @@ import { ShadowHover } from '../../display/shadow.directive';
 
 @Component({
 	selector: "opener",
-	styleUrls: ["./app/focus/opener/opener.css"],
+	styles: [require("./opener.css")],
 	directives: [ShadowHover],
 	template: `
 		<div class="openerContainer"
@@ -81,7 +81,7 @@ export class Opener implements OnChanges {
 	}
 
 	show() {
-		setTimeout(() => {
+		setTimeout(()=>{
 			this.showSubOptions = true;
 		}, 0)
 	}

@@ -6,7 +6,7 @@ import { MainFocus } from "./mainFocus.component";
 @Component({
 	selector: "focus-control",
 	directives: [MainFocus],
-	styleUrls: ["./app/focus/focus.css"],
+	styles: [require("./focus.css")],
 	template: `
 		<div class="blur" 
 			[class.blurActive]="focus.active" 

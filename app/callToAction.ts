@@ -17,7 +17,7 @@ import {Component, View} from 'angular2/core';
 	`	
 })
 export class CallToAction {
-	image: string = "./app/assets/callToAction.png";
+	image: string = require("./assets/callToAction.png");
 	control: CallToActionControl;
 
 	constructor () {

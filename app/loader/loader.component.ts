@@ -7,7 +7,7 @@ import { WidgetLoaderInstance } from "./loader.instance";
 @Component({
 	selector: "widget-loader",
 	directives: [NgIf, NgFor],
-	styleUrls: ["./app/loader/loader.css"],
+	styles: [require("./loader.css")],
 	template: `
 		<div class="widget-loader" *ngIf="_loader.loading">
 			<div class="widget-loader-bar" *ngFor="#color of colors; #i = index;"

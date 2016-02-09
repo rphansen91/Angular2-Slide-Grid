@@ -7,15 +7,32 @@ var config = {
 		filename: "./dist/bundle.js"
 	},
 	resolve: {
-		extensions: ['', '.ts', '.js']
+		extensions: ['', '.ts', '.js', '.html', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ttf', '.woff', '.eot']
 	},
 	plugins: [],
 	module: {
-		loaders: [{
-			test: /\.ts/,
-			loaders: ["ts-loader"],
-			exclude: /node_modules/
-		}]
+		loaders: [
+			{
+				test: /\.ts/,
+				loaders: ["ts-loader"],
+				exclude: /node_modules/
+			},
+			{
+		        test: /\.html$/,
+		        loader: 'raw',
+		        exclude: /node_modules/
+		      },
+		      { 
+		        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, 
+		        loader: "file",
+		        exclude: /node_modules/
+		      },
+		      {
+		        test: /\.css/,
+		        loader: 'raw',
+		        exclude: /node_modules/
+		      }
+		]
 	}
 }
 

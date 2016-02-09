@@ -14,7 +14,7 @@ import { FocusService } from '../../focus/focus.service';
 	selector: "listing-display",
 	pipes: [PriceDisplay],
 	directives: [NgIf],
-	styleUrls: ["./app/display/listing/listing.css"],
+	styles: [require("./listing.css")],
 	template: `
 		<div *ngIf="listing" class="listingDisplay" 
 			[style.width]="width" 

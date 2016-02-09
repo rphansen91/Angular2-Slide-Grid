@@ -19,7 +19,11 @@
     "zone.js": "0.5.11"
   },
   "devDependencies": {
-    "typescript": "^1.7.5",
-    "ts-loader": "^0.7.2"
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.13.0",
+    "ts-loader": "^0.7.2",
+    "typescript": "^1.7.5"
   }
 }

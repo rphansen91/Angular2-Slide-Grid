@@ -11,7 +11,7 @@ import { Easings } from './easings';
 
 @Component({
 	selector: "main-focus",
-	styleUrls: ["./app/display/listing/listing.css"],
+	styles: [require("../display/listing/listing.css")],
 	pipes: [PriceDisplay],
 	directives: [NgIf, Opener],
 	template: `

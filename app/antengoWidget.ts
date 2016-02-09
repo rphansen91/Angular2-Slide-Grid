@@ -1,5 +1,5 @@
 import { bootstrap } from 'angular2/platform/browser';
-import {Component, View, Input, ElementRef, Inject, Attribute} from 'angular2/core';
+import {Component, View, Input, ElementRef, Inject, Attribute, ViewEncapsulation, OnInit} from 'angular2/core';
 import {NgFor} from 'angular2/common';
 import {HTTP_PROVIDERS} from "angular2/http";
 
@@ -24,6 +24,7 @@ import {FocusService} from "./focus/focus.service";
     providers: [PartnersService, ListingStore, ListingGrid, ElementRef, FocusService],
 	directives: [NgFor, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellButton, FocusControl],
 	styles: [
+		require('./style.css'),
 		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
 		'.listingsRow {position: relative; width: 100%;}',
 		'.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}',
@@ -31,9 +32,10 @@ import {FocusService} from "./focus/focus.service";
 		'.scrollingContainer::-webkit-scrollbar-thumb {background-color: #ccc;}',
 		'.offset {position: relative; float: left;}'
 	],
-	templateUrl: './app/widget.html'
+	template: require('./widget.html'),
+	encapsulation: ViewEncapsulation.None
 })
-class AntengoWidget {
+class AntengoWidget implements OnInit {
 	public width: number;
 	public height: number;
 
@@ -51,17 +53,19 @@ class AntengoWidget {
 		public loader: WidgetLoaderInstance,
 		public focus: FocusService,
 		@Inject(ElementRef) public element: ElementRef
-	) {
+	) {}
+
+	ngOnInit () {
 		this.customizations.initialize()
 		this.color = this.customizations.values.colors[0];
 		this.fontUrl = this.customizations.values.fontUrl;
-		
+
 		this.listingStore.initialize()
 		.subscribe((listings) => { this.setListings(listings) })
 
-		partnersService.initialize();
-		slideItems.initialize();
-		
+		this.partnersService.initialize();
+		this.slideItems.initialize();
+
 		this.setSizes()
 
 		window.onresize = () => { this.setSizes() };
@@ -83,8 +87,8 @@ class AntengoWidget {
 
 		this.width = this.element.nativeElement.clientWidth;
 		this.height = this.element.nativeElement.clientHeight;
-		this.listingGrid.initialize(this.width, this.height)
-
+		this.listingGrid.initialize(this.width, this.height);
+		
 		if (this.listingStore.visible.length) {
 			this.setListings([...this.listingStore.visible, ...this.listingStore.all])
 		}

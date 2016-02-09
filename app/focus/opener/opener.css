@@ -1,3 +1,41 @@
+@font-face {
+    font-family: 'ant-icon';
+    src: url('./app/focus/opener/icons/icomoon.eot');
+    src: url('./app/focus/opener/icons/icomoon.eot') format('embedded-opentype'),
+         url('./app/focus/opener/icons/icomoon.ttf') format('truetype'),
+         url('./app/focus/opener/icons/icomoon.woff') format('woff'),
+         url('./app/focus/opener/icons/icomoon.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'ant-icon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    margin: auto;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-mustache:before {
+    content: "\e902";
+}
+.icon-chat:before {
+    content: "\e900";
+}
+.icon-share:before {
+    content: "\e901";
+}
+
 .openerContainer{position: absolute; z-index: 3; top: 0px; left: 0px; width: 82px; height: 82px;}
 
 .main {position: absolute; top: 4px; left: 4px; width: 44px; height: 44px; line-height: 44px; font-size: 34px; border-radius: 44px; text-align: center; background-color: #fff; border: 1px solid; z-index: 2;

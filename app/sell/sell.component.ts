@@ -8,7 +8,7 @@ import { ShadowHover } from '../display/shadow.directive';
 @Component({
 	selector: "sell-button",
 	directives: [NgIf, ShadowHover],
-	styleUrls: ["./app/sell/sell.css"],
+	styles: [require("./sell.css")],
 	template: `
 		<div class="sell"
 			[shadowHover]="[0,8,12]"
@@ -25,7 +25,7 @@ import { ShadowHover } from '../display/shadow.directive';
 				<div class="featuredText" [class.featuredTextVisible]="hovering">
 					and get\n<span class="bold">featured</span>\nhere <img class="partnerLogo" [src]="customizations.values.partnerLogo"/>
 				</div>
-				
+
 		</div>
 	`,
 })
