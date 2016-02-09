@@ -1,5 +1,6 @@
 import { Injectable } from "angular2/core";
 import { Http } from "angular2/http";
+import 'rxjs/Rx';
 
 @Injectable()
 export class PartnersService {
@@ -18,10 +19,14 @@ export class PartnersService {
 
 		if (this.partner && this.partner.length) {
 			this.getPartners()
-			.subscribe((res) => { 
-				this.partners = res.json().result.rs;
-				this.validatePartner()
-			})
+			.map(res => res.json().result.rs)
+			.subscribe(
+				(partners) => { 
+					this.partners = partners
+					this.validatePartner()
+				}, 
+				(err) => {}
+			)
 		}
 	}
 

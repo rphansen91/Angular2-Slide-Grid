@@ -15,11 +15,13 @@ import { Easings } from './easings';
 	pipes: [PriceDisplay],
 	directives: [NgIf, Opener],
 	template: `
-		<div *ngIf="focus.active && focus.listing" class="listingDisplay" 
+		<div *ngIf="focus.active && focus.listing" class="listingDisplay"
 			[style.width]="focus.listing.width" 
 			[style.height]="focus.listing.height"
 			[style.top]="focus.listing.top"
 			[style.left]="focus.listing.left"
+			[style.background-color]="color"
+			[style.box-shadow]="'0 1px 2px ' + color"
 			[style.background-image]="focus.listing.slide.image" 
 			[style.background-position]="position"
 			(click)="openListing()"

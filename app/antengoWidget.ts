@@ -12,7 +12,6 @@ import {ListingGrid} from "./display/grid/grid.service"
 import {CallToAction, CallToActionControl} from "./callToAction";
 import {SellButton} from "./sell/sell.component";
 import {SlowScroll, SlowScrollInterval} from "./slowScroll";
-import {CrossPlatform} from "./platform/crossPlatform";
 import {SlideItems} from "./display/slide/slideItems";
 import {SlidePositions} from './display/slide/slidePositions';
 import {WidgetLoader} from "./loader/loader.component";
@@ -22,7 +21,7 @@ import {FocusService} from "./focus/focus.service";
 
 @Component({
     selector: 'antengo-listings',
-    providers: [PartnersService, ListingStore, ListingGrid, ElementRef, FocusService, CrossPlatform],
+    providers: [PartnersService, ListingStore, ListingGrid, ElementRef, FocusService],
 	directives: [NgFor, ListingDisplay, CallToAction, SlowScroll, WidgetLoader, SellButton, FocusControl],
 	styles: [
 		'.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}',
@@ -58,13 +57,11 @@ class AntengoWidget {
 		this.fontUrl = this.customizations.values.fontUrl;
 		
 		this.listingStore.initialize()
-		.subscribe((res) => { 
-			let listings = res.json().result.rs;
-			this.setListings(listings) 
-		})
+		.subscribe((listings) => { this.setListings(listings) })
 
 		partnersService.initialize();
 		slideItems.initialize();
+		
 		this.setSizes()
 
 		window.onresize = () => { this.setSizes() };

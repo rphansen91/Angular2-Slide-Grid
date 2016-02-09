@@ -2,31 +2,37 @@ import { Component, Input, OnChanges } from "angular2/core";
 
 import { Customizations } from '../../customizations/customizations.service';
 import { PartnersService } from '../../partners/partners.service';
-import { CrossPlatform } from '../../platform/crossPlatform';
+import { ShadowHover } from '../../display/shadow.directive';
 
 @Component({
 	selector: "opener",
 	styleUrls: ["./app/focus/opener/opener.css"],
+	directives: [ShadowHover],
 	template: `
 		<div class="openerContainer"
-			[style.color]="customizations.values.colors[0]"
+			[style.color]="color"
 			(mouseenter)="show()"
 			(mouseleave)="hide()">
 			
 			<div class="main"
-				[style.border-color]="customizations.values.colors[0]"
+				[shadowHover]="[0,4,6]"
+				[style.border-color]="color"
 				(click)="openListing($event)">
 				+
 			</div>
 			<div class="sub" 
-				[style.border-color]="customizations.values.colors[0]"
-				[class.visible_one]="showSubs"
+				[shadowHover]="[0,4,6]"
+				[style.border-color]="color"
+				[style.z-index]="(showSubOptions)?3:1"
+				[class.visible_one]="showSubOptions"
 				(click)="openChat($event)">
 				<span class="icon-chat"></span>
 			</div>
-			<div class="sub" 
-				[style.border-color]="customizations.values.colors[0]"
-				[class.visible_two]="showSubs"
+			<div class="sub"
+				[shadowHover]="[0,4,6]"
+				[style.border-color]="color"
+				[style.z-index]="(showSubOptions)?3:1"
+				[class.visible_two]="showSubOptions"
 				(click)="openShare($event)">
 				<span class="icon-share"></span>
 			</div>
@@ -37,30 +43,30 @@ import { CrossPlatform } from '../../platform/crossPlatform';
 export class Opener implements OnChanges {
 
 	@Input('id') listingId: string;
-	public showSubs: boolean = false;
-	public opened: boolean = false;
+	
+	public showSubOptions: boolean = false;
 	public url: string;
+	public color: string;
 
 	constructor (
-		public customizations: Customizations,
-		private _partnersService: PartnersService,
-		private _crossPlatform: CrossPlatform
+		private _customizations: Customizations,
+		private _partnersService: PartnersService
 	) {
-		this.url = "https://antengo.com/p?" + this._partnersService.partner + "/#/itemDetail/"
+		this.url = "https://antengo.com/p?" + this._partnersService.partner + "/#/itemDetail/";
+		this.color = this._customizations.values.colors[0];
 	}
 
 	ngOnChanges () {
-		this.opened = false;
+		this.hide()
 	}
 
 	openListing($event: any) {
 		$event.stopPropagation()
 
-		if (this._crossPlatform.device.type == "Desktop" || this.opened) {
+		if (this.showSubOptions) {
 			window.open(this.url + this.listingId);
 		} else {
-			this.showSubs = true;
-			this.opened = true;
+			this.showSubOptions = true;
 		}
 	}
 
@@ -75,10 +81,12 @@ export class Opener implements OnChanges {
 	}
 
 	show() {
-		this.showSubs = true;
+		setTimeout(() => {
+			this.showSubOptions = true;
+		}, 0)
 	}
 	hide() {
-		this.showSubs = false;
+		this.showSubOptions = false;
 	}
 
 }

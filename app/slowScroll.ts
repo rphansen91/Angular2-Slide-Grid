@@ -1,5 +1,4 @@
 import {Directive, ElementRef, Inject, Input, OnInit} from "angular2/core";
-import {CrossPlatform} from "./platform/crossPlatform"
 
 @Directive({
 	selector: "slow-scroll",
