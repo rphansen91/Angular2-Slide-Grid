@@ -24,6 +24,7 @@ import { Easings } from './easings';
 			[style.box-shadow]="'0 1px 2px ' + color"
 			[style.background-image]="focus.listing.slide.image" 
 			[style.background-position]="position"
+			[style.opacity]="1"
 			(click)="openListing()"
 			(mouseenter)="startShow()"
 			(mouseleave)="removeFocus()">

@@ -22,6 +22,7 @@ import { FocusService } from '../../focus/focus.service';
 			[style.top]="listing.top"
 			[style.left]="listing.left"
 			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
+			[style.opacity]="opacity"
 			(click)="startSolo()"
             (mouseleave)="debounceEnd()"
 			(mouseenter)="debounceStart()" 
@@ -39,6 +40,7 @@ export class ListingDisplay implements OnInit {
 	@Input() height: number;
 
 	public color: string;
+	public opacity: number = 0;
 
 	debounce: any;
 
@@ -52,6 +54,9 @@ export class ListingDisplay implements OnInit {
 
 	ngOnInit () {
 		this.color = this._customizations.values.colors[0];
+		setTimeout(()=> {
+			this.opacity = 1;
+		}, 200)
 	}
 	goToApp () {
 		let code = this._partnersService.partner;
