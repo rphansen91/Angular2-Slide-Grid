@@ -11,13 +11,13 @@ import { ShadowHover } from '../../display/shadow.directive';
 	template: `
 		<div class="openerContainer"
 			[style.color]="color"
-			(mouseenter)="show()"
 			(mouseleave)="hide()">
 			
 			<div class="main"
 				[shadowHover]="[0,4,6]"
 				[style.border-color]="color"
-				(click)="openListing($event)">
+				(click)="openListing($event)"
+				(mouseenter)="show()">
 				+
 			</div>
 			<div class="sub" 
@@ -83,7 +83,7 @@ export class Opener implements OnChanges {
 	show() {
 		setTimeout(() => {
 			this.showSubOptions = true;
-		}, 100)
+		}, 0)
 	}
 	hide() {
 		this.showSubOptions = false;
