@@ -9,34 +9,36 @@ import { ShadowHover } from '../../display/shadow.directive';
 	styles: [require("./opener.css")],
 	directives: [ShadowHover],
 	template: `
-		<div class="openerContainer"
-			[style.color]="color"
+		<div class="openerContainer" 
 			(mouseleave)="hide()">
-			
-			<div class="main"
-				[shadowHover]="[0,4,6]"
-				[style.border-color]="color"
-				(click)="openListing($event)"
-				(mouseenter)="show()">
+		</div>
+
+		<div class="main"
+			[style.border-color]="color"
+			[style.color]="color"
+			(click)="openListing($event)"
+			(mouseenter)="waitToShow($event)">
 				+
-			</div>
-			<div class="sub" 
-				[shadowHover]="[0,4,6]"
-				[style.border-color]="color"
-				[style.z-index]="(showSubOptions)?3:1"
-				[class.visible_one]="showSubOptions"
-				(click)="openChat($event)">
+		</div>
+
+		<div class="sub" 
+			[shadowHover]="[0,4,6]"
+			[style.border-color]="color"
+			[style.color]="color"
+			[class.visible_one]="showSubOptions"
+			(mouseenter)="show()"
+			(click)="openChat($event)">
 				<span class="icon-chat"></span>
-			</div>
-			<div class="sub"
-				[shadowHover]="[0,4,6]"
-				[style.border-color]="color"
-				[style.z-index]="(showSubOptions)?3:1"
-				[class.visible_two]="showSubOptions"
-				(click)="openShare($event)">
+		</div>
+
+		<div class="sub"
+			[shadowHover]="[0,4,6]"
+			[style.border-color]="color"
+			[style.color]="color"
+			[class.visible_two]="showSubOptions"
+			(mouseenter)="show()"
+			(click)="openShare($event)">
 				<span class="icon-share"></span>
-			</div>
-			
 		</div>
 	`
 })
@@ -79,14 +81,23 @@ export class Opener implements OnChanges {
 		$event.stopPropagation()
 		window.open(this.url + this.listingId + "?open=chat");
 	}
-
+	waitToShow () {
+		setTimeout(() => {
+			this.show();
+		}, 400)
+	}
 	show() {
-		setTimeout(()=>{
-			this.showSubOptions = true;
-		}, 0)
+		this.showSubOptions = true;
 	}
 	hide() {
 		this.showSubOptions = false;
+	}
+	toggle() {
+		if (this.showSubOptions) {
+			this.hide()
+		} else {
+			this.show()
+		}
 	}
 
 }
