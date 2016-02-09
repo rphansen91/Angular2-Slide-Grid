@@ -83,7 +83,7 @@ export class Opener implements OnChanges {
 	show() {
 		setTimeout(() => {
 			this.showSubOptions = true;
-		}, 0)
+		}, 100)
 	}
 	hide() {
 		this.showSubOptions = false;
