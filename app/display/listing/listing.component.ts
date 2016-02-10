@@ -2,9 +2,8 @@ import { Component, Input, OnInit } from 'angular2/core';
 import { NgIf } from 'angular2/common';
 
 import { Customizations } from '../../customizations/customizations.service';
-import { SlideItems } from '../slide/slideItems';
+import { ImagePosition } from '../slide/slidePositions';
 import { Photo, SlideItem } from '../slide/slideItem';
-import { SlidePositions } from '../slide/slidePositions'
 import { PriceDisplay } from './price';
 import { PartnersService } from '../../partners/partners.service';
 import { ListingGrid } from '../grid/grid.service';
@@ -19,8 +18,8 @@ import { FocusService } from '../../focus/focus.service';
 		<div *ngIf="listing" class="listingDisplay" 
 			[style.width]="width" 
 			[style.height]="height"
-			[style.top]="listing.top"
-			[style.left]="listing.left"
+			[style.top]="computeTop()"
+			[style.left]="computeLeft()"
 			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
 			[style.opacity]="opacity"
 			(click)="startSolo()"
@@ -38,6 +37,7 @@ export class ListingDisplay implements OnInit {
 	@Input() listing: Listing;
 	@Input() width: number;
 	@Input() height: number;
+	@Input() index: number;
 
 	public color: string;
 	public opacity: number = 0;
@@ -45,15 +45,25 @@ export class ListingDisplay implements OnInit {
 	debounce: any;
 
 	constructor(
-		private _slidePositions: SlidePositions,
+		public grid: ListingGrid,
 		private _partnersService: PartnersService,
 		private _customizations: Customizations,
-		private _listingGrid: ListingGrid,
 		private _focusService: FocusService
 	) {}
 
+	computeTop () {
+		return (Math.floor(this.index / this.grid.columns) * this.grid.height)
+	}
+	computeLeft () {
+		return ((this.index % this.grid.columns) * this.grid.width)
+	}
+
 	ngOnInit () {
+		if (this.listing.photos.length > 1) {
+            this.listing.photos = this.listing.photos.concat(this.listing.photos[0]);
+        }
 		this.color = this._customizations.values.colors[0];
+
 		setTimeout(()=> {
 			this.opacity = 1;
 		}, 200)
@@ -73,8 +83,11 @@ export class ListingDisplay implements OnInit {
         if (this.debounce) { clearTimeout(this.debounce) }
     }
 	startSolo () {
-		let listing = this.listing;
-		this._focusService.activate(listing)
+		this.listing.slide = new SlideItem(this.listing.photos)
+		this.listing.position = new ImagePosition().setSize(this.grid.width * 1.3).setPosition(100, this.listing.photos.length - 1).position;
+		this.listing.top = this.computeTop();
+		this.listing.left = this.computeLeft();
+		this._focusService.activate(this.listing)
 	}
 }
 

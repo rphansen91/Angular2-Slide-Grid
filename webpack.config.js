@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 var config = {
-	entry: "./app/antengoWidget",
+	entry: "./app/app",
 	output: {
 		path: __dirname,
 		filename: "./dist/bundle.js"

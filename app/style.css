@@ -4,3 +4,7 @@
 }
 
 .listingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; width: 100%; height: 100%;font-family: "Brown-Lite", Brown, Arial;}
+.widgetContainer {position: absolute; top: 0; bottom: 0; left: 0; right: 0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;-webkit-user-select: none;}
+.scrollingContainer {position: absolute; top: 0; right: 0; left: 0; bottom: 0; margin: auto; overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;}
+.scrollingContainer::-webkit-scrollbar {background-color: #fff!important; width: 12px;}
+.scrollingContainer::-webkit-scrollbar-thumb {background-color: #ccc;}

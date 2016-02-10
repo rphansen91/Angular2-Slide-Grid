@@ -15,10 +15,13 @@ export class FocusService {
 
 	activate(listing: Listing) {
 		this.listing = this.getActiveListingValues(listing);
-		this.active = true;
+		setTimeout(()=>{
+			this.active = true;
+		}, 0)
 	}
 
 	hide() {
+		this.listing = {};
 		this.active = false;
 	}
 

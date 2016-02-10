@@ -14,6 +14,7 @@ import { Easings } from './easings';
 	styles: [require("../display/listing/listing.css")],
 	pipes: [PriceDisplay],
 	directives: [NgIf, Opener],
+	providers: [SlidePositions],
 	template: `
 		<div *ngIf="focus.active && focus.listing" class="listingDisplay"
 			[style.width]="focus.listing.width" 

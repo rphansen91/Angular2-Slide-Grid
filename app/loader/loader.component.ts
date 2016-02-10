@@ -1,4 +1,4 @@
-import { Component } from "angular2/core";
+import { Component, OnInit } from "angular2/core";
 import { NgIf, NgFor } from "angular2/common";
 
 import { Customizations } from '../customizations/customizations.service';
@@ -9,7 +9,7 @@ import { WidgetLoaderInstance } from "./loader.instance";
 	directives: [NgIf, NgFor],
 	styles: [require("./loader.css")],
 	template: `
-		<div class="widget-loader" *ngIf="_loader.loading">
+		<div class="widget-loader" *ngIf="loader.loading">
 			<div class="widget-loader-bar" *ngFor="#color of colors; #i = index;"
 				[style.background-color]="color"
 				[style.webkit-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
@@ -21,14 +21,17 @@ import { WidgetLoaderInstance } from "./loader.instance";
 		</div>
 	`
 })
-export class WidgetLoader {
+export class WidgetLoader implements OnInit {
 
 	public colors: string[];
 
 	constructor (
-		public _loader: WidgetLoaderInstance,
-		public _customizations: Customizations
-	) {
+		public loader: WidgetLoaderInstance,
+		private _customizations: Customizations
+	) {}
+
+	ngOnInit () {
 		this.colors = this._customizations.values.colors;
 	}
+
 }
