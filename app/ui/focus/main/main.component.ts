@@ -37,9 +37,16 @@ export class MainFocus implements OnInit {
 		this.hasTitles = this._customizations.values.hasTitles;
 
 		this.focus.stream.subscribe(
-			(listing) => { this.startShow(); },
-			(err) => { console.log(err);},
-			() => { console.log("done");}
+			(active) => { 
+				if (active) {
+					this.startShow();
+				} else {
+					this.endShow();
+					this.showTitle = false;
+				}
+			},
+			(err) => {},
+			() => {}
 		)
 	}
 
@@ -49,9 +56,9 @@ export class MainFocus implements OnInit {
 	}
 
 	removeFocus() {
-		this.endShow()
-		this.focus.hide()
+		this.endShow();
 		this.showTitle = false;
+		this.focus.hide();
 	}
 
 	startShow() {

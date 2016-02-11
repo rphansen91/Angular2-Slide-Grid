@@ -11,7 +11,7 @@ export class FocusService {
 	public active: boolean = false;
 	public listing: FocusedListing;
 
-	public stream: Observable<FocusedListing>;
+	public stream: Observable<boolean>;
 	public nextListing: any;
 
 	constructor(
@@ -25,12 +25,13 @@ export class FocusService {
 	activate(listing: Listing) {
 		this.listing = this.getActiveListingValues(listing);
 		this.active = true;
-		this.nextListing(this.listing);
+		this.nextListing(this.active);
 	}
 
 	hide() {
 		this.listing = {};
 		this.active = false;
+		this.nextListing(this.active);
 	}
 
 	getActiveListingValues(listing: Listing): FocusedListing {
