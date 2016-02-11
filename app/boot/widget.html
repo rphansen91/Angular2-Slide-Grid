@@ -1,0 +1,13 @@
+<div class="widgetContainer" 
+	(mouseleave)="showCTA()" 
+	(mouseenter)="hideCTA()" 
+	(touchstart)="hideCTA()" 
+	(click)="hideCTA()">
+	
+	<call-to-action></call-to-action>
+
+	<sell-button [show]="showSell"></sell-button>
+
+	<listings [height]="height"></listings>
+
+</div>

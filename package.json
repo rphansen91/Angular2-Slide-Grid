@@ -26,6 +26,7 @@
     "raw-loader": "^0.5.1",
     "style-loader": "^0.13.0",
     "ts-loader": "^0.7.2",
-    "typescript": "^1.7.5"
+    "typescript": "^1.7.5",
+    "url-loader": "^0.5.7"
   }
 }

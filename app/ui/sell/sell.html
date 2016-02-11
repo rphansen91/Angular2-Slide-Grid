@@ -1,0 +1,19 @@
+<div class="sell"
+	[shadowHover]="[0,8,12]"
+	[class.show]="show"
+	[class.oblong]="hovering" 
+	[style.color]="customizations.values.colors[0]"
+	(click)="sell()" 
+	(mouseenter)="isHovering()" 
+	(mouseleave)="notHovering()">
+
+		<div class="dollarContainer">
+			<span>$</span><span *ngIf="hovering" class="sellText">ell</span>
+		</div>
+		<div class="featuredText" [class.featuredTextVisible]="hovering">
+			and get
+			<span class="bold">featured</span>
+			here <img class="partnerLogo" [src]="customizations.values.partnerLogo"/>
+		</div>
+
+</div>

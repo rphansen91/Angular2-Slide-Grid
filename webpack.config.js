@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 var config = {
-	entry: "./app/app",
+	entry: "./app/boot/app",
 	output: {
 		path: __dirname,
 		filename: "dist/bundle.js"
@@ -24,7 +24,7 @@ var config = {
 		      },
 		      { 
 		        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, 
-		        loader: "file",
+		        loader: "url?limit=14000",
 		        exclude: /node_modules/
 		      },
 		      {
