@@ -6,41 +6,9 @@ import { ShadowHover } from '../../display/shadow.directive';
 
 @Component({
 	selector: "opener",
-	styles: [require("./opener.css")],
 	directives: [ShadowHover],
-	template: `
-		<div class="openerContainer" 
-			(mouseleave)="hide()">
-		</div>
-
-		<div class="main"
-			[style.border-color]="color"
-			[style.color]="color"
-			(click)="openListing($event)"
-			(mouseenter)="waitToShow($event)">
-				+
-		</div>
-
-		<div class="sub" 
-			[shadowHover]="[0,4,6]"
-			[style.border-color]="color"
-			[style.color]="color"
-			[class.visible_one]="showSubOptions"
-			(mouseenter)="show()"
-			(click)="openChat($event)">
-				<span class="icon-chat"></span>
-		</div>
-
-		<div class="sub"
-			[shadowHover]="[0,4,6]"
-			[style.border-color]="color"
-			[style.color]="color"
-			[class.visible_two]="showSubOptions"
-			(mouseenter)="show()"
-			(click)="openShare($event)">
-				<span class="icon-share"></span>
-		</div>
-	`
+	styles: [require("./opener.less")],
+	template: require("./opener.html")
 })
 export class Opener implements OnChanges {
 

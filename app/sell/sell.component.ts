@@ -8,26 +8,8 @@ import { ShadowHover } from '../display/shadow.directive';
 @Component({
 	selector: "sell-button",
 	directives: [NgIf, ShadowHover],
-	styles: [require("./sell.css")],
-	template: `
-		<div class="sell"
-			[shadowHover]="[0,8,12]"
-			[class.show]="show"
-			[class.oblong]="hovering" 
-			[style.color]="customizations.values.colors[0]"
-			(click)="sell()" 
-			(mouseenter)="isHovering()" 
-			(mouseleave)="notHovering()">
-
-				<div class="dollarContainer">
-					<span>$</span><span *ngIf="hovering" class="sellText">ell</span>
-				</div>
-				<div class="featuredText" [class.featuredTextVisible]="hovering">
-					and get\n<span class="bold">featured</span>\nhere <img class="partnerLogo" [src]="customizations.values.partnerLogo"/>
-				</div>
-
-		</div>
-	`,
+	styles: [require("./sell.less")],
+	template: require("./sell.html")
 })
 export class SellButton {
 

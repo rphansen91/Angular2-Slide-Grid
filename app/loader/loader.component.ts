@@ -7,19 +7,8 @@ import { WidgetLoaderInstance } from "./loader.instance";
 @Component({
 	selector: "widget-loader",
 	directives: [NgIf, NgFor],
-	styles: [require("./loader.css")],
-	template: `
-		<div class="widget-loader" *ngIf="loader.loading">
-			<div class="widget-loader-bar" *ngFor="#color of colors; #i = index;"
-				[style.background-color]="color"
-				[style.webkit-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
-				[style.-moz-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
-				[style.-o-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
-				[style.-ms-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
-				[style.animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"
-			></div>
-		</div>
-	`
+	styles: [require("./loader.less")],
+	template: require("./loader.html")
 })
 export class WidgetLoader implements OnInit {
 

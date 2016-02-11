@@ -14,7 +14,8 @@ import {Listings} from "./listings/listings.component";
     selector: 'antengo-listings',
     providers: [ElementRef, CTAService, SlowScrollService, ListingGrid],
 	directives: [CTA, SellButton, Listings],
-	template: require('./widget.html')
+	styles: [require("./widget.less")],
+	template: require("./widget.html")
 })
 export class AntengoWidget implements OnInit {
 	public width: number;

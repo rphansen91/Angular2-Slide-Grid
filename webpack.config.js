@@ -4,7 +4,7 @@ var config = {
 	entry: "./app/app",
 	output: {
 		path: __dirname,
-		filename: "./dist/bundle.js"
+		filename: "dist/bundle.js"
 	},
 	resolve: {
 		extensions: ['', '.ts', '.js', '.html', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ttf', '.woff', '.eot']
@@ -28,9 +28,9 @@ var config = {
 		        exclude: /node_modules/
 		      },
 		      {
-		        test: /\.css/,
-		        loader: 'raw',
-		        exclude: /node_modules/
+		      	test: /\.less/,
+		      	loader: 'raw!less',
+		      	exclude: /node_modules/
 		      }
 		]
 	}

@@ -1,0 +1,16 @@
+<div *ngIf="listing" class="listingDisplay" 
+	[style.width]="width" 
+	[style.height]="height"
+	[style.top]="grid.getTop(index)"
+	[style.left]="grid.getLeft(index)"
+	[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
+	[style.opacity]="opacity"
+	(click)="startSolo()"
+    (mouseleave)="debounceEnd()"
+	(mouseenter)="debounceStart()" 
+	(touchstart)="debounceStart()">
+	
+	<div class="sold" [style.background-image]="listing.soldImage"></div>	
+	<div class="price" *ngIf="listing.price" [style.background-color]="color">$ {{listing.price | price}}</div>
+
+</div>

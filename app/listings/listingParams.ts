@@ -15,7 +15,8 @@ export class ListingParams {
 
 	runSearch () {
 		let body = JSON.stringify({ "id": "0", "method": "search_v2", "params": this.params });
-		// return this._http.get('./listing.json')
+
+		// return this._http.get('./mocks/listing.json')
 		return this._http.post(this.url + "/supplylisting/rpc", body)
 		.map(res => res.json().result.rs);
 	}

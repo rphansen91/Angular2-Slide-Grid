@@ -11,13 +11,14 @@ import {SlowScrollService} from "../slowScroll/slowScroll.service";
 // DIRECTIVES
 import {SlowScroll} from "../slowScroll/slowScroll.directive";
 import {ListingDisplay, Listing} from "../display/listing/listing.component";
-import {FocusControl} from "../focus/focus.component";
+import {FocusControl} from "../focus/container/focus.component";
 
 @Component({
 	selector: "listings",
-	template: require("./listings.html"),
 	providers: [ListingStore, FocusService],
-	directives: [NgFor, SlowScroll, ListingDisplay, FocusControl]
+	directives: [NgFor, SlowScroll, ListingDisplay, FocusControl],
+	styles: [require("./listings.less")],
+	template: require("./listings.html")
 })
 export class Listings implements OnInit {
 
@@ -35,7 +36,12 @@ export class Listings implements OnInit {
 
 	ngOnInit () {
 		this.listingStore.initialize()
-		.subscribe((listings) => { this.setListings(listings) })
+		.subscribe((listings) => { 
+			this.listingGrid.hasInitialized()
+			.then(() => {
+				this.setListings(listings) 
+			})
+		})
 	}
 
 	setListings (listings: Listing[]) {

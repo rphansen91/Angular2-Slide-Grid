@@ -14,17 +14,9 @@ import { WidgetLoader } from "./loader/loader.component";
 	selector: "widget",
 	providers: [Customizations, PartnersService, WidgetLoaderInstance],
 	directives: [AntengoWidget, WidgetLoader],
-	styles: [require('./style.css')],
-	encapsulation: ViewEncapsulation.None,
-	template: `
-		<antengo-listings 
-			class="listingContainer"
-			[style.background-color]="customizations.values.colors[0]">
-
-		</antengo-listings>
-
-		<widget-loader></widget-loader>
-	`
+	styles: [require("./app.less")],
+	template: require("./app.html"),
+	encapsulation: ViewEncapsulation.None
 })
 class WidgetBootstrap {
 

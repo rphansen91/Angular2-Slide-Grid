@@ -13,25 +13,8 @@ import { FocusService } from '../../focus/focus.service';
 	selector: "listing-display",
 	pipes: [PriceDisplay],
 	directives: [NgIf],
-	styles: [require("./listing.css")],
-	template: `
-		<div *ngIf="listing" class="listingDisplay" 
-			[style.width]="width" 
-			[style.height]="height"
-			[style.top]="computeTop()"
-			[style.left]="computeLeft()"
-			[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
-			[style.opacity]="opacity"
-			(click)="startSolo()"
-            (mouseleave)="debounceEnd()"
-			(mouseenter)="debounceStart()" 
-			(touchstart)="debounceStart()">
-			
-			<div class="sold" *ngIf="listing.status == 2"></div>	
-			<div class="price" *ngIf="listing.price" [style.background-color]="color">$ {{listing.price | price}}</div>
-		
-		</div>
-	`
+	styles: [require("./listing.less")],
+	template: require("./listing.html")
 })
 export class ListingDisplay implements OnInit {
 	@Input() listing: Listing;
@@ -51,16 +34,12 @@ export class ListingDisplay implements OnInit {
 		private _focusService: FocusService
 	) {}
 
-	computeTop () {
-		return (Math.floor(this.index / this.grid.columns) * this.grid.height)
-	}
-	computeLeft () {
-		return ((this.index % this.grid.columns) * this.grid.width)
-	}
-
 	ngOnInit () {
 		if (this.listing.photos.length > 1) {
             this.listing.photos = this.listing.photos.concat(this.listing.photos[0]);
+        }
+        if (this.listing.status == 2) {
+        	this.listing.soldImage = `url(${require("./sold.png")})`
         }
 		this.color = this._customizations.values.colors[0];
 
@@ -83,10 +62,10 @@ export class ListingDisplay implements OnInit {
         if (this.debounce) { clearTimeout(this.debounce) }
     }
 	startSolo () {
-		this.listing.slide = new SlideItem(this.listing.photos)
+		this.listing.slide = new SlideItem(this.listing.photos);
 		this.listing.position = new ImagePosition().setSize(this.grid.width * 1.3).setPosition(100, this.listing.photos.length - 1).position;
-		this.listing.top = this.computeTop();
-		this.listing.left = this.computeLeft();
+		this.listing.top = this.grid.getTop(this.index);
+		this.listing.left = this.grid.getLeft(this.index);
 		this._focusService.activate(this.listing)
 	}
 }
@@ -102,4 +81,6 @@ export interface Listing {
 	photos?: Photo[];
 	top?: number;
 	left?: number;
+	status?: number;
+	soldImage?: string;
 }

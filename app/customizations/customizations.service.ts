@@ -9,7 +9,8 @@ export class Customizations {
         categoryId: 0,
 		fontUrl: "./app/assets/Brown-Light.ttf",
 		colors: ["#8c77b6","#baadd3","#f3f1f7"],
-		partnerLogo: "./app/assets/logos/nbc.png"
+		partnerLogo: "./app/assets/logos/nbc.png",
+		hasTitles: true
 	}
 	
 	constructor () {}
@@ -23,7 +24,7 @@ export class Customizations {
 			})
 			values.forEach((val)=>{
 				if (this.values[val[0]] || this.values[val[0]] >= 0) {
-					this.values[val[0]] = (val[1].split(",").length > 1) ? val[1].split(","): val[1];
+					this.values[val[0]] = (val[1].split(",").length > 1) ? val[1].split(","): JSON.parse(val[1]) ;
 				}
 			})
 		}
@@ -37,4 +38,5 @@ interface CustomizationsTypes {
 	fontUrl: string;
 	colors: string[];
 	partnerLogo: string;
+	hasTitles: boolean;
 }

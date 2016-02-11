@@ -12,16 +12,40 @@ export class ListingGrid {
 	public columns: number;
 	public rows: number;
 
+	public initialized: Promise<boolean>;
+	public resolver: any;
+	public rejecter: any;
+
 	constructor(private _customizations: Customizations) { }
 
-	initialize(totalWidth: number, totalHeight: number) {
-		this.totalWidgetWidth = totalWidth;
-		this.totalWidgetHeight = totalHeight;
-		this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
-		this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
+	initializePromise() {
+		this.initialized = new Promise((resolve, reject) => {
+			this.resolver = resolve;
+			this.rejecter = reject;
+		})
+	}
 
-		this.width = (totalWidth / this.columns);
-		this.height = (totalHeight / this.rows);
+	hasInitialized () {
+		if (this.initialized == null) {
+			this.initializePromise();
+		}
+		return this.initialized;
+	}
+
+	initialize(totalWidth: number, totalHeight: number) {
+		this.hasInitialized();
+
+		if (totalWidth && totalHeight) {
+			this.totalWidgetWidth = totalWidth;
+			this.totalWidgetHeight = totalHeight;
+			this.columns = Math.floor(totalWidth / this._customizations.values.cardWidth) || 1;
+			this.rows = Math.floor(totalHeight / this._customizations.values.cardHeight) || 1;
+
+			this.width = (totalWidth / this.columns);
+			this.height = (totalHeight / this.rows);
+
+			this.resolver(true);
+		}
 	}
 
 	getTop(index: number): number {
@@ -36,5 +60,9 @@ export class ListingGrid {
 
 	addListingCount (): number {
 		return this.columns * (this.rows + 2);
+	}
+
+	getFirstRowIndex(index: number) {
+		return Math.floor(index / this.columns) * this.columns;
 	}
 }
