@@ -10,7 +10,7 @@
 	(mouseenter)="debounceStart()" 
 	(touchstart)="debounceStart()">
 	
-	<div class="sold" [style.background-image]="listing.soldImage"></div>	
+	<div class="sold" *ngIf="listing.soldImage" [style.background-image]="listing.soldImage"></div>	
 	<div class="price" *ngIf="listing.price" [style.background-color]="color">$ {{listing.price | price}}</div>
 
 </div>

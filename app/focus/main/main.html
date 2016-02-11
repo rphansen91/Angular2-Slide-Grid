@@ -14,7 +14,7 @@
 	
 	<opener [id]="focus.listing.id"></opener>
 
-	<div class="sold" [style.background-image]="focus.listing.soldImage"></div>	
+	<div class="sold" *ngIf="focus.listing.soldImage" [style.background-image]="focus.listing.soldImage"></div>	
 	<div class="price" *ngIf="focus.listing.price" [style.background-color]="color">$ {{focus.listing.price | price}}</div>
 
 	<div class="titleContainer" [class.titleContainerActive]="showTitle && hasTitles">
