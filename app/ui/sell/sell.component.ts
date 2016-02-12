@@ -32,7 +32,7 @@ export class SellButton {
 		}
 
 		create("mouseenter").merge(create("mouseleave"))
-		.debounceTime(100)
+		.debounceTime(400)
 		.subscribe((hovering: boolean) => {
 			this.hovering = hovering;
 		})
