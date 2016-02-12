@@ -24,8 +24,7 @@ export class SlowScroll implements OnInit {
 		this.slowScrollService.addScroller(this)
 		
 		Observable.fromEvent(this.element.nativeElement, "scroll")
-		.throttleTime(400)
-		// .map((ev) => { this.focus.hide(); return ev; })
+		.debounceTime(400)
 		.filter(ev => this.checkDistance(ev))
 		.subscribe(() => {
 			this.store.appendToVisible(this.grid.addListingCount())
@@ -33,6 +32,6 @@ export class SlowScroll implements OnInit {
 	}
 
 	checkDistance (event): boolean {
-		return event.target.scrollHeight < (event.target.scrollTop + this.grid.height + this.grid.totalWidgetHeight);
+		return event.target.scrollHeight <= (event.target.scrollTop + this.grid.height + this.grid.totalWidgetHeight);
 	}
 }
