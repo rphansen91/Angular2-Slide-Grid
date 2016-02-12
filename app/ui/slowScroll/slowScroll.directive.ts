@@ -5,6 +5,7 @@ import {SlowScrollService} from "./slowScroll.service";
 import {ListingStore} from "../../boot/listings/listingStore";
 import {FocusService} from "../focus/focus.service";
 import {ListingGrid} from "../display/grid/grid.service";
+import {WidgetLoaderInstance} from "../../boot/loader/loader.instance";
 
 @Directive({
 	selector: "slow-scroll",
@@ -17,14 +18,15 @@ export class SlowScroll implements OnInit {
 		public slowScrollService: SlowScrollService,
 		public store: ListingStore,
 		public focus: FocusService,
-		public grid: ListingGrid
+		public grid: ListingGrid,
+		public loader: WidgetLoaderInstance
 	) {}
 
 	ngOnInit() {
 		this.slowScrollService.addScroller(this)
 		
 		Observable.fromEvent(this.element.nativeElement, "scroll")
-		.debounceTime(400)
+		// .debounceTime(200)
 		.filter(ev => this.checkDistance(ev))
 		.subscribe(() => {
 			this.store.appendToVisible(this.grid.addListingCount())

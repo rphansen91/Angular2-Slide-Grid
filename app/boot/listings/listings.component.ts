@@ -55,23 +55,38 @@ export class Listings implements OnInit {
 
 	movementDriver () {
 		let closest = (evt) => {
+			if (evt.type == "mouseleave") {
+				return {} // NEED MOUSELEAVE SO WE CAN 
+			}
 			return evt.target.closest("listing-display")
 		}
+		let mouseover = Observable.fromEvent(this.element.nativeElement, "mouseover", closest);
+		let mouseleave = Observable.fromEvent(this.element.nativeElement, "mouseleave", closest);
 
-		return Observable.fromEvent(this.element.nativeElement, "mouseover", closest)
-		.filter((element: any) => (element != null && typeof parseInt(element.id) == "number"))
+		return mouseover.merge(mouseleave)
+		.filter(element => element != null)
 		.debounceTime(300)
-		.map((element: any) => parseInt(element.id))
+		.map((element: any) => { 
+			return parseInt(element.id) 
+		})
 		.map((index: number) => {
-			let focused: Listing = this.listingStore.visible[index]
-			focused.slide = new SlideItem(focused.photos);
-			focused.position = new ImagePosition().setSize(this.listingGrid.width * 1.3).setPosition(100, focused.photos.length - 1).position;
-			focused.top = this.listingGrid.getTop(index);
-			focused.left = this.listingGrid.getLeft(index);
-			return focused;
+			if (index) {
+				let focused: Listing = this.listingStore.visible[index]
+				focused.slide = new SlideItem(focused.photos);
+				focused.position = new ImagePosition().setSize(this.listingGrid.width * 1.3).setPosition(100, focused.photos.length - 1).position;
+				focused.top = this.listingGrid.getTop(index);
+				focused.left = this.listingGrid.getLeft(index);
+				return focused;
+			} else {
+				return false;
+			}
 		})
 		.subscribe((focused) => {
-			this.focus.activate(focused);
+			if (focused) {
+				this.focus.activate(focused);
+			} else {
+				this.focus.hide();
+			}
 		})
 	}
 
