@@ -47,13 +47,9 @@ export class Listings implements OnInit {
 	}
 
 	listingsDriver () {
-		return Observable.combineLatest([
-			this.listingStore.initialize(),
-			this.listingGrid.stream
-		])
-		.filter(latest => latest[0] && latest[1])
-		.subscribe((latest) => {
-			this.setListings(latest[0]);
+		return this.listingStore.initialize()
+		.subscribe((listings) => {
+			this.setListings(listings);
 		})
 	}
 

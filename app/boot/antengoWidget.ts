@@ -40,7 +40,6 @@ export class AntengoWidget implements OnInit {
 	setSizes () {
 		this.width = this.element.nativeElement.clientWidth;
 		this.height = this.element.nativeElement.clientHeight;
-
 		this.listingGrid.initialize(this.width, this.height);
 	}
 	showCTA () {

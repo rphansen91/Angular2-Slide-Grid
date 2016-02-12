@@ -31,6 +31,7 @@ export class ListingGrid {
 
 			this.width = (totalWidth / this.columns);
 			this.height = (totalHeight / this.rows);
+
 			if (typeof this.onNext == "function") {
 				this.onNext(true);
 			}
