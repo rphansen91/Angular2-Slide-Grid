@@ -3,9 +3,7 @@
 	[class.show]="show"
 	[class.oblong]="hovering" 
 	[style.color]="customizations.values.colors[0]"
-	(click)="sell()" 
-	(mouseenter)="isHovering()" 
-	(mouseleave)="notHovering()">
+	(click)="sell()">
 
 		<div class="dollarContainer">
 			<span>$</span><span *ngIf="hovering" class="sellText">ell</span>
