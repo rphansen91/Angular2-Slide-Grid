@@ -5,7 +5,6 @@ import {SlowScrollService} from "./slowScroll.service";
 import {ListingStore} from "../../boot/listings/listingStore";
 import {FocusService} from "../focus/focus.service";
 import {ListingGrid} from "../display/grid/grid.service";
-import {WidgetLoaderInstance} from "../../boot/loader/loader.instance";
 
 @Directive({
 	selector: "slow-scroll",
@@ -18,8 +17,7 @@ export class SlowScroll implements OnInit {
 		public slowScrollService: SlowScrollService,
 		public store: ListingStore,
 		public focus: FocusService,
-		public grid: ListingGrid,
-		public loader: WidgetLoaderInstance
+		public grid: ListingGrid
 	) {}
 
 	ngOnInit() {

@@ -16,6 +16,7 @@ export class SellButton {
 	@Input('show') show: boolean;
 
 	public hovering: boolean = false;
+	public hoveringId: any;
 
 	constructor(
 		public customizations: Customizations,
@@ -32,11 +33,14 @@ export class SellButton {
 	}
 
 	isHovering() {
-		setTimeout(() => {
+		this.hoveringId = setTimeout(() => {
 			this.hovering = true;
-		}, 0)
+		}, 400)
 	}
 	notHovering() {
+		if (this.hoveringId) {
+			clearTimeout(this.hoveringId)
+		}
 		this.hovering = false;
 	}
 }
