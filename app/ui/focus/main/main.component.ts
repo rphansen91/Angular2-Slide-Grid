@@ -4,6 +4,7 @@ import { NgIf } from 'angular2/common';
 import { Customizations } from '../../../boot/customizations/customizations.service';
 import { FocusService, FocusedListing } from '../focus.service';
 import { PriceDisplay } from '../../display/listing/price';
+import { SoldBanner } from '../../display/sold/sold.component';
 import { Opener } from '../opener/opener.component';
 import { SlidePositions } from '../../display/slide/slidePositions';
 import { PartnersService } from '../../../boot/partners/partners.service';
@@ -12,7 +13,7 @@ import { Easings } from './easings';
 @Component({
 	selector: "main-focus",
 	pipes: [PriceDisplay],
-	directives: [NgIf, Opener],
+	directives: [NgIf, Opener, SoldBanner],
 	providers: [SlidePositions],
 	styles: [require("../../display/listing/listing.less")],
 	template: require("./main.html")

@@ -1,10 +1,11 @@
-<slow-scroll class="scrollingContainer" (scroll)="elementScroll($event)">
+<slow-scroll class="scrollingContainer">
 
 	<focus-control 
 		[height]="listingGrid.height * (listingStore.visible.length / listingGrid.columns)">
 	</focus-control>
 
 	<listing-display *ngFor="#listing of listingStore.visible; #i=index;" 
+		id = "{{i}}"
 		[listing]="listing" 
 		[width]="listingGrid.width" 
 		[height]="listingGrid.height"

@@ -5,12 +5,9 @@
 	[style.left]="grid.getLeft(index)"
 	[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
 	[style.opacity]="opacity"
-	(click)="startSolo()"
-    (mouseleave)="debounceEnd()"
-	(mouseenter)="debounceStart()" 
-	(touchstart)="debounceStart()">
+	(click)="startSolo()">
 	
-	<div class="sold" *ngIf="listing.soldImage" [style.background-image]="listing.soldImage"></div>	
+	<sold-banner *ngIf="listing.status == 2"></sold-banner>
 	<div class="price" *ngIf="listing.price" [style.background-color]="customizations.values.colors[0]">$ {{listing.price | price}}</div>
 
 </div>

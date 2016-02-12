@@ -18,7 +18,7 @@ export class FocusService {
 		private _grid: ListingGrid
 	) {
 		this.stream = Observable.create((observer) => {
-			this.nextListing = observer._next;
+			this.nextListing = observer.next.bind(observer);
 		})
 	}
 

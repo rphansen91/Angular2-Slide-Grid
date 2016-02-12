@@ -1,4 +1,5 @@
 import { Injectable } from 'angular2/core';
+import { Observable } from 'rxjs/Rx';
 
 import { Customizations } from '../../../boot/customizations/customizations.service';
 
@@ -12,29 +13,16 @@ export class ListingGrid {
 	public columns: number;
 	public rows: number;
 
-	public initialized: Promise<boolean>;
-	public resolver: any;
-	public rejecter: any;
+	public stream: Observable<boolean>;
+	private onNext: any;
 
-	constructor(private _customizations: Customizations) { }
-
-	initializePromise() {
-		this.initialized = new Promise((resolve, reject) => {
-			this.resolver = resolve;
-			this.rejecter = reject;
+	constructor(private _customizations: Customizations) {
+		this.stream = Observable.create((observer) => {
+			this.onNext = observer.next.bind(observer);
 		})
 	}
 
-	hasInitialized () {
-		if (this.initialized == null) {
-			this.initializePromise();
-		}
-		return this.initialized;
-	}
-
 	initialize(totalWidth: number, totalHeight: number) {
-		this.hasInitialized();
-
 		if (totalWidth && totalHeight) {
 			this.totalWidgetWidth = totalWidth;
 			this.totalWidgetHeight = totalHeight;
@@ -43,8 +31,9 @@ export class ListingGrid {
 
 			this.width = (totalWidth / this.columns);
 			this.height = (totalHeight / this.rows);
-
-			this.resolver(true);
+			if (typeof this.onNext == "function") {
+				this.onNext(true);
+			}
 		}
 	}
 

@@ -1,4 +1,5 @@
-import { Component, Input } from "angular2/core";
+import { Component, Input, ElementRef } from "angular2/core";
+import { Observable } from 'rxjs/Rx';
 
 import { FocusService } from "../focus.service";
 import { MainFocus } from "../main/main.component";
@@ -14,8 +15,17 @@ export class FocusControl {
 	@Input('height')height: number;
 
 	constructor(
+		public element: ElementRef,
 		public focus: FocusService
-	) { }
+	) {
+		Observable.fromEvent(this.element.nativeElement, "mouseover", (evt) => {
+			return evt.target.closest("main-focus")
+		})
+		.filter(x => x == null)
+		.subscribe(() => {
+			this.focus.hide();
+		})
+	}
 
 	closeFocus() {
 		this.focus.hide();

@@ -9,11 +9,12 @@ import { PriceDisplay } from './price';
 import { PartnersService } from '../../../boot/partners/partners.service';
 import { ListingGrid } from '../grid/grid.service';
 import { FocusService } from '../../focus/focus.service';
+import { SoldBanner } from '../sold/sold.component';
 
 @Component({
 	selector: "listing-display",
 	pipes: [PriceDisplay],
-	directives: [NgIf],
+	directives: [NgIf, SoldBanner],
 	styles: [require("./listing.less")],
 	template: require("./listing.html")
 })
@@ -24,8 +25,6 @@ export class ListingDisplay implements OnInit {
 	@Input() index: number;
 
 	public opacity: number = 0;
-
-	debounce: any;
 
 	constructor(
 		public grid: ListingGrid,
@@ -38,9 +37,6 @@ export class ListingDisplay implements OnInit {
 		if (this.listing.photos.length > 1) {
             this.listing.photos = [...this.listing.photos, this.listing.photos[0]];
         }
-        if (this.listing.status == 2) {
-        	this.listing.soldImage = `url(${require("./sold.png")})`
-        }
 
 		setTimeout(()=> {
 			this.opacity = 1;
@@ -50,16 +46,6 @@ export class ListingDisplay implements OnInit {
 		let code = this._partnersService.partner;
 		window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.listing.id);
 	}
-	debounceStart () {
-		if (this.debounce) { clearTimeout(this.debounce) }
-
-		this.debounce = setTimeout(() => { 
-			this.startSolo(); 
-		}, 300)
-	}
-    debounceEnd () {
-        if (this.debounce) { clearTimeout(this.debounce) }
-    }
 	startSolo () {
 		this.listing.slide = new SlideItem(this.listing.photos);
 		this.listing.position = new ImagePosition().setSize(this.grid.width * 1.3).setPosition(100, this.listing.photos.length - 1).position;
