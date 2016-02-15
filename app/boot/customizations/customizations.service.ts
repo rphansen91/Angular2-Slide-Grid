@@ -9,7 +9,7 @@ export class Customizations {
         categoryId: 0,
 		fontUrl: "./app/assets/Brown-Light.ttf",
 		colors: ["#8c77b6","#baadd3","#f3f1f7"],
-		partnerLogo: "./app/assets/logos/guardian.svg",
+		partnerLogo: "./app/assets/logos/antengo.png",
 		hasTitles: true
 	}
 	
@@ -26,7 +26,7 @@ export class Customizations {
 				if (this.values[val[0]] || this.values[val[0]] >= 0) {
 					if (val[1].split(",").length > 1) {
 						this.values[val[0]] = val[1].split(",")
-					} else {
+					} else if (val[1] && val[1].length) {
 						try {
 							this.values[val[0]] = JSON.parse(val[1])
 						} catch (err) {
