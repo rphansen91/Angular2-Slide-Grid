@@ -33,7 +33,6 @@ export class AntengoWidget implements OnInit {
 
 	ngOnInit () {
 		this.setSizes();
-
 		window.onresize = () => { this.setSizes() };
 	}
 

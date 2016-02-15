@@ -91,6 +91,7 @@ export class Listings implements OnInit {
 	}
 
 	setListings (listings: Listing[]) {
+
 		listings = listings.splice(0, this.MAX_LISTINGS - (this.MAX_LISTINGS % this.listingGrid.columns))
 
 		this.listingStore.setAll(listings);

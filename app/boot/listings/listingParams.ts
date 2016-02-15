@@ -1,6 +1,8 @@
 import { Injectable } from "angular2/core";
-import { Http } from "angular2/http";
-import 'rxjs/Rx';
+import { Http, Response } from "angular2/http";
+import { Observable } from 'rxjs/Rx';
+
+import {Listing} from '../../ui/display/listing/listing.component';
 
 @Injectable()
 export class ListingParams {
@@ -16,8 +18,8 @@ export class ListingParams {
 	runSearch () {
 		let body = JSON.stringify({ "id": "0", "method": "search_v2", "params": this.params });
 
-		// return this._http.get('./mocks/listing.json')
 		return this._http.post(this.url + "/supplylisting/rpc", body)
+		// return this._http.get('./mocks/listing.json')
 		.map(res => res.json().result.rs);
 	}
 
