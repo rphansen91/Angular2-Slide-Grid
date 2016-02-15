@@ -16,6 +16,7 @@ export class SellButton {
 
 	@Input('show') show: boolean;
 
+	public logoValid: boolean = false;
 	public hovering: boolean = false;
 	public hoveringId: any;
 
@@ -36,6 +37,13 @@ export class SellButton {
 		.subscribe((hovering: boolean) => {
 			this.hovering = hovering;
 		})
+
+		let _logoImg = new Image()
+		_logoImg.src = this.customizations.values.partnerLogo;
+		_logoImg.onload = (ev) => {
+			this.logoValid = true;
+		}
+		
 	}
 
 	sell() {

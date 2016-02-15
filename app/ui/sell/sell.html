@@ -11,7 +11,9 @@
 		<div class="featuredText" [class.featuredTextVisible]="hovering">
 			and get
 			<span class="bold">featured</span>
-			here <img class="partnerLogo" [src]="customizations.values.partnerLogo"/>
+			here <img class="partnerLogo" 
+				*ngIf="logoValid"
+				[src]="customizations.values.partnerLogo"/>
 		</div>
 
 </div>
