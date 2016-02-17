@@ -17,10 +17,11 @@
 				*ngIf="logoValid && !customizations.values.vertical"
 				[style.height]="customizations.values.partnerLogoSize"
 				[src]="customizations.values.partnerLogo"/>
-
-			<img class="partnerLogoLarge" 
+		</div>
+		<div class="partnerLogoLarge" 
 			*ngIf="logoValid && customizations.values.vertical"
-			[style.height]="customizations.values.partnerLogoSize"
-			[src]="customizations.values.partnerLogo"/>
+			[class.partnerLogoLargeVisible]="hovering"
+			[style.background-size]="customizations.values.partnerLogoSize + 'px'"
+			[style.background-image]="'url(' + customizations.values.partnerLogo + ')'">
 		</div>
 </div>
