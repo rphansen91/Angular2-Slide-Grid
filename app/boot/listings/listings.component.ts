@@ -56,7 +56,7 @@ export class Listings implements OnInit {
 	movementDriver () {
 		let closest = (evt) => {
 			if (evt.type == "mouseleave") {
-				return {} // NEED MOUSELEAVE SO WE CAN 
+				return {} // NEED MOUSELEAVE SO WE CAN CLOSE ANYTHING OPEN
 			}
 			return evt.target.closest("listing-display")
 		}
@@ -70,7 +70,7 @@ export class Listings implements OnInit {
 			return parseInt(element.id) 
 		})
 		.map((index: number) => {
-			if (index) {
+			if (typeof index == "number" && !isNaN(index)) {
 				let focused: Listing = this.listingStore.visible[index]
 				focused.slide = new SlideItem(focused.photos);
 				focused.position = new ImagePosition().setSize(this.listingGrid.width * 1.3).setPosition(100, focused.photos.length - 1).position;

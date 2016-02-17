@@ -29,10 +29,15 @@ export class SellButton {
 			return (evt.type == "mouseenter")
 		}
 		let create = (eventType):Observable<boolean> => {
-			return Observable.fromEvent(element.nativeElement, eventType, isHovering);
+			return Observable.fromEvent(
+				element.nativeElement, 
+				eventType, 
+				isHovering
+			);
 		}
 
-		create("mouseenter").merge(create("mouseleave"))
+		create("mouseenter")
+		.merge(create("mouseleave"))
 		.debounceTime(400)
 		.subscribe((hovering: boolean) => {
 			this.hovering = hovering;

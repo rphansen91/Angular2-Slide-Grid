@@ -1,19 +1,26 @@
 <div class="sell"
 	[shadowHover]="[0,8,12]"
 	[class.show]="show"
-	[class.oblong]="hovering" 
+	[class.oblong]="hovering && !customizations.values.vertical" 
+	[class.oblongVertical] = "hovering && customizations.values.vertical"
 	[style.color]="customizations.values.colors[0]"
 	(click)="sell()">
 
-		<div class="dollarContainer">
+		<div class="dollarContainer"
+			[style.width]="(hovering && customizations.values.vertical)?'100%':'80px'">
 			<span>$</span><span *ngIf="hovering" class="sellText">ell</span>
 		</div>
 		<div class="featuredText" [class.featuredTextVisible]="hovering">
 			and get
 			<span class="bold">featured</span>
 			here <img class="partnerLogo" 
-				*ngIf="logoValid"
+				*ngIf="logoValid && !customizations.values.vertical"
+				[style.height]="customizations.values.partnerLogoSize"
 				[src]="customizations.values.partnerLogo"/>
-		</div>
 
+			<img class="partnerLogoLarge" 
+			*ngIf="logoValid && customizations.values.vertical"
+			[style.height]="customizations.values.partnerLogoSize"
+			[src]="customizations.values.partnerLogo"/>
+		</div>
 </div>

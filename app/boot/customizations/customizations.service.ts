@@ -10,6 +10,8 @@ export class Customizations {
 		fontUrl: "./app/assets/Brown-Light.ttf",
 		colors: ["#8c77b6","#baadd3","#f3f1f7"],
 		partnerLogo: "./app/assets/logos/antengo.png",
+		partnerLogoSize: 45,
+		vertical: false,
 		hasTitles: true
 	}
 	
@@ -47,5 +49,7 @@ interface CustomizationsTypes {
 	fontUrl: string;
 	colors: string[];
 	partnerLogo: string;
+	partnerLogoSize: number;
+	vertical: boolean;
 	hasTitles: boolean;
 }

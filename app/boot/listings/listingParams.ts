@@ -20,6 +20,7 @@ export class ListingParams {
 
 		return this._http.post(this.url + "/supplylisting/rpc", body)
 		// return this._http.get('./mocks/listing.json')
+		// .delay(1000)
 		.map(res => res.json().result.rs);
 	}
 
