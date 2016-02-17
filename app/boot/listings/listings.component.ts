@@ -10,6 +10,7 @@ import {WidgetLoaderInstance} from "../loader/loader.instance";
 import {SlowScrollService} from "../../ui/slowScroll/slowScroll.service";
 import {ImagePosition} from '../../ui/display/slide/slidePositions';
 import {Photo, SlideItem} from '../../ui/display/slide/slideItem';
+import {CTAService} from '../cta/cta.service';
 
 // DIRECTIVES
 import {SlowScroll} from "../../ui/slowScroll/slowScroll.directive";
@@ -38,7 +39,8 @@ export class Listings implements OnInit {
 		public focus: FocusService,
 		public listingGrid: ListingGrid,
 		public loader: WidgetLoaderInstance,
-		public slowScroll: SlowScrollService
+		public slowScroll: SlowScrollService,
+		public cta: CTAService
 	) {}
 
 	ngOnInit () {
@@ -98,6 +100,9 @@ export class Listings implements OnInit {
 		this.listingStore.appendToVisible(this.listingGrid.addListingCount());
 
 		this.loader.stop();
-		this.slowScroll.start();
+
+		if (this.cta.visible) {
+			this.slowScroll.start();
+		}
 	}
 }
