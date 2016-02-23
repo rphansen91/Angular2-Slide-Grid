@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from 'angular2/core';
 import { NgIf } from 'angular2/common';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { Customizations } from '../../../boot/customizations/customizations.service';
 import { FocusService, FocusedListing } from '../focus.service';
@@ -25,6 +26,7 @@ export class MainFocus implements OnInit {
 	public showTitle: boolean = false;
 	public hasTitles: boolean = true;
 	public interval: ImageInterval = new ImageInterval();
+	public positionStream: Subscription<string>;
 
 	constructor (
 		public focus: FocusService,
@@ -66,10 +68,11 @@ export class MainFocus implements OnInit {
 		if (this.focus.listing.slide.length > 1) {
 			let index = this.focus.listing.slide.length - 2
 
-			this.interval.config(500, "easeIn")
+			this.interval.config(400, "easeIn")
 			this.interval.resetValue()
-			this.interval.startInterval(() => {
-				this.position = this._slidePositions.getPosition(this.interval.value, index, this.focus.listing.width);
+
+			this.positionStream = Observable.interval(this.interval.interval)
+			.map((val) => {
 				this.interval.increaseValue()
 
 				if (this.interval.value > 100) {
@@ -80,6 +83,10 @@ export class MainFocus implements OnInit {
 					this.showTitle = true;
 					this.endShow();
 				}
+				return this._slidePositions.getPosition(this.interval.value, index, this.focus.listing.width)
+			})
+			.subscribe((position: string) => {
+				this.position = position
 			})
 		} else {
 			this.showTitle = true;
@@ -89,8 +96,8 @@ export class MainFocus implements OnInit {
 
 	endShow() {
 		this.setDefaultImagePosition();
-		if (this.interval) {
-			this.interval.stopInterval();
+		if (this.positionStream) {
+			this.positionStream.unsubscribe();
 		}
 	}
 
@@ -138,17 +145,5 @@ export class ImageInterval {
 		// Fibonacci increase
 		this.currentTime += this.interval;
 		this.value = this.easingFn(this.currentTime, this.startValue, this.change, this.duration)
-	}
-
-	startInterval(callback: any) {
-		if (this.id) {
-			clearInterval(this.id)
-		}
-		this.id = setInterval(() => {
-			callback()
-		}, this.interval)
-	}
-	stopInterval() {
-		clearInterval(this.id)
 	}
 }
