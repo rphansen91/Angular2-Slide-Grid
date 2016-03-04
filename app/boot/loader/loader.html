@@ -1,4 +1,4 @@
-<div class="widgetLoader" *ngIf="loader.loading">
+<div class="widgetLoader" *ngIf="loading">
 	<div class="widgetLoaderBar" *ngFor="#color of colors; #i = index;"
 		[style.background-color]="color"
 		[style.webkit-animation]="'loading ' + colors.length + 's linear ' + (colors.length - i - 1) + 's infinite'"

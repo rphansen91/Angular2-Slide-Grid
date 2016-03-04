@@ -22,7 +22,8 @@ class WidgetBootstrap {
 
 	constructor (
 		private _partners: PartnersService,
-		public customizations: Customizations
+		public customizations: Customizations,
+		public loader: WidgetLoaderInstance
 	) {
 		this.customizations.initialize();
 		this._partners.initialize();

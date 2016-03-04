@@ -1,8 +1,7 @@
-import { Component, OnInit } from "angular2/core";
+import { Component, Input, OnInit } from "angular2/core";
 import { NgIf, NgFor } from "angular2/common";
 
 import { Customizations } from '../customizations/customizations.service';
-import { WidgetLoaderInstance } from "./loader.instance";
 
 @Component({
 	selector: "widget-loader",
@@ -12,10 +11,11 @@ import { WidgetLoaderInstance } from "./loader.instance";
 })
 export class WidgetLoader implements OnInit {
 
+	@Input('loading') loading: boolean = false;
+
 	public colors: string[];
 
 	constructor (
-		public loader: WidgetLoaderInstance,
 		private _customizations: Customizations
 	) {}
 
