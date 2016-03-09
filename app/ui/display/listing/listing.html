@@ -4,8 +4,7 @@
 	[style.top]="grid.getTop(index)"
 	[style.left]="grid.getLeft(index)"
 	[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
-	[style.opacity]="opacity"
-	(click)="startSolo()">
+	[style.opacity]="opacity">
 	
 	<sold-banner *ngIf="listing.status == 2"></sold-banner>
 	<div class="price" *ngIf="listing.price" [style.background-color]="customizations.values.colors[0]">$ {{listing.price | price}}</div>

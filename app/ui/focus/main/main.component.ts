@@ -11,6 +11,7 @@ import { SlidePositions } from '../../display/slide/slidePositions';
 import { PartnersService } from '../../../boot/partners/partners.service';
 import { Easings } from './easings';
 import { WidgetLoader } from '../../../boot/loader/loader.component';
+import { ImageLoader } from '../../../boot/loader/image.service';
 
 @Component({
 	selector: "main-focus",
@@ -30,6 +31,8 @@ export class MainFocus implements OnInit {
 	public interval: ImageInterval = new ImageInterval();
 	public loader: ImageLoader = new ImageLoader();
 	public loadingStream: Subscription<boolean[]>;
+
+	public position$: Observable<string>;
 	public positionStream: Subscription<string>;
 
 	constructor (
@@ -106,64 +109,35 @@ export class MainFocus implements OnInit {
 		}
 	}
 
-	startPositionStream(begginingIndex: number) {
-		this.interval.config(400, "easeIn")
+	startPositionStream(begin: number) {
+		this.interval.config(400, begin, "easeIn")
 		this.interval.resetValue()
 
 		this.positionStream = Observable.interval(this.interval.interval)
-		.map(() => {
-			this.interval.increaseValue()
-			if (this.interval.value > 100) {
-				begginingIndex--;
-				this.interval.resetValue();
-			}
-			if (begginingIndex < 0) {
-				this.showTitle = true;
-				this.endShow();
-			}
+		.map(() => this.interval.calculateValues())
+		.map(({value, index}) => {
+			
+			if (index < 0) { return "" }
+			
 			return this._slidePositions.getPosition(
-				this.interval.value, 
-				begginingIndex, 
+				value, 
+				index, 
 				this.focus.listing.width
 			)
 		})
-		.subscribe((position: string) => this.position = position)
+		.subscribe((position: string) => {
+			if (position) {
+				this.position = position;
+			} else {
+				this.showTitle = true;
+				this.endShow();
+			}
+		})
 	}
 
 	setDefaultImagePosition() {
 		this.position = this._slidePositions.getPosition(100, 0, this.focus.listing.width);
 	}
-}
-
-export class ImageLoader {
-
-	constructor () {}
-
-	loadImage(image: string): Promise<any> {
-		return new Promise((resolve, reject) => {
-			let img = new Image();
-			img.src = image + "";
-			img.onload = resolve;
-			img.onerror = reject;
-		})
-	}
-
-	loadImages(images: string[]): Promise<any>[] {
-		return images.map(image => this.loadImage(image))
-	}
-
-	imagesLoaded(images: string[]): Promise<any[]> {
-		return Promise.all(
-			this.loadImages(images)
-		)
-	}
-
-	completed(images: string[]): Observable<any[]> {
-		return Observable.fromPromise(
-			this.imagesLoaded(images)
-		)
-	}
-
 }
 
 export class ImageInterval {
@@ -172,6 +146,7 @@ export class ImageInterval {
 
 	public duration: number;
 	public type: string;
+	public index: number;
 
 	easingFn: any;
 	startValue: number = 0;
@@ -185,9 +160,10 @@ export class ImageInterval {
 
 	constructor() { }
 
-	config(d: number, t: string, ammount?: number, start?: number, end?: number) {
+	config(d: number, i: number, t: string, ammount?: number, start?: number, end?: number) {
 		this.duration = d;
 		this.type = t;
+		this.index = i;
 
 		this.startValue = (start) ? start : 0;
 		this.endValue = (end) ? end : 100;
@@ -200,6 +176,18 @@ export class ImageInterval {
 	resetValue() {
 		this.value = 0;
 		this.currentTime = 0;
+	}
+	calculateValues() {
+		this.increaseValue()
+		if (this.value > 100) {
+			this.index--;
+			this.resetValue();
+		}
+
+		return {
+			index: this.index,
+			value: this.value
+		};
 	}
 	increaseValue() {
 		// Fibonacci increase
