@@ -9,7 +9,11 @@ var config = {
 	resolve: {
 		extensions: ['', '.ts', '.js', '.html', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ttf', '.woff', '.eot']
 	},
-	plugins: [],
+	plugins: [
+    	new webpack.DefinePlugin({
+      		TESTING: (process.env.NODE_ENV == "test"),
+    	})
+	],
 	module: {
 		loaders: [
 			{

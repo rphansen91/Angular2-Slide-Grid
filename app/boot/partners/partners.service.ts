@@ -65,8 +65,11 @@ export class PartnersService {
 		let url = "https://api.antengo.com/partner/rpc"
 		let body = JSON.stringify({id:0,method:"getActive",params:{}})
 
-		// return this._http.get("./mocks/partners.json")
-		return this._http.post(url, body)
+		if (TESTING) {
+			return this._http.get("./mocks/partners.json")
+		} else {
+			return this._http.post(url, body)
+		}
 	}
 
 }
