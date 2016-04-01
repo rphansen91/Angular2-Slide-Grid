@@ -27,15 +27,20 @@ var config = {
 		        exclude: /node_modules/
 		      },
 		      { 
-		        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, 
-		        loader: "url?limit=14000",
+		        test: /\.jpe?g$|\.gif$|\.png$|\.woff$|\.ttf$|\.wav$|\.mp3$/, 
+		        loader: "url?limit=100000",
 		        exclude: /node_modules/
 		      },
 		      {
 		      	test: /\.less/,
 		      	loader: 'raw!less',
 		      	exclude: /node_modules/
-		      }
+		      },
+		      {
+		      	test: /\.svg/,
+		      	loader: 'raw',
+		      	exclude: /node_modules/
+		      },
 		]
 	}
 }

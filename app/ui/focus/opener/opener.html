@@ -29,3 +29,19 @@
 	(click)="openShare($event)">
 		<span class="icon_share"></span>
 </div>
+
+<div class="sub" 
+	[shadowHover]="[0,4,6]"
+	[style.border-color]="color"
+	[style.color]="color"
+	[class.visible_three]="showSubOptions"
+	(mouseenter)="show()"
+	(click)="openProfile($event)">
+
+		<span class="icon_image"
+			[style.background-image]="'url(' + listing.user.photos[0].url + ')'"
+		></span>
+		<span class="icon_badge"
+			[style.background-image]="'url(' + ((showSubOptions)?badges[listing.user.trustLevel]:'') + ')'"
+		></span>
+</div>

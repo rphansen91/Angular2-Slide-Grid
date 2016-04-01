@@ -1,7 +1,30 @@
 <div class="callToAction callToActionAnimated" 
 	[class.callToActionRemoved]="!cta.visible">
+	
+	<div class="ctaFree">
+		Free!
+		<div class="ctaClassifieds">
+		classifieds
+		</div>
+	</div>
+	
+	<div class="ctaBuyAndSell">
+		<div>Buy & Sell</div>
+		<div class="ctaWith">with</div>
+		<div>TRUST</div>
+		<div class="ctaBadge">
+			<svg class="ctaShield" preserveAspectRatio="xMidYMid" width="163" height="166" viewBox="0 0 163 166">
+				<path d="M79.971,165.994 C79.971,165.994 9.236,129.105 9.236,129.105 C9.236,129.105 0.009,-0.006 0.009,-0.006 C0.009,-0.006 163.009,-0.006 163.009,-0.006 C163.009,-0.006 147.632,132.179 147.632,132.179 C147.632,132.179 79.971,165.994 79.971,165.994 Z" id="path-1" fill-rule="evenodd" [style.fill]="customizations.values.colors[0]" [style.fillOpacity]="1"/>
+			</svg>
+			<div class="ctaOutline" [style.background-image]="shield"></div>
+		</div>
+	</div>
 
-		<div class="callToActionImage"
+
+	<div class="ctaPaypal"
+		[style.background-image]="protection"
+	></div>
+		<!-- <div class="callToActionImage"
 			[style.background-image]="image"
-		></div>
+		></div> -->
 </div>

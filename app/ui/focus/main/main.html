@@ -10,7 +10,7 @@
 	[style.opacity]="1"
 	(click)="openListing()">
 	
-	<opener [id]="focus.listing.id"></opener>
+	<opener [listing]="focus.listing"></opener>
 
 	<sold-banner *ngIf="focus.listing.status == 2" ></sold-banner>	
 	<div class="price" *ngIf="focus.listing.price" [style.background-color]="color">$ {{focus.listing.price | price}}</div>

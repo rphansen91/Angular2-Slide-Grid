@@ -2,3 +2,21 @@
 .callToActionAnimated {-webkit-transition: opacity 0.2s ease-in, visibility 0s ease-in 0.2s; -moz-transition: opacity 0.2s ease-in, visibility 0s ease-in 0.2s; -ms-transition: opacity 0.2s ease-in, visibility 0s ease-in 0.2s; -o-transition: opacity 0.2s ease-in, visibility 0s ease-in 0.2s; transition: opacity 0.2s ease-in, visibility 0s ease-in 0.2s;}
 .callToActionRemoved {visibility: hidden; opacity: 0;}
 .callToActionImage {position: absolute; margin: auto; top: 0; left: 0; right: 0; bottom: 0; height: 50%; width: 60%; min-width: 300px; max-width: 500px; background-size: contain; background-position: center; background-repeat: no-repeat;}
+
+.ctaFree {position: absolute; top: 0; left: 0; color: #fff; font-size: 62px; padding: 20px; text-shadow: 2px 3px 4px rgba(0,0,0,0.4); visibility: hidden;}
+.ctaClassifieds {font-size: 28px;}
+
+.ctaBuyAndSell {position: absolute; top: 0; left: 0; bottom: 0; right: 0; margin: auto; width: 90%; height: 90%; color: #fff; font-size: 62px; line-height: 62px; padding: 20px; text-shadow: 2px 3px 4px rgba(0,0,0,0.4); text-align: center;}
+.ctaWith {font-size: 34px;line-height: 44px;}
+
+.ctaPaypal {position: absolute; bottom: 20px; right: 20px; width: 120px; height: 40px; background-size: contain; background-position: center; background-repeat: no-repeat; visibility: hidden;}
+
+.ctaBadge {position: absolute;left: 0;right: 0;margin: auto;}
+.ctaShield {position: absolute;left: 0;right: 0;margin: auto;}
+.ctaOutline {position: absolute;top:-38px;left: 0;right: 0;margin: auto; width: 232px; height: 241px; z-index: 2; background-size: contain; background-repeat: no-repeat; background-position: center;}
+
+@media only screen and (min-height: 450px) and (min-width: 550px) {
+	.ctaBuyAndSell {width: 50%; height: 50%;}
+	.ctaPaypal {visibility: visible;}
+	.ctaFree {visibility: visible;}
+}

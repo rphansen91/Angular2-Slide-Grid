@@ -1,6 +1,7 @@
 import { Component } from 'angular2/core';
 
 import { CTAService } from './cta.service';
+import { Customizations } from '../customizations/customizations.service';
 
 @Component({
 	selector: "call-to-action",
@@ -8,9 +9,11 @@ import { CTAService } from './cta.service';
 	template: require("./cta.html")
 })
 export class CTA {
-	public image: string = `url(${require("./cta.png")})`;
+	public protection: string = `url(${require("./protection.png")})`;
+	public shield: string = `url(${require("./shield.png")})`;
 
 	constructor(
-		public cta: CTAService
+		public cta: CTAService,
+		public customizations: Customizations
 	) {}
 }
