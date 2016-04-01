@@ -1,14 +1,14 @@
 <div class="callToAction callToActionAnimated" 
 	[class.callToActionRemoved]="!cta.visible">
 	
-	<div class="ctaFree">
+	<div class="ctaFree" *ngIf="cta.visible">
 		Free!
 		<div class="ctaClassifieds">
 		classifieds
 		</div>
 	</div>
 	
-	<div class="ctaBuyAndSell">
+	<div class="ctaBuyAndSell" *ngIf="cta.visible">
 		<div>Buy & Sell</div>
 		<div class="ctaWith">with</div>
 		<div>TRUST</div>
@@ -21,7 +21,7 @@
 	</div>
 
 
-	<div class="ctaPaypal"
+	<div class="ctaPaypal" *ngIf="cta.visible"
 		[style.background-image]="protection"
 	></div>
 		<!-- <div class="callToActionImage"
