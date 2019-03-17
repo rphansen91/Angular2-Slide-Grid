@@ -1,14 +1,11 @@
-import { Component, Input, ElementRef } from 'angular2/core';
-import { NgIf } from 'angular2/common';
+import { Component, Input, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
 import { PartnersService } from '../../boot/partners/partners.service';
 import { Customizations } from '../../boot/customizations/customizations.service';
-import { ShadowHover } from '../display/shadow.directive';
 
 @Component({
 	selector: "sell-button",
-	directives: [NgIf, ShadowHover],
 	styles: [require("./sell.less")],
 	template: require("./sell.html")
 })
@@ -54,7 +51,7 @@ export class SellButton {
 	sell() {
 		if (this.hovering) {
 			let code = this._partnersService.partner;
-			window.open("https://antengo.com/p?" + code + "/#/post");
+			window.open("https://sellwild.com/p?" + code + "/#/post");
 		} else {
 			this.hovering = true;
 		}

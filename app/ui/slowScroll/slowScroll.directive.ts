@@ -1,5 +1,7 @@
-import {Directive, ElementRef, OnInit} from "angular2/core";
-import {Observable} from "rxjs/Rx";
+import {Directive, ElementRef, OnInit} from "@angular/core";
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/filter';
 
 import {SlowScrollService} from "./slowScroll.service";
 import {ListingStore} from "../../boot/listings/listingStore";
@@ -7,8 +9,7 @@ import {FocusService} from "../focus/focus.service";
 import {ListingGrid} from "../display/grid/grid.service";
 
 @Directive({
-	selector: "slow-scroll",
-	providers: [ElementRef]
+	selector: "slow-scroll"
 })
 export class SlowScroll implements OnInit {
 

@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from "angular2/core";
-import { NgIf, NgFor } from "angular2/common";
+import { Component, Input, OnInit } from "@angular/core";
 
 import { Customizations } from '../customizations/customizations.service';
 
 @Component({
 	selector: "widget-loader",
-	directives: [NgIf, NgFor],
 	styles: [require("./loader.less")],
 	template: require("./loader.html")
 })

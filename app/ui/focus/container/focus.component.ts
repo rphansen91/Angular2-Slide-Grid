@@ -1,12 +1,12 @@
-import { Component, Input, ElementRef } from "angular2/core";
-import { Observable } from 'rxjs/Rx';
+import { Component, Input, ElementRef } from "@angular/core";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/filter';
 
 import { FocusService } from "../focus.service";
-import { MainFocus } from "../main/main.component";
  
 @Component({
 	selector: "focus-control",
-	directives: [MainFocus],
 	styles: [require("./focus.less")],
 	template: require("./focus.html")
 })

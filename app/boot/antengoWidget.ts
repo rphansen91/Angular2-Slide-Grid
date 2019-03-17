@@ -1,20 +1,12 @@
-import {Component, ElementRef, OnInit} from 'angular2/core';
-import {NgIf} from 'angular2/common';
+import {Component, ElementRef, OnInit} from '@angular/core';
 
 // PROVIDERS
 import {CTAService} from './cta/cta.service';
 import {SlowScrollService} from '../ui/slowScroll/slowScroll.service';
 import {ListingGrid} from '../ui/display/grid/grid.service';
 
-// DIRECTIVES
-import {CTA} from './cta/cta.component';
-import {SellButton} from '../ui/sell/sell.component';
-import {Listings} from './listings/listings.component';
-
 @Component({
     selector: 'antengo-listings',
-    providers: [ElementRef, CTAService, SlowScrollService, ListingGrid],
-	directives: [NgIf, CTA, SellButton, Listings],
 	styles: [require('./widget.less')],
 	template: require('./widget.html')
 })

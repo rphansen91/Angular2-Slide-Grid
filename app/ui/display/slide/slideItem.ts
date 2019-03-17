@@ -13,7 +13,4 @@ export class SlideItem {
 	}
 }
 
-export class Photo {
-	url: string;
-	thumbUrl: string;
-}
+export class Photo { url: string; }

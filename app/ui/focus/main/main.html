@@ -5,7 +5,7 @@
 	[style.left]="focus.listing.left"
 	[style.background-color]="color"
 	[style.box-shadow]="'0 1px 2px ' + color"
-	[style.background-image]="focus.listing.slide.image" 
+	[style.background-image]="sanitizer.bypassSecurityTrustStyle(focus.listing.slide.image)" 
 	[style.background-position]="position"
 	[style.opacity]="1"
 	(click)="openListing()">
@@ -21,5 +21,5 @@
 		<div class="titleSubText">Learn More</div>
 	</div>
 
-	<widget-loader [loading]="loading"></widget-loader>
+	<!--<widget-loader [loading]="loading"></widget-loader>-->
 </div>

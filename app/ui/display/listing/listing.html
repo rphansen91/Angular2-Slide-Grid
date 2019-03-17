@@ -1,7 +1,20 @@
-<div *ngIf="listing" class="listingDisplay" 
+<ins *ngIf="ad"
+	class="adsbygoogle" 
+	data-ad-client="ca-pub-3154552656014103"
+	data-ad-slot="6206342518"
+	data-ad-format="auto"
+	data-full-width-responsive="true"
+	[style.zIndex]="2"
+	[style.position]="'absolute'"
 	[style.width]="width" 
-	[style.height]="height"
+	[style.height]="'40px'"
 	[style.top]="grid.getTop(index)"
+	[style.left]="grid.getLeft(index)"></ins>
+<listing-item *ngIf="listing" class="listingDisplay" 
+	id="{{index}}"
+	[style.width]="width" 
+	[style.height]="height - (ad ? 40 : 0)" 
+	[style.top]="grid.getTop(index) + (ad ? 40 : 0)"
 	[style.left]="grid.getLeft(index)"
 	[style.background-image]="'url(' + listing.photos[listing.photos.length - 1].url + ')'"
 	[style.opacity]="opacity">
@@ -9,4 +22,4 @@
 	<sold-banner *ngIf="listing.status == 2"></sold-banner>
 	<div class="price" *ngIf="listing.price" [style.background-color]="customizations.values.colors[0]">$ {{listing.price | price}}</div>
 
-</div>
+</listing-item>

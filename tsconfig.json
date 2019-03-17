@@ -10,9 +10,11 @@
     "noImplicitAny": false
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "files": [
+    "typings/index.d.ts",
     "globals.d.ts"
   ]
 }

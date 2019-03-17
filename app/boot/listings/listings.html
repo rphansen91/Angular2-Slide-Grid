@@ -1,15 +1,21 @@
 <slow-scroll class="scrollingContainer">
 
+	<div 
+		[style.position]="'absolute'"
+		[style.width]="listingGrid.width" 
+		[style.height]="listingGrid.height"
+		*ngFor="let listing of listingStore.visible; let i=index;">
+		<listing-display
+			[ad]="i % 5 === 0 ? '6206342518' : ''"
+			[listing]="listing" 
+			[width]="listingGrid.width" 
+			[height]="listingGrid.height"
+			[index]="i">
+		</listing-display>
+	</div>
+
 	<focus-control 
 		[height]="listingGrid.height * (listingStore.visible.length / listingGrid.columns)">
 	</focus-control>
-
-	<listing-display *ngFor="#listing of listingStore.visible; #i=index;" 
-		id = "{{i}}"
-		[listing]="listing" 
-		[width]="listingGrid.width" 
-		[height]="listingGrid.height"
-		[index]="i">
-	</listing-display>
 
 </slow-scroll>

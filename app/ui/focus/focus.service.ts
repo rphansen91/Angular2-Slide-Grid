@@ -1,9 +1,9 @@
-import { Injectable } from "angular2/core";
+import { Injectable } from "@angular/core";
 
 import { Listing } from "../display/listing/listing.component";
 import { ListingGrid } from "../display/grid/grid.service";
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class FocusService {

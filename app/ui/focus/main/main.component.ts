@@ -1,23 +1,19 @@
-import { Component, Input, OnInit } from 'angular2/core';
-import { NgIf } from 'angular2/common';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/map';
 
 import { Customizations } from '../../../boot/customizations/customizations.service';
 import { FocusService, FocusedListing } from '../focus.service';
-import { PriceDisplay } from '../../display/listing/price';
-import { SoldBanner } from '../../display/sold/sold.component';
-import { Opener } from '../opener/opener.component';
+
 import { SlidePositions } from '../../display/slide/slidePositions';
 import { PartnersService } from '../../../boot/partners/partners.service';
 import { Easings } from './easings';
-import { WidgetLoader } from '../../../boot/loader/loader.component';
 import { ImageLoader } from '../../../boot/loader/image.service';
 
 @Component({
 	selector: "main-focus",
-	pipes: [PriceDisplay],
-	directives: [NgIf, Opener, SoldBanner, WidgetLoader],
-	providers: [SlidePositions],
 	styles: [require("../../display/listing/listing.less")],
 	template: require("./main.html")
 })
@@ -30,13 +26,14 @@ export class MainFocus implements OnInit {
 	public hasTitles: boolean = true;
 	public interval: ImageInterval = new ImageInterval();
 	public loader: ImageLoader = new ImageLoader();
-	public loadingStream: Subscription<boolean[]>;
+	public loadingStream;
 
 	public position$: Observable<string>;
-	public positionStream: Subscription<string>;
+	public positionStream;
 
 	constructor (
 		public focus: FocusService,
+		public sanitizer: DomSanitizer,
 		private _customizations: Customizations,
 		private _slidePositions: SlidePositions,
 		private _partnersService: PartnersService
@@ -61,8 +58,7 @@ export class MainFocus implements OnInit {
 	}
 
 	openListing() {
-		let code = this._partnersService.partner;
-		window.open("https://antengo.com/p?" + code + "/#/itemDetail/" + this.focus.listing.id);
+		window.open("https://sellwild.com/#/itemDetail/" + this.focus.listing.id + "?p=" + this._partnersService.partner);
 	}
 
 	removeFocus() {

@@ -1,4 +1,4 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from "@angular/core";
 
 import {ListingParams, ListingLocation, SearchParams} from './listingParams';
 import {Listing} from '../../ui/display/listing/listing.component';

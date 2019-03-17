@@ -1,6 +1,9 @@
-import {Component, Input, OnInit, ElementRef} from "angular2/core";
-import {NgFor} from 'angular2/common';
-import {Observable, Subscription} from 'rxjs/Rx'
+import {Component, Input, OnInit, ElementRef} from "@angular/core";
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/merge';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
 
 // PROVIDERS
 import {ListingStore} from '../listings/listingStore';
@@ -13,14 +16,11 @@ import {Photo, SlideItem} from '../../ui/display/slide/slideItem';
 import {CTAService} from '../cta/cta.service';
 
 // DIRECTIVES
-import {SlowScroll} from "../../ui/slowScroll/slowScroll.directive";
-import {ListingDisplay, Listing} from "../../ui/display/listing/listing.component";
-import {FocusControl} from "../../ui/focus/container/focus.component";
+import {Listing} from "../../ui/display/listing/listing.component";
 
 @Component({
 	selector: "listings",
-	providers: [ElementRef, ListingStore, FocusService],
-	directives: [NgFor, SlowScroll, ListingDisplay, FocusControl],
+	providers: [ListingStore, FocusService],
 	styles: [require("./listings.less")],
 	template: require("./listings.html")
 })
@@ -30,8 +30,8 @@ export class Listings implements OnInit {
 
 	private MAX_LISTINGS: number = 300;
 
-	public listingsSub: Subscription<any>;
-	public movementSub: Subscription<any>;
+	public listingsSub;
+	public movementSub;
 
 	constructor (
 		public element: ElementRef,
@@ -60,7 +60,7 @@ export class Listings implements OnInit {
 			if (evt.type == "mouseleave") {
 				return {} // NEED MOUSELEAVE SO WE CAN CLOSE ANYTHING OPEN
 			}
-			return evt.target.closest("listing-display")
+			return evt.target.closest("listing-item")
 		}
 		let mouseover = Observable.fromEvent(this.element.nativeElement, "mouseover", closest);
 		let mouseleave = Observable.fromEvent(this.element.nativeElement, "mouseleave", closest);
@@ -97,8 +97,7 @@ export class Listings implements OnInit {
 		listings = listings.splice(0, this.MAX_LISTINGS - (this.MAX_LISTINGS % this.listingGrid.columns))
 
 		this.listingStore.setAll(listings);
-		this.listingStore.appendToVisible(this.listingGrid.addListingCount());
-
+		this.listingStore.appendToVisible(this.listingGrid.initialListingCount());
 		this.loader.stop();
 
 		if (this.cta.visible) {

@@ -1,6 +1,5 @@
-import { Injectable } from "angular2/core";
-import { Http } from "angular2/http";
-import 'rxjs/Rx';
+import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
 
 @Injectable()
 export class PartnersService {
@@ -46,7 +45,6 @@ export class PartnersService {
 		if (this.partners && this.partners.length) {
 
 			let filtered = this.partners.filter((p) => this.verifyCode(p))
-
 			if (filtered && filtered.length) {
 				this.isValid = true;
 			} else {

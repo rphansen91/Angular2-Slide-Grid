@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from "angular2/core";
+import { Component, Input, OnChanges } from "@angular/core";
 
 import { Customizations } from '../../../boot/customizations/customizations.service';
 import { PartnersService } from '../../../boot/partners/partners.service';
@@ -6,7 +6,6 @@ import { ShadowHover } from '../../display/shadow.directive';
 
 @Component({
 	selector: "opener",
-	directives: [ShadowHover],
 	styles: [require("./opener.less")],
 	template: require("./opener.html")
 })
@@ -15,7 +14,6 @@ export class Opener implements OnChanges {
 	@Input('listing') public listing: any;
 	
 	public showSubOptions: boolean = false;
-	public profile: string;
 	public url: string;
 	public color: string;
 
@@ -28,10 +26,9 @@ export class Opener implements OnChanges {
 
 	constructor (
 		private _customizations: Customizations,
-		private _partnersService: PartnersService
+		private _partnersService: PartnersService,
 	) {
-		this.profile = "https://antengo.com/p?" + this._partnersService.partner + "/#/profile/";
-		this.url = "https://antengo.com/p?" + this._partnersService.partner + "/#/itemDetail/";
+		this.url = "https://sellwild.com/#/"
 		this.color = this._customizations.values.colors[0];
 	}
 
@@ -43,7 +40,7 @@ export class Opener implements OnChanges {
 		$event.stopPropagation()
 
 		if (this.showSubOptions) {
-			window.open(this.url + this.listing.id);
+			window.open(this.url + "itemDetail/" + this.listing.id + "?p=" + this._partnersService.partner);
 		} else {
 			this.showSubOptions = true;
 		}
@@ -51,17 +48,17 @@ export class Opener implements OnChanges {
 
 	openProfile ($event: any) {
 		$event.stopPropagation()
-		window.open(this.profile + this.listing.user.id);
+		window.open(this.url + "profile/" + this.listing.user.id + "?p=" + this._partnersService.partner);
 	}
 
 	openShare($event: any) {
 		$event.stopPropagation()
-		window.open(this.url + this.listing.id + "?open=share");
+		window.open(this.url + "itemDetail/" + this.listing.id + "?open=share&p=" + this._partnersService.partner);
 	}
 
 	openChat($event: any) {
 		$event.stopPropagation()
-		window.open(this.url + this.listing.id + "?open=chat");
+		window.open(this.url + "itemDetail/" + this.listing.id + "?open=chat&p=" + this._partnersService.partner);
 	}
 	waitToShow () {
 		setTimeout(() => {

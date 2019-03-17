@@ -1,10 +1,9 @@
-import { Directive, Input, OnInit, ElementRef, Renderer } from "angular2/core";
+import { Directive, Input, OnInit, ElementRef, Renderer } from "@angular/core";
 
 import { Customizations } from '../../boot/customizations/customizations.service';
 
 @Directive({
 	selector: "[shadowHover]",
-	providers: [ElementRef, Renderer],
 	host: {
 		'(mouseenter)': 'onMouseEnter()',
 		'(mouseleave)': 'onMouseLeave()',

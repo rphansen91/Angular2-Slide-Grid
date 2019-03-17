@@ -1,5 +1,5 @@
-import { Injectable } from 'angular2/core';
-import { Observable } from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { Customizations } from '../../../boot/customizations/customizations.service';
 
@@ -31,7 +31,6 @@ export class ListingGrid {
 
 			this.width = (totalWidth / this.columns);
 			this.height = (totalHeight / this.rows);
-
 			if (typeof this.onNext == "function") {
 				this.onNext(true);
 			}
@@ -49,6 +48,10 @@ export class ListingGrid {
 	}
 
 	addListingCount (): number {
+		return this.columns * 2;
+	}
+
+	initialListingCount (): number {
 		return this.columns * (this.rows + 2);
 	}
 
